@@ -23,6 +23,22 @@ describe("class-list section status colors", () => {
   });
   afterEach(() => workspace.restore());
 
+  it.each([
+    ["Enrolled: 1 of 80 Left", "enrolled"],
+    ["Enrolled: 0 of 3 Taken", "enrolled"],
+    ["Open: 1 of 80 Left", "open"],
+    ["Waitlisted: 0 of 3 Taken", "waitlist"],
+    ["Waitlisted Class Full (3)", "waitlist"],
+    ["Closed: 0 of 80 Left", "closed"],
+    ["Closed Class Full (80)", "closed"]
+  ])("preserves %s and assigns the same status tone after redraw", (text, tone) => {
+    rows[0].cells[2].textContent = text;
+    mount(); mount();
+    expect(statuses()[0].textContent).toBe(text);
+    expect(statuses()[0].dataset.plStatusTone).toBe(tone);
+    expect(rows[0].cells[2].textContent).toBe(text);
+  });
+
   it("keeps lecture/discussion wording, counts and original markup while assigning each its own tone", () => {
     rows[0].cells[2].innerHTML = '<i class="icon-unlock" style="color:green"></i>Open<br>1 of 80 Left';
     rows[1].cells[2].innerHTML = '<i class="icon-lock" style="color:orange"></i>Waitlist<br>0 of 3 Taken';

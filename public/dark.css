@@ -3,6 +3,55 @@
    masthead/navigation, native visibility, control geometry and course colors
    remain unchanged. Print deliberately keeps the ordinary light stylesheet. */
 @media screen {
+  /* Include the native layout ID so UCLA's ID-scoped important widget styles
+     cannot outrank the dark surface reset. Pseudo-elements may paint strips. */
+  html[data-pl-appearance="dark"] #layoutContentArea right-sidebar.pl-intro-sidebar-open :not(input,select,textarea,i,svg,path,use) {
+    background: var(--pl-dark-surface) !important;
+    color: var(--pl-dark-text) !important;
+    border-color: var(--pl-dark-line) !important;
+    text-shadow: none !important;
+  }
+  html[data-pl-appearance="dark"] #layoutContentArea right-sidebar.pl-intro-sidebar-open :not(i,svg,path,use)::before,
+  html[data-pl-appearance="dark"] #layoutContentArea right-sidebar.pl-intro-sidebar-open :not(i,svg,path,use)::after {
+    background-color: transparent !important;
+    background-image: none !important;
+    box-shadow: none !important;
+  }
+  /* Help widgets use native/custom surface tags beyond standard headings.
+     Reset every non-control surface inside this open panel, without depending
+     on a guessed tag/class name. Icons and form controls keep their own rules. */
+  html[data-pl-appearance="dark"] right-sidebar.pl-intro-sidebar-open :not(input,select,textarea,button,a,i,svg,path,use) {
+    background: var(--pl-dark-surface) !important;
+    color: var(--pl-dark-text) !important;
+    border-color: var(--pl-dark-line) !important;
+    text-shadow: none !important;
+  }
+  html[data-pl-appearance="dark"] .classPlanner_ClassOptimizerSection :is(button,input[type="button"],input[type="submit"],input[type="reset"]) {
+    background: var(--pl-dark-raised) !important;
+    color: var(--pl-dark-text) !important;
+    border-color: #60758c !important;
+    text-shadow: none !important;
+  }
+  html[data-pl-appearance="dark"] .classPlanner_ClassOptimizerSection button :is(span,i) { color: inherit !important; background: transparent !important; }
+  html[data-pl-appearance="dark"] .classPlanner_ClassOptimizerSection :is(button,input[type="button"],input[type="submit"]):hover:not(:disabled) { background: var(--pl-dark-hover) !important; }
+  html[data-pl-appearance="dark"] .classPlanner_ClassOptimizerSection :is(button,input[type="button"],input[type="submit"]):is(:disabled,[aria-disabled="true"]) { background: #253344 !important; color: #adbed0 !important; border-color: #41546a !important; opacity: 1; }
+  html[data-pl-appearance="dark"] .pl-workspace-layout-options { background: var(--pl-dark-raised); color: var(--pl-dark-text); border-color: var(--pl-dark-line); }
+  html[data-pl-appearance="dark"] .pl-intro-sidebar-open :is(iwe-widget,div,section,article,header,footer,table,thead,tbody,tfoot,tr,th,td) {
+    background: var(--pl-dark-surface) !important;
+    color: var(--pl-dark-text) !important;
+    border-color: var(--pl-dark-line) !important;
+  }
+  html[data-pl-appearance="dark"] .pl-intro-sidebar-open :is(h1,h2,h3,h4,p,li,label,span,strong,b) { color: var(--pl-dark-text) !important; }
+  /* Native widgets can paint their title on the heading itself or on a custom
+     element, rather than on a DIV/header wrapper. Include those title surfaces. */
+  html[data-pl-appearance="dark"] .pl-intro-sidebar-open :is(header,thead,th,h1,h2,h3,h4,h5,h6,iwe-widget-header,iwe-widget-title,[class*="header" i],[class*="title" i]) {
+    background: var(--pl-dark-raised) !important;
+    color: var(--pl-dark-text) !important;
+    border-color: var(--pl-dark-line) !important;
+    text-shadow: none !important;
+  }
+  html[data-pl-appearance="dark"] .pl-intro-sidebar-open a { color: var(--pl-dark-link) !important; background: transparent !important; }
+  html[data-pl-appearance="dark"] .pl-intro-sidebar-open :is(button,input[type="button"],input[type="submit"]) { background: var(--pl-dark-raised) !important; color: var(--pl-dark-text) !important; border-color: #60758c !important; text-shadow: none !important; }
   html[data-pl-appearance="dark"] {
     --pl-dark-canvas: #111820;
     --pl-dark-surface: #18222e;
@@ -174,10 +223,85 @@
   /* Calendar event fill/border/geometry stay native. Only the surrounding grid
      becomes dark, and every event keeps dark readable text on its light swatch. */
   html[data-pl-appearance="dark"] .pl-workspace-calendar :is(#gridDiv,.hourbox,.timebox) { background-color: var(--pl-dark-surface); color: var(--pl-dark-muted); border-color: var(--pl-dark-line); }
+  /* Draw inside the native time cells: visible rules without adding dimensions
+     or changing the position/size of meetings when Grid size changes. */
+  html[data-pl-appearance="dark"] .pl-workspace-calendar #gridDiv :is(.hourbox,.timebox) {
+    box-shadow: inset 0 -1px 0 #52677f, inset 1px 0 0 #3e5269;
+  }
+  /* Day columns span the whole day, over the native hourly table. An opaque
+     column hides that table's internal rules; keep this projection transparent. */
+  html[data-pl-appearance="dark"] .pl-workspace-calendar #gridDiv .timebox {
+    background-color: transparent !important;
+  }
+  html[data-pl-appearance="dark"] .pl-workspace-calendar #gridDiv table :is(td,th) {
+    border-color: #52677f !important;
+  }
   html[data-pl-appearance="dark"] .pl-workspace-calendar #gridDiv tr.primary.light.headerBar.classPlanner > td { background: var(--pl-dark-raised); color: var(--pl-dark-text); }
   html[data-pl-appearance="dark"] .pl-workspace-calendar .plannerMenuLinks,
   html[data-pl-appearance="dark"] .pl-workspace-calendar .plannerMenuLinks .pl-native-label { color: var(--pl-dark-muted) !important; }
   html[data-pl-appearance="dark"] .pl-workspace-calendar #gridDiv .planneritembox,
   html[data-pl-appearance="dark"] .pl-workspace-calendar #gridDiv .planneritembox :is(a,span,strong,b) { color: #17334b; }
   html[data-pl-appearance="dark"] .pl-workspace-calendar #gridDiv .planneritembox:focus-visible { outline-color: #17334b !important; }
+  html[data-pl-appearance="dark"] .pl-workspace-search :is(.message,.planClass),
+  html[data-pl-appearance="dark"] .pl-workspace-plan :is(.planClass,.enrl-plan-actions),
+  html[data-pl-appearance="dark"] .pl-workspace-plan tr.mobilemenupanel > td {
+    background-color: var(--pl-dark-raised) !important; color: var(--pl-dark-text) !important;
+    border-color: #52677f !important;
+  }
+  html[data-pl-appearance="dark"] :is(.pl-workspace-search .message,.pl-workspace-plan .enrl-plan-actions) :is(p,li,label,h2,h3,h4) {
+    color: var(--pl-dark-text) !important;
+  }
+  html[data-pl-appearance="dark"] :is(.pl-workspace-search .message,.pl-workspace-plan .enrl-plan-actions) a {
+    color: var(--pl-dark-link) !important; background-color: transparent !important;
+  }
+  /* Native search action forms have their own white inline surfaces. Theme
+     those surfaces and their text, not just the surrounding search panel. */
+  html[data-pl-appearance="dark"] .pl-workspace-search :is(.planClass,.touchpanelmenu,.message) :is(div,table,tbody,tr,td,fieldset,header) {
+    background-color: var(--pl-dark-raised) !important;
+    color: var(--pl-dark-text) !important; border-color: #52677f !important;
+  }
+  html[data-pl-appearance="dark"] .pl-workspace-search :is(.planClass,.touchpanelmenu,.message) :is(span,p,li,label,h2,h3,h4) {
+    color: var(--pl-dark-text) !important;
+  }
+}
+@media screen {
+  html[data-pl-appearance="dark"] .pl-workspace-host .pl-workspace-plan div.pl-course-menu-items { box-shadow: none; }
+  /* Search responses are not always descendants of message/planClass. Native
+     action panels can be sibling table cells with a repeated white image.
+     Clear images on structural search surfaces only; leave icons, inputs,
+     status spans and calendar swatches untouched. */
+  html[data-pl-appearance="dark"] .pl-workspace-search :is(div,table,thead,tbody,tfoot,tr,td,th,fieldset,header,footer) {
+    background-image: none !important;
+    background-color: var(--pl-dark-surface) !important;
+    color: var(--pl-dark-text) !important;
+    border-color: var(--pl-dark-line) !important;
+  }
+  html[data-pl-appearance="dark"] .pl-workspace-search :is(p,ul,ol,li,label,h2,h3,h4) {
+    color: var(--pl-dark-text) !important;
+    background-image: none !important;
+    background-color: transparent !important;
+  }
+  html[data-pl-appearance="dark"] .pl-workspace-search a {
+    background-image: none !important;
+    background-color: transparent !important;
+    color: var(--pl-dark-link) !important;
+  }
+  /* Native response controls may retain a white gradient independently of
+     their panel. Reset the complete background, preserving native state. */
+  html[data-pl-appearance="dark"] .pl-workspace-search :is(button,input[type="button"],input[type="submit"],input[type="reset"]) {
+    background: var(--pl-dark-raised) !important;
+    color: var(--pl-dark-text) !important;
+    border-color: #60758c !important;
+    text-shadow: none !important;
+  }
+  html[data-pl-appearance="dark"] .pl-workspace-search button :is(span,label) { color: inherit !important; }
+  html[data-pl-appearance="dark"] .pl-workspace-search :is(button,input[type="button"],input[type="submit"],input[type="reset"]):hover:not(:disabled):not([aria-disabled="true"]) {
+    background: var(--pl-dark-hover) !important;
+  }
+  html[data-pl-appearance="dark"] .pl-workspace-search :is(button,input[type="button"],input[type="submit"],input[type="reset"]):is(:disabled,[aria-disabled="true"]) {
+    background: #253344 !important;
+    color: #adbed0 !important;
+    border-color: #41546a !important;
+    opacity: 1;
+  }
 }

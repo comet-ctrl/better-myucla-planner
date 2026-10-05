@@ -29,6 +29,8 @@ export class PlannerIntroduction {
     this.compactHeader = compact; this.positionHeader(); this.positionInfo();
   }
 
+  isHeaderCompact(): boolean { return this.compactHeader; }
+
   private saveChoice(compact: boolean): void {
     const sequence = ++this.saveSequence; this.saveFailed = false;
     this.pendingSave = this.pendingSave.catch(() => {}).then(() => this.onHeaderChange(compact));

@@ -4,7 +4,8 @@ import {
   readLayoutSettings,
   readSessionSettings,
   saveLayoutSettings,
-  saveSessionSettings
+  saveSessionSettings,
+  watchLayoutSettings
 } from "../storage/settings";
 import { normalizeAppearance, saveAppearance } from "../storage/appearance";
 import { subscribeAppearance, type AppearanceState } from "../appearance";
@@ -64,6 +65,8 @@ void readSessionSettings().then(renderSession);
 void readLayoutSettings().then(({ tidy: on }) => {
   if (tidy) tidy.checked = on;
 });
+const stopLayoutWatch = watchLayoutSettings(({tidy:on})=>{if(tidy)tidy.checked=on;});
+window.addEventListener("pagehide",stopLayoutWatch,{once:true});
 
 tidy?.addEventListener("change", () => {
   void saveLayoutSettings({ tidy: tidy.checked });

@@ -484,25 +484,17 @@ describe("MyUclaPlannerController UI", () => {
     expect(document.querySelectorAll("[data-pl-real-tools]")).toHaveLength(3);
   });
 
-  it("keeps secondary actions accessible in a menu without touching native buttons", async () => {
+  it("exposes secondary tools directly without touching native buttons", async () => {
     controller = new MyUclaPlannerController(new MyUclaPlannerAdapter());
     await controller.start();
     const tools = document.querySelector<HTMLElement>("[data-pl-real-tools]")!;
-    const menu = tools.querySelector<HTMLDetailsElement>("[data-pl-course-menu]")!;
-    const summary = menu.querySelector<HTMLElement>("summary")!;
+    const menu = tools.querySelector<HTMLElement>(".pl-course-menu")!;
+    expect(menu.querySelector("summary")).toBeNull();
     const nativeClicks = vi.fn();
     document.querySelectorAll("button.moveupClass, button.movedownClass").forEach((button) => button.addEventListener("click", nativeClicks));
-    summary.click();
-    expect(menu.open).toBe(true);
     menu.querySelector<HTMLButtonElement>('[data-pl-action="tag"]')!.click();
-    expect(menu.open).toBe(false);
     expect(tools.querySelector<HTMLElement>("[data-pl-tag-editor]")?.hidden).toBe(false);
     expect(document.activeElement).toBe(tools.querySelector("[data-pl-tag]"));
-    summary.click();
-    summary.focus();
-    summary.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
-    expect(menu.open).toBe(false);
-    expect(document.activeElement).toBe(summary);
     expect(nativeClicks).not.toHaveBeenCalled();
   });
 

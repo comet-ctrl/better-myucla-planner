@@ -202,7 +202,7 @@ describe("one-page native planner workspace", () => {
     mount();mount();
     const actions=[...document.querySelectorAll<HTMLButtonElement>('[data-pl-workspace-actions]')];
     expect(actions).toHaveLength(courses.length);
-    expect(actions[0].getAttribute('aria-label')).toBe(`Class actions for ${courses[0].label}`);
+    expect(actions[0].getAttribute('aria-label')).toBe(`Course tools for ${courses[0].label}`);
     expect(actions.every(button=>button.type==='button'&&button.getAttribute('aria-expanded')==='false')).toBe(true);
     for(const button of actions){
       expect(button.previousElementSibling?.matches('[data-pl-workspace-details]')).toBe(true);
