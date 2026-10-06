@@ -1390,10 +1390,36 @@ html.pl-calm-page .pl-headline .pl-code { color: #253547; text-transform: none; 
 }
 
 /* Workspace: native modules in a persistent navigation, work area and schedule. */
-/* Use the document's scrollbar so the unchanged UCLA header can scroll away.
-   BODY is not a scroll container: native focus cannot scroll it independently. */
+/* Keep document scrolling for the untouched UCLA header. Only its scrollbar
+   is hidden in the workspace; local panels retain their visible scrollbars. */
 html.pl-workspace-page, html.pl-intro-page { height: auto; min-height: 100%; overflow: auto; }
 html.pl-workspace-page body, html.pl-intro-page body { height: auto; min-height: 100dvh; overflow: visible; }
+@media screen {
+  html.pl-workspace-page, html.pl-intro-page { scrollbar-width: none; }
+  html.pl-workspace-page::-webkit-scrollbar, html.pl-intro-page::-webkit-scrollbar { display: none; }
+  button.pl-intro-header-edge {
+    position: fixed; z-index: 118; inset: 0 0 auto; width: 100%; height: 8px;
+    box-sizing: border-box; margin: 0; padding: 0; border: 0;
+    background: transparent; color: transparent; cursor: pointer;
+    font: 12px/28px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  }
+  button.pl-intro-header-edge::after {
+    content: ""; position: absolute; top: 2px; left: calc(50% - 24px);
+    width: 48px; height: 3px; border-radius: 3px; background: #8195ac;
+    transition: width 140ms ease, left 140ms ease, background-color 140ms ease;
+  }
+  button.pl-intro-header-edge:hover::after { width: 64px; left: calc(50% - 32px); background: #386b9e; }
+  button.pl-intro-header-edge:focus-visible {
+    inset: 0 auto auto 50%; transform: translateX(-50%); width: 132px; height: 30px;
+    border: 1px solid #8195ac; border-top: 0; border-radius: 0 0 7px 7px;
+    background: #f8fafc; color: #315776; outline: 2px solid #4184c2; outline-offset: 2px;
+  }
+  button.pl-intro-header-edge:focus-visible::after { display: none; }
+  html.pl-header-revealed button.pl-intro-header-edge:not(:focus-visible) { opacity: 0; pointer-events: none; }
+  button.pl-intro-header-edge[hidden] { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { button.pl-intro-header-edge::after { transition: none; } }
+@media print { button.pl-intro-header-edge { display: none !important; } }
 html.pl-intro-page section#layoutContentArea.pl-planner-introduction { min-height: calc(100dvh - 12px); }
 .pl-intro-toolbar { justify-content: flex-end; }
 .classPlannerWrapper.pl-workspace-host {
@@ -1449,7 +1475,7 @@ section#layoutContentArea.pl-planner-introduction {
 .pl-workspace-host #classPlanHeader button { min-height: 36px; padding: 6px 10px; border: 1px solid #dce3eb; border-radius: 5px; background: #fff; color: #46617d; font: 13px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
 .pl-workspace-host > .plannerTopMenuLinks { margin: 0; padding: 4px 16px 8px; color: #59687a; font: 13px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
 .pl-workspace-host > .plannerTopMenuLinks a, .pl-workspace-host > .plannerTopMenuLinks button.link { color: #46617d; font: inherit; }
-.pl-workspace-host > .classPlanner_Messages { grid-column: 1 / -1; grid-row: 2; margin: 0; padding: 4px 16px; background: #fffaf0; font-size: 13px; }
+.pl-workspace-host > .classPlanner_Messages { grid-column: 1 / -1; grid-row: 2; margin: 0; padding: 4px 16px; background: transparent; font-size: 13px; }
 .pl-workspace-host > .classPlanner_Messages > .classPlanner_Labels,
 .pl-workspace-host > .classPlanner_Messages > .classPlanner_Notes,
 .pl-workspace-host > .classPlanner_Messages > .classPlanner_TermReq { margin-bottom: 2px; }
@@ -2104,6 +2130,7 @@ section#layoutContentArea.pl-planner-introduction {
 .pl-panel-resize:focus-visible { outline: 2px solid #3477b5; outline-offset: -2px; }
 .pl-panel-drop-overlay { position: fixed; inset: 0; z-index: 2147483500; pointer-events: none; }
 .pl-panel-drop-preview { position: fixed; display: flex; align-items: center; justify-content: center; box-sizing: border-box; padding: 20px; pointer-events: none; border: 2px solid #6b9bcbbb; border-radius: 10px; background: #438ddd30; box-shadow: inset 0 0 0 1px #ffffff66,0 8px 28px #14344f12; color: #194a79; text-align: center; font: 600 14px/1.5 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; animation: pl-dock-reveal 120ms ease-out; }
+.pl-panel-drop-label { padding: 6px 12px; border: 1px solid #87acd0; border-radius: 8px; color: #194a79; background: #fff; box-shadow: 0 2px 8px #14344f26; }
 @keyframes pl-dock-reveal { from { opacity: .35; } to { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) { .pl-panel-drop-preview { animation: none; } }
 .pl-pane-title.pl-panel-handle { cursor: grab; touch-action: auto; }

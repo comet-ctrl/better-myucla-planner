@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="en" data-pl-fictional-preview="true"><head><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'nonce-pl-fictional-preview'; style-src 'unsafe-inline'; img-src data:; connect-src 'none'; form-action 'none'; base-uri 'none'; object-src 'none'; frame-src 'none'">
 <meta charset="utf-8">
-<title>Better MyUCLA · v0.19.1 fictional preview</title>
+<title>Better MyUCLA · v0.19.4 fictional preview</title>
 <style>
   body { margin:0; background:#fff; color:#4e4e4e; font-family: Verdana, Geneva, sans-serif; font-size:12px; }
   .pagehead { padding:14px 24px; border-bottom:3px solid #0055a6; }
@@ -84,7 +84,7 @@
   #panelSearch .ClassSearchList .data_row:nth-child(even) > [class*="span"] { background:#eaeaea; }
   .ClassSearchList .example-native-rating { display:inline-block; padding:2px 4px; background:#dcecff; }
   .ClassSearchList .icon-unlock::before { content:"◇"; }
-</style><style>html,body{height:100%;overflow:auto}body{margin:0}form{height:100%;padding:0}#layoutContentArea{width:min(1280px,100%);box-sizing:border-box;margin:-20px auto 100px;padding:50px 30px;background:white}#titleText{font-size:35px;line-height:42px;margin:0 0 20px;border-bottom:1px solid #ccd}#page_title_text{padding:0 0 10px;margin:0 0 10px;line-height:18.5px}layout-columnwrapper{display:inline-block;width:100%}main-content{display:block;float:left;width:calc(100% - 280px)}right-sidebar{display:block;float:right;width:260px;height:1200px}right-sidebar>*{padding:12px;margin:0 0 12px;border:1px solid #ccc;display:block}.enroll_term{padding:5px 12px;margin-bottom:10px;border:1px solid #888;background:#ddd;height:42px;box-sizing:border-box}.term_display{float:left}.term{float:right}</style><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="planner-build-version" content="0.19.1"><meta name="planner-source-revision" content="a337a1625aebd074ddb7a80cc483221daccb3d93"><meta name="planner-production-css-sha256" content="e08e0c115609d0c805115bbd45cdd192f5d5f8eda7660dc9a5bbc345d5b7c01b"><meta name="planner-production-content-sha256" content="f47b0c4fab788bb3a12c308679b21707e2315d45fc2c9f23dfa59c5f94e631f4"><meta name="description" content="Interactive fictional preview using the Better MyUCLA production presentation code. No account connection or network requests."><style id="preview-production-css">/* Better MyUCLA — injected UI.
+</style><style>html,body{height:100%;overflow:auto}body{margin:0}form{height:100%;padding:0}#layoutContentArea{width:min(1280px,100%);box-sizing:border-box;margin:-20px auto 100px;padding:50px 30px;background:white}#titleText{font-size:35px;line-height:42px;margin:0 0 20px;border-bottom:1px solid #ccd}#page_title_text{padding:0 0 10px;margin:0 0 10px;line-height:18.5px}layout-columnwrapper{display:inline-block;width:100%}main-content{display:block;float:left;width:calc(100% - 280px)}right-sidebar{display:block;float:right;width:260px;height:1200px}right-sidebar>*{padding:12px;margin:0 0 12px;border:1px solid #ccc;display:block}.enroll_term{padding:5px 12px;margin-bottom:10px;border:1px solid #888;background:#ddd;height:42px;box-sizing:border-box}.term_display{float:left}.term{float:right}</style><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="planner-build-version" content="0.19.4"><meta name="planner-source-revision" content="254f7d99281e83381f55d16af42478f1b7b071b9"><meta name="planner-production-css-sha256" content="54864268bcbc58dd850e9b7531550033d5b9c8332ea8be178a6117b1611bc410"><meta name="planner-production-content-sha256" content="eac14a23ca4bf7939f79c61f3469f0be7c4613368481acddaed7cdf996ee0fac"><meta name="description" content="Interactive fictional preview using the Better MyUCLA production presentation code. No account connection or network requests."><style id="preview-production-css">/* Better MyUCLA — injected UI.
    Tokens are read off the live Class Planner so the injected controls read as
    part of MyUCLA rather than as a strip bolted on top of it. Measured on the
    real page: section title bars are #2C5E91 with a 7px radius, course titles
@@ -1476,10 +1476,36 @@ html.pl-calm-page .pl-headline .pl-code { color: #253547; text-transform: none; 
 }
 
 /* Workspace: native modules in a persistent navigation, work area and schedule. */
-/* Use the document's scrollbar so the unchanged UCLA header can scroll away.
-   BODY is not a scroll container: native focus cannot scroll it independently. */
+/* Keep document scrolling for the untouched UCLA header. Only its scrollbar
+   is hidden in the workspace; local panels retain their visible scrollbars. */
 html.pl-workspace-page, html.pl-intro-page { height: auto; min-height: 100%; overflow: auto; }
 html.pl-workspace-page body, html.pl-intro-page body { height: auto; min-height: 100dvh; overflow: visible; }
+@media screen {
+  html.pl-workspace-page, html.pl-intro-page { scrollbar-width: none; }
+  html.pl-workspace-page::-webkit-scrollbar, html.pl-intro-page::-webkit-scrollbar { display: none; }
+  button.pl-intro-header-edge {
+    position: fixed; z-index: 118; inset: 0 0 auto; width: 100%; height: 8px;
+    box-sizing: border-box; margin: 0; padding: 0; border: 0;
+    background: transparent; color: transparent; cursor: pointer;
+    font: 12px/28px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  }
+  button.pl-intro-header-edge::after {
+    content: ""; position: absolute; top: 2px; left: calc(50% - 24px);
+    width: 48px; height: 3px; border-radius: 3px; background: #8195ac;
+    transition: width 140ms ease, left 140ms ease, background-color 140ms ease;
+  }
+  button.pl-intro-header-edge:hover::after { width: 64px; left: calc(50% - 32px); background: #386b9e; }
+  button.pl-intro-header-edge:focus-visible {
+    inset: 0 auto auto 50%; transform: translateX(-50%); width: 132px; height: 30px;
+    border: 1px solid #8195ac; border-top: 0; border-radius: 0 0 7px 7px;
+    background: #f8fafc; color: #315776; outline: 2px solid #4184c2; outline-offset: 2px;
+  }
+  button.pl-intro-header-edge:focus-visible::after { display: none; }
+  html.pl-header-revealed button.pl-intro-header-edge:not(:focus-visible) { opacity: 0; pointer-events: none; }
+  button.pl-intro-header-edge[hidden] { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { button.pl-intro-header-edge::after { transition: none; } }
+@media print { button.pl-intro-header-edge { display: none !important; } }
 html.pl-intro-page section#layoutContentArea.pl-planner-introduction { min-height: calc(100dvh - 12px); }
 .pl-intro-toolbar { justify-content: flex-end; }
 .classPlannerWrapper.pl-workspace-host {
@@ -1535,7 +1561,7 @@ section#layoutContentArea.pl-planner-introduction {
 .pl-workspace-host #classPlanHeader button { min-height: 36px; padding: 6px 10px; border: 1px solid #dce3eb; border-radius: 5px; background: #fff; color: #46617d; font: 13px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
 .pl-workspace-host > .plannerTopMenuLinks { margin: 0; padding: 4px 16px 8px; color: #59687a; font: 13px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
 .pl-workspace-host > .plannerTopMenuLinks a, .pl-workspace-host > .plannerTopMenuLinks button.link { color: #46617d; font: inherit; }
-.pl-workspace-host > .classPlanner_Messages { grid-column: 1 / -1; grid-row: 2; margin: 0; padding: 4px 16px; background: #fffaf0; font-size: 13px; }
+.pl-workspace-host > .classPlanner_Messages { grid-column: 1 / -1; grid-row: 2; margin: 0; padding: 4px 16px; background: transparent; font-size: 13px; }
 .pl-workspace-host > .classPlanner_Messages > .classPlanner_Labels,
 .pl-workspace-host > .classPlanner_Messages > .classPlanner_Notes,
 .pl-workspace-host > .classPlanner_Messages > .classPlanner_TermReq { margin-bottom: 2px; }
@@ -2190,6 +2216,7 @@ section#layoutContentArea.pl-planner-introduction {
 .pl-panel-resize:focus-visible { outline: 2px solid #3477b5; outline-offset: -2px; }
 .pl-panel-drop-overlay { position: fixed; inset: 0; z-index: 2147483500; pointer-events: none; }
 .pl-panel-drop-preview { position: fixed; display: flex; align-items: center; justify-content: center; box-sizing: border-box; padding: 20px; pointer-events: none; border: 2px solid #6b9bcbbb; border-radius: 10px; background: #438ddd30; box-shadow: inset 0 0 0 1px #ffffff66,0 8px 28px #14344f12; color: #194a79; text-align: center; font: 600 14px/1.5 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; animation: pl-dock-reveal 120ms ease-out; }
+.pl-panel-drop-label { padding: 6px 12px; border: 1px solid #87acd0; border-radius: 8px; color: #194a79; background: #fff; box-shadow: 0 2px 8px #14344f26; }
 @keyframes pl-dock-reveal { from { opacity: .35; } to { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) { .pl-panel-drop-preview { animation: none; } }
 .pl-pane-title.pl-panel-handle { cursor: grab; touch-action: auto; }
@@ -2530,7 +2557,20 @@ section#layoutContentArea.pl-planner-introduction {
     color: var(--pl-dark-muted) !important;
   }
   html[data-pl-appearance="dark"] .pl-planner-introduction .pl-intro-notice :is(b,strong) { color: var(--pl-dark-text); }
-  html[data-pl-appearance="dark"] .pl-workspace-host > .classPlanner_Messages { background: #312a1c; color: #f2d69b; }
+  /* UCLA presents these notices as inline text and links. Button fills create
+     disconnected dark rectangles here; keep the same native presentation. */
+  html[data-pl-appearance="dark"] .pl-workspace-host > .classPlanner_Messages { background: transparent; color: var(--pl-dark-muted); }
+  html[data-pl-appearance="dark"] .pl-workspace-host .classPlanner_Messages .errorText:not(button) { color: #f3c979; }
+  html[data-pl-appearance="dark"] .pl-workspace-host :is(.classPlanner_Messages,.plannerTopMenuLinks,.plannerMenuLinks) button.link,
+  html[data-pl-appearance="dark"] .pl-workspace-host :is(.classPlanner_Messages,.plannerTopMenuLinks,.plannerMenuLinks) button.link:hover:not(:disabled) {
+    background: transparent !important; color: var(--pl-dark-link) !important; box-shadow: none;
+  }
+  html[data-pl-appearance="dark"] .pl-workspace-host :is(.classPlanner_Messages,.plannerTopMenuLinks,.plannerMenuLinks) button.link:hover:not(:disabled) { text-decoration: underline; }
+  html[data-pl-appearance="dark"] .pl-workspace-host :is(.classPlanner_Messages,.plannerTopMenuLinks,.plannerMenuLinks) button.link:disabled { color: var(--pl-dark-muted) !important; cursor: default; }
+  html[data-pl-appearance="dark"] .pl-workspace-host button.link.text-default > :is(i,span) { color: inherit !important; }
+  html[data-pl-appearance="dark"] button.pl-intro-header-edge::after { background: #7898b9; }
+  html[data-pl-appearance="dark"] button.pl-intro-header-edge:hover::after { background: #99ccff; }
+  html[data-pl-appearance="dark"] button.pl-intro-header-edge:focus-visible { color: var(--pl-dark-link); background: var(--pl-dark-raised); border-color: #7898b9; outline-color: var(--pl-dark-focus); }
   html[data-pl-appearance="dark"] .pl-workspace-shell,
   html[data-pl-appearance="dark"] .pl-workspace-nav-footer { border-color: var(--pl-dark-line); }
   html[data-pl-appearance="dark"] .pl-workspace-nav { background: #151f2b; border-color: var(--pl-dark-line); }
@@ -2631,6 +2671,7 @@ section#layoutContentArea.pl-planner-introduction {
   html[data-pl-appearance="dark"] .pl-panel-layout-menu { box-shadow: 0 12px 32px #0006; }
   html[data-pl-appearance="dark"] .pl-panel-layout-menu button[aria-checked="true"] { background-color: var(--pl-dark-selected) !important; color: #c6e3ff !important; }
   html[data-pl-appearance="dark"] .pl-panel-drop-preview { border-color: #94caff; color: #e3f2ff; background: #3966938c; box-shadow: inset 0 0 0 1px #a6d5ff40,0 8px 28px #0004; }
+  html[data-pl-appearance="dark"] .pl-panel-drop-label { border-color: #739bc0; color: #e3f2ff; background: #182c42; box-shadow: 0 2px 8px #0006; }
   html[data-pl-appearance="dark"] .pl-workspace-splitter,
   html[data-pl-appearance="dark"] .pl-panel-divider { background-color: var(--pl-dark-canvas); border-color: var(--pl-dark-line); }
   html[data-pl-appearance="dark"] :is(.pl-navigation-divider,.pl-workspace-splitter,.pl-panel-divider):hover { background-color: #75bfff40; }
@@ -2646,7 +2687,11 @@ section#layoutContentArea.pl-planner-introduction {
   html[data-pl-appearance="dark"] .pl-finals-host::backdrop { background: #050a12b3; }
   /* Calendar event fill/border/geometry stay native. Only the surrounding grid
      becomes dark, and every event keeps dark readable text on its light swatch. */
-  html[data-pl-appearance="dark"] .pl-workspace-calendar :is(#gridDiv,.hourbox,.timebox) { background-color: var(--pl-dark-surface); color: var(--pl-dark-muted); border-color: var(--pl-dark-line); }
+  html[data-pl-appearance="dark"] .pl-workspace-calendar :is(#gridDiv,.hourbox) { background-color: var(--pl-dark-surface); color: var(--pl-dark-muted); border-color: var(--pl-dark-line); }
+  /* Native hour rows are behind the full-height day columns. Opaque columns
+     cover their horizontal rules; keep this overlay transparent without
+     changing the native row heights, vertical borders or meeting fills. */
+  html[data-pl-appearance="dark"] .pl-workspace-calendar #gridDiv .timebox { background-color: transparent; color: var(--pl-dark-muted); border-color: var(--pl-dark-line); }
   html[data-pl-appearance="dark"] .pl-workspace-calendar #gridDiv tr.primary.light.headerBar.classPlanner > td { background: var(--pl-dark-raised); color: var(--pl-dark-text); }
   html[data-pl-appearance="dark"] .pl-workspace-calendar .plannerMenuLinks,
   html[data-pl-appearance="dark"] .pl-workspace-calendar .plannerMenuLinks .pl-native-label { color: var(--pl-dark-muted) !important; }
@@ -2654,7 +2699,94 @@ section#layoutContentArea.pl-planner-introduction {
   html[data-pl-appearance="dark"] .pl-workspace-calendar #gridDiv .planneritembox :is(a,span,strong,b) { color: #17334b; }
   html[data-pl-appearance="dark"] .pl-workspace-calendar #gridDiv .planneritembox:focus-visible { outline-color: #17334b !important; }
 }
-</style><script id="preview-build-meta" type="application/json">{"version":"0.19.1","cssSha256":"e08e0c115609d0c805115bbd45cdd192f5d5f8eda7660dc9a5bbc345d5b7c01b","contentSha256":"f47b0c4fab788bb3a12c308679b21707e2315d45fc2c9f23dfa59c5f94e631f4","sourceRevision":"a337a1625aebd074ddb7a80cc483221daccb3d93"}</script><style>
+
+/* Owned layout settings only. Native UCLA controls and menus are untouched. */
+@media screen {
+  .pl-workspace-nav-footer > button.pl-workspace-settings {
+    display: flex; align-items: center; justify-content: flex-start; gap: 10px;
+  }
+  .pl-workspace-nav-footer > button.pl-workspace-settings::before { content: none; }
+  .pl-settings-icon { display: block; flex: none; width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width: 1.65; stroke-linejoin: round; }
+  .pl-navigation-collapsed .pl-workspace-nav-footer > button.pl-workspace-settings { justify-content: center; }
+  .pl-navigation-collapsed .pl-settings-trigger-label { display: none; }
+
+  dialog.pl-workspace-settings-dialog {
+    --pl-settings-surface: #fff; --pl-settings-text: #24354a; --pl-settings-muted: #63748a;
+    --pl-settings-line: #dbe3ed; --pl-settings-hover: #f5f8fc; --pl-settings-selected: #eaf2fc;
+    --pl-settings-accent: #2d68a6; --pl-settings-browse: #dce9f8; --pl-settings-calendar: #ddefeb;
+    --pl-settings-browse-line: #729bc9; --pl-settings-calendar-line: #73a69a;
+    box-sizing: border-box; width: min(450px,calc(100vw - 32px)); max-width: none;
+    max-height: calc(100vh - 32px); max-height: calc(100dvh - 32px);
+    margin: auto; padding: 0; overflow: hidden; border: 1px solid var(--pl-settings-line);
+    border-radius: 16px; box-shadow: 0 24px 90px #13253d30,0 4px 16px #13253d12;
+    background: var(--pl-settings-surface); color: var(--pl-settings-text); color-scheme: light;
+    font: 14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    text-align: left;
+  }
+  dialog.pl-workspace-settings-dialog:not([open]) { display: none; }
+  dialog.pl-workspace-settings-dialog[open] { display: flex; flex-direction: column; }
+  dialog.pl-workspace-settings-dialog::backdrop { background: #10223961; backdrop-filter: blur(3px); }
+  .pl-workspace-settings-dialog .pl-settings-header { display: flex; flex: none; align-items: center; justify-content: space-between; gap: 16px; padding: 20px 22px 16px; margin: 0; border-bottom: 1px solid var(--pl-settings-line); background: none; }
+  .pl-workspace-settings-dialog h2 { margin: 0; padding: 0; border: 0; color: var(--pl-settings-text); font: 650 21px/1.35 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+  .pl-workspace-settings-dialog h3 { margin: 0 0 6px; padding: 0; border: 0; color: var(--pl-settings-text); font: 600 15px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+  .pl-workspace-settings-dialog button { box-sizing: border-box; min-height: 0; margin: 0; float: none; background-image: none; text-shadow: none; box-shadow: none; font: inherit; color: var(--pl-settings-text); cursor: pointer; }
+  .pl-workspace-settings-dialog button:focus-visible { outline: 3px solid var(--pl-settings-accent); outline-offset: 3px; }
+  .pl-workspace-settings-dialog button.pl-settings-close { display: inline-flex; flex: none; align-items: center; justify-content: center; width: 32px; height: 32px; padding: 0; border: 1px solid var(--pl-settings-line); border-radius: 8px; background: var(--pl-settings-surface); color: var(--pl-settings-muted); font-size: 24px; line-height: 1; }
+  .pl-workspace-settings-dialog button.pl-settings-close:hover { background: var(--pl-settings-hover); color: var(--pl-settings-text); }
+  .pl-settings-body { min-height: 0; padding: 20px 22px 12px; overflow: auto; overscroll-behavior: contain; scrollbar-width: thin; }
+  .pl-workspace-settings-dialog p { margin: 0; padding: 0; }
+  .pl-workspace-settings-dialog .pl-settings-description { color: var(--pl-settings-muted); margin-bottom: 18px; }
+  .pl-settings-presets { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 10px; }
+  .pl-workspace-settings-dialog button.pl-settings-preset { position: relative; display: flex; flex-direction: column; align-items: stretch; gap: 10px; min-width: 0; padding: 12px 9px 10px; border: 1px solid var(--pl-settings-line); border-radius: 10px; background: var(--pl-settings-surface); text-align: center; }
+  .pl-workspace-settings-dialog button.pl-settings-preset:hover { border-color: var(--pl-settings-browse-line); background: var(--pl-settings-hover); }
+  .pl-workspace-settings-dialog button.pl-settings-preset[aria-pressed="true"] { border-color: var(--pl-settings-accent); background: var(--pl-settings-selected); box-shadow: inset 0 0 0 1px var(--pl-settings-accent); }
+  .pl-settings-preset-name { display: block; font-size: 12px; font-weight: 500; line-height: 1.4; min-height: 34px; }
+  .pl-settings-diagram { display: flex; gap: 3px; height: 56px; padding: 3px; border: 1px solid var(--pl-settings-line); border-radius: 5px; background: var(--pl-settings-surface); }
+  .pl-settings-diagram-pane { position: relative; display: block; min-width: 0; overflow: hidden; border: 1px solid var(--pl-settings-browse-line); border-radius: 2px; background: var(--pl-settings-browse); }
+  .pl-settings-diagram-pane::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 8px; border-bottom: 1px solid var(--pl-settings-browse-line); }
+  .pl-settings-diagram-browsing::after, .pl-settings-diagram-tabs::after { content: ""; position: absolute; top: 15px; left: 5px; right: 5px; height: 21px; background: repeating-linear-gradient(to bottom,var(--pl-settings-browse-line) 0 2px,transparent 2px 8px); opacity: .55; }
+  .pl-settings-diagram-tabs::before { background: linear-gradient(to right,transparent 32%,var(--pl-settings-browse-line) 32% 34%,transparent 34% 65%,var(--pl-settings-browse-line) 65% 67%,transparent 67%); }
+  .pl-settings-diagram-schedule { background: var(--pl-settings-calendar); border-color: var(--pl-settings-calendar-line); }
+  .pl-settings-diagram-schedule::before { border-color: var(--pl-settings-calendar-line); }
+  .pl-settings-diagram-schedule::after { content: ""; position: absolute; top: 13px; left: 4px; right: 4px; bottom: 5px; opacity: .5; background: repeating-linear-gradient(to right,var(--pl-settings-calendar-line) 0 1px,transparent 1px 20%),repeating-linear-gradient(to bottom,var(--pl-settings-calendar-line) 0 1px,transparent 1px 8px); }
+  .pl-settings-selected { display: none; position: absolute; top: -6px; right: -5px; width: 19px; height: 19px; border: 2px solid var(--pl-settings-surface); border-radius: 50%; background: var(--pl-settings-accent); color: #fff; font: 600 12px/19px sans-serif; text-align: center; }
+  [aria-pressed="true"] > .pl-settings-selected { display: block; }
+  .pl-workspace-settings-dialog .pl-settings-legend { display: flex; align-items: center; gap: 16px; margin-top: 14px; color: var(--pl-settings-muted); font-size: 12px; }
+  .pl-settings-legend > span { display: inline-flex; align-items: center; gap: 6px; }
+  .pl-settings-legend > span::before { content: ""; width: 9px; height: 9px; border: 1px solid var(--pl-settings-browse-line); border-radius: 2px; background: var(--pl-settings-browse); }
+  .pl-settings-legend > .pl-settings-legend-schedule::before { border-color: var(--pl-settings-calendar-line); background: var(--pl-settings-calendar); }
+  .pl-workspace-settings-dialog .pl-settings-current { margin-top: 14px; color: var(--pl-settings-muted); font-size: 12px; }
+  .pl-workspace-settings-dialog .pl-settings-compact-note { margin-top: 10px; padding: 10px 12px; border-radius: 7px; background: var(--pl-settings-hover); color: var(--pl-settings-muted); font-size: 12px; }
+  .pl-workspace-settings-dialog .pl-settings-compact-note[hidden] { display: none; }
+  .pl-workspace-settings-dialog .pl-settings-status { min-height: 18px; margin-top: 10px; color: var(--pl-settings-accent); font-size: 12px; }
+  .pl-workspace-settings-dialog .pl-settings-footer { display: flex; flex: none; align-items: center; justify-content: space-between; gap: 12px; margin: 0; padding: 14px 22px; border-top: 1px solid var(--pl-settings-line); background: none; color: var(--pl-settings-muted); font-size: 11px; }
+  .pl-workspace-settings-dialog button.pl-settings-default { flex: none; padding: 7px 10px; border: 1px solid var(--pl-settings-line); border-radius: 7px; background: var(--pl-settings-surface); font-size: 12px; }
+  .pl-workspace-settings-dialog button.pl-settings-default:hover { border-color: var(--pl-settings-browse-line); background: var(--pl-settings-hover); }
+  html[data-pl-appearance="dark"] dialog.pl-workspace-settings-dialog {
+    --pl-settings-surface: #18222e; --pl-settings-text: #e7eef7; --pl-settings-muted: #afbed1;
+    --pl-settings-line: #394c61; --pl-settings-hover: #202d3c; --pl-settings-selected: #263e57;
+    --pl-settings-accent: #99ccff; --pl-settings-browse: #294969; --pl-settings-calendar: #244d48;
+    --pl-settings-browse-line: #7aa3cd; --pl-settings-calendar-line: #82b6a9; color-scheme: dark;
+    box-shadow: 0 24px 90px #0008,0 4px 16px #0006;
+  }
+  html[data-pl-appearance="dark"] .pl-settings-selected { color: #13263b; }
+  html[data-pl-appearance="dark"] dialog.pl-workspace-settings-dialog::backdrop { background: #03081099; }
+}
+@media screen and (max-width:1279px) {
+  /* Keep the owned gear discoverable at the start of the scrolling nav row. */
+  .pl-workspace-nav > .pl-workspace-nav-footer { display: contents; }
+  .pl-workspace-nav-footer > button.pl-workspace-settings { position: sticky; left: 0; order: -1; z-index: 5; flex: none; justify-content: center; width: 40px; min-width: 40px; padding: 8px; background: #f8fafc; box-shadow: 3px 0 0 #f8fafc; }
+  .pl-workspace-nav-footer > button.pl-workspace-settings .pl-settings-trigger-label { display: none; }
+  html[data-pl-appearance="dark"] .pl-workspace-host .pl-workspace-nav-footer > button.pl-workspace-settings { background-color: #151f2b !important; box-shadow: 3px 0 0 #151f2b; }
+}
+@media screen and (max-width:430px) {
+  .pl-settings-presets { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .pl-settings-body { padding: 18px 18px 10px; }
+  .pl-workspace-settings-dialog .pl-settings-header { padding: 18px; }
+  .pl-workspace-settings-dialog .pl-settings-footer { padding: 12px 18px; }
+}
+@media print { .pl-workspace-settings,dialog.pl-workspace-settings-dialog,dialog.pl-workspace-settings-dialog::backdrop { display: none !important; } }
+</style><script id="preview-build-meta" type="application/json">{"version":"0.19.4","cssSha256":"54864268bcbc58dd850e9b7531550033d5b9c8332ea8be178a6117b1611bc410","contentSha256":"eac14a23ca4bf7939f79c61f3469f0be7c4613368481acddaed7cdf996ee0fac","sourceRevision":"254f7d99281e83381f55d16af42478f1b7b071b9"}</script><style>
   #preview-notice { display:flex; flex-wrap:wrap; gap:12px; align-items:center; justify-content:center; box-sizing:border-box; padding:5px 12px; border-bottom:1px solid #dbe3ec; background:#f8fafc; color:#526174; font:11px/1.5 system-ui,sans-serif; }
   #preview-notice button { padding:0; border:0; background:none; color:#24528f; font:inherit; text-decoration:underline; cursor:pointer; }
   #preview-feedback { position:fixed; bottom:48px; left:50%; transform:translateX(-50%); z-index:2147483601; width:max-content; max-width:min(520px,calc(100vw - 32px)); padding:12px 16px; border:1px solid #cbd5e1; border-radius:9px; background:#fff; box-shadow:0 4px 20px #0002; color:#334155; font:13px/1.5 system-ui,sans-serif; }
@@ -2672,7 +2804,7 @@ section#layoutContentArea.pl-planner-introduction {
   }
   @media print { #preview-notice, #preview-feedback { display:none !important; } }
 </style></head>
-<body><aside id="preview-notice" aria-label="Fictional preview information"><span>Fictional preview · v0.19.1</span><button type="button" id="preview-about">What works here?</button></aside><layout-headerwrap style="display: block;"><nav id="fixture-native-navigation" aria-label="Example UCLA navigation" style="display: flex; align-items: center; gap: 24px; height: 166px; padding: 0px 24px; background: rgb(36, 82, 143); color: white; box-sizing: border-box;"><strong>UCLA</strong><a href="#">Home</a><a href="#">Academics</a><button type="button">Menu</button></nav></layout-headerwrap>
+<body><aside id="preview-notice" aria-label="Fictional preview information"><span>Fictional preview · v0.19.4</span><button type="button" id="preview-about">What works here?</button></aside><layout-headerwrap style="display: block;"><nav id="fixture-native-navigation" aria-label="Example UCLA navigation" style="display: flex; align-items: center; gap: 24px; height: 166px; padding: 0px 24px; background: rgb(36, 82, 143); color: white; box-sizing: border-box;"><strong>UCLA</strong><a href="#">Home</a><a href="#">Academics</a><button type="button">Menu</button></nav></layout-headerwrap>
 <form id="aspnetForm" method="post" action="https://be.my.ucla.edu/ClassPlanner/ClassPlan.aspx" autocomplete="off">
 
   <div class="maincontentpanel" id="main_wrapper">
@@ -3505,6 +3637,12 @@ section#layoutContentArea.pl-planner-introduction {
   // src/content/planner-introduction.ts
   var OWNED4 = "data-planner-lift-owned";
   var TERM = "ctl00_MainContent_termSessionChooser_TermChooser";
+  var composedParent = (node) => node.parentNode || (node instanceof ShadowRoot ? node.host : null);
+  var inComposedTree = (root2, value) => {
+    let node = value instanceof Node ? value : null;
+    for (let depth = 0; node && depth < 128; depth++, node = composedParent(node)) if (node === root2) return true;
+    return false;
+  };
   var PlannerIntroduction = class {
     constructor(onHeaderChange = () => {
     }) {
@@ -3515,23 +3653,242 @@ section#layoutContentArea.pl-planner-introduction {
     saveFailed = false;
     saveSequence = 0;
     pendingSave = Promise.resolve();
+    headerRevealed = false;
+    headerMotion = null;
     setHeaderCompact(compact) {
+      this.stopHeaderMotion();
+      this.headerRevealed = false;
       this.compactHeader = compact;
       this.positionHeader();
       this.positionInfo();
     }
+    stopHeaderMotion() {
+      if (this.headerMotion) this.state?.doc.defaultView?.clearTimeout(this.headerMotion.timer);
+      this.headerMotion = null;
+    }
+    compactTop() {
+      const s = this.state, view = s?.doc.defaultView;
+      return s && view ? Math.max(0, view.scrollY + s.title.getBoundingClientRect().top - 12) : 0;
+    }
+    isHeaderCompact() {
+      const s = this.state;
+      return this.compactHeader || this.headerRevealed || !!(s && (s.doc.defaultView?.scrollY || 0) > 0 && s.title.getBoundingClientRect().top <= 13);
+    }
+    /** Scroll the untouched native header; never replay a navigation action. */
+    moveHeader(top) {
+      const s = this.state, view = s?.doc.defaultView;
+      if (!s || !view) return;
+      this.stopHeaderMotion();
+      const motion = { target: top, timer: 0 };
+      this.headerMotion = motion;
+      const finish = () => {
+        if (this.headerMotion !== motion || this.state !== s) return;
+        this.stopHeaderMotion();
+        this.positionHeader();
+        this.positionInfo();
+        s.onLayout();
+      };
+      motion.timer = view.setTimeout(finish, 800);
+      const reduced = view.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+      view.scrollTo({ top, behavior: reduced ? "instant" : "smooth" });
+      this.positionInfo();
+      s.onLayout();
+    }
+    revealHeader() {
+      if (!this.state?.masthead || !this.isHeaderCompact() || this.headerRevealed) return;
+      this.headerRevealed = true;
+      this.moveHeader(0);
+    }
+    concealHeader(returnFocus = false) {
+      const s = this.state;
+      if (!s || !this.headerRevealed) return;
+      this.headerRevealed = false;
+      if (returnFocus && s.header.isConnected) s.header.focus({ preventScroll: true });
+      this.moveHeader(this.compactTop());
+    }
+    bindHeaderReveal(s) {
+      const { doc, masthead, edge } = s, view = doc.defaultView;
+      if (!masthead || !edge || !view) return () => {
+      };
+      let hovering = false, leaveTimer = 0, heldPointer = null, suppressHover = false;
+      let pointerX = null, pointerY = 0;
+      const locatePointer = (event) => {
+        if (event.pointerType !== "touch") {
+          pointerX = event.clientX;
+          pointerY = event.clientY;
+        }
+      };
+      const pointerAtEdge = () => {
+        if (pointerX === null) return false;
+        const bounds = edge.getBoundingClientRect();
+        return pointerX >= bounds.left && pointerX <= bounds.right && pointerY >= bounds.top && pointerY <= bounds.bottom;
+      };
+      const cancelLeave = () => {
+        view.clearTimeout(leaveTimer);
+        leaveTimer = 0;
+      };
+      const contains = (node) => inComposedTree(masthead, node) || inComposedTree(edge, node);
+      let observedRoots = [];
+      const rendered = (element) => {
+        let node = element;
+        for (let depth = 0; node && depth < 128; depth++, node = composedParent(node)) {
+          if (node instanceof Element) {
+            const style = view.getComputedStyle(node);
+            if (node.hasAttribute("hidden") || style.display === "none" || style.visibility === "hidden" || style.visibility === "collapse") return false;
+          }
+          if (node === masthead) return true;
+        }
+        return false;
+      };
+      const menuOpen = () => {
+        const roots = [masthead], candidates = [];
+        let count = 0, truncated = false;
+        for (let index = 0; index < roots.length && count <= 2048; index++) {
+          const root2 = roots[index], walker = doc.createTreeWalker(root2, NodeFilter.SHOW_ELEMENT);
+          let node = root2 instanceof Element ? root2 : walker.nextNode();
+          while (node) {
+            if (++count > 2048) {
+              truncated = true;
+              break;
+            }
+            if (node.shadowRoot) {
+              if (roots.length < 32) roots.push(node.shadowRoot);
+              else truncated = true;
+            }
+            if (node.matches('[aria-expanded="true"],details[open],[role="menu"]')) candidates.push(node);
+            node = walker.nextNode();
+          }
+        }
+        if (roots.length !== observedRoots.length || roots.some((root2, index) => observedRoots[index] !== root2)) {
+          observer.disconnect();
+          for (const root2 of roots) observer.observe(root2, { subtree: true, childList: true, attributes: true, attributeFilter: ["aria-expanded", "open", "hidden", "class", "style"] });
+          observedRoots = roots;
+        }
+        return truncated || candidates.some((menu) => rendered(menu) && (menu.matches('[aria-expanded="true"],details[open]') || menu.getClientRects().length > 0));
+      };
+      const scheduleLeave = () => {
+        cancelLeave();
+        if (!this.headerRevealed || heldPointer !== null) return;
+        leaveTimer = view.setTimeout(() => {
+          leaveTimer = 0;
+          if (this.state === s && heldPointer === null && !hovering && !contains(doc.activeElement) && !menuOpen()) this.concealHeader();
+        }, 280);
+      };
+      const enter = (event) => {
+        locatePointer(event);
+        if (event.pointerType === "touch" || event.buttons || suppressHover) return;
+        hovering = true;
+        cancelLeave();
+        this.revealHeader();
+      };
+      const leave = (event) => {
+        locatePointer(event);
+        if (event.relatedTarget === null && (event.clientY <= 0 || event.clientX <= 0 || event.clientX >= view.innerWidth || event.clientY >= view.innerHeight)) suppressHover = false;
+        hovering = contains(event.relatedTarget);
+        if (!hovering) scheduleLeave();
+      };
+      const pointerMove = (event) => {
+        locatePointer(event);
+        if (!suppressHover || event.pointerType === "touch") return;
+        if (!pointerAtEdge()) suppressHover = false;
+      };
+      const click = () => {
+        if (this.state === s) {
+          suppressHover = false;
+          cancelLeave();
+          this.revealHeader();
+        }
+      };
+      const focusOut = () => scheduleLeave();
+      const pointerDown = (event) => {
+        locatePointer(event);
+        if (event.button !== 0 || event.isPrimary === false) return;
+        heldPointer = event.pointerId ?? 0;
+        cancelLeave();
+      };
+      const pointerEnd = (event) => {
+        if (heldPointer !== (event.pointerId ?? 0)) return;
+        heldPointer = null;
+        scheduleLeave();
+      };
+      const blur = () => {
+        heldPointer = null;
+        scheduleLeave();
+      };
+      const outsideClick = (event) => {
+        if (event.button !== 0 || !this.headerRevealed || contains(event.target) || event.target === s.header) return;
+        cancelLeave();
+        hovering = false;
+        this.concealHeader(contains(doc.activeElement));
+      };
+      const key = (event) => {
+        if (event.key !== "Escape" || event.defaultPrevented || !this.headerRevealed) return;
+        const target = event.target instanceof Element ? event.target : null;
+        if (target?.closest('dialog[open],[role="dialog"],.ui-dialog') && !contains(target)) return;
+        if (s.header.isConnected) s.header.focus({ preventScroll: true });
+        suppressHover = pointerAtEdge();
+        cancelLeave();
+        hovering = false;
+        this.concealHeader();
+        event.preventDefault();
+      };
+      const scrollEnd = () => {
+        if (!this.headerMotion || Math.abs(view.scrollY - this.headerMotion.target) > 1) return;
+        this.stopHeaderMotion();
+        this.positionHeader();
+        this.positionInfo();
+        s.onLayout();
+      };
+      const observer = new MutationObserver(() => {
+        if (!hovering) scheduleLeave();
+      });
+      menuOpen();
+      for (const node of [masthead, edge]) {
+        node.addEventListener("pointerenter", enter);
+        node.addEventListener("pointerleave", leave);
+        node.addEventListener("focusout", focusOut);
+      }
+      edge.addEventListener("click", click);
+      doc.addEventListener("keydown", key);
+      doc.addEventListener("click", outsideClick);
+      doc.addEventListener("pointerdown", pointerDown, true);
+      doc.addEventListener("pointerup", pointerEnd, true);
+      doc.addEventListener("pointercancel", pointerEnd, true);
+      doc.addEventListener("pointermove", pointerMove, true);
+      view.addEventListener("scrollend", scrollEnd);
+      view.addEventListener("blur", blur);
+      return () => {
+        cancelLeave();
+        observer.disconnect();
+        this.stopHeaderMotion();
+        for (const node of [masthead, edge]) {
+          node.removeEventListener("pointerenter", enter);
+          node.removeEventListener("pointerleave", leave);
+          node.removeEventListener("focusout", focusOut);
+        }
+        edge.removeEventListener("click", click);
+        doc.removeEventListener("keydown", key);
+        doc.removeEventListener("click", outsideClick);
+        doc.removeEventListener("pointerdown", pointerDown, true);
+        doc.removeEventListener("pointerup", pointerEnd, true);
+        doc.removeEventListener("pointercancel", pointerEnd, true);
+        doc.removeEventListener("pointermove", pointerMove, true);
+        view.removeEventListener("scrollend", scrollEnd);
+        view.removeEventListener("blur", blur);
+      };
+    }
     saveChoice(compact) {
-      const sequence = ++this.saveSequence;
+      const sequence2 = ++this.saveSequence;
       this.saveFailed = false;
       this.pendingSave = this.pendingSave.catch(() => {
       }).then(() => this.onHeaderChange(compact));
       this.pendingSave.then(() => {
-        if (sequence === this.saveSequence) {
+        if (sequence2 === this.saveSequence) {
           this.saveFailed = false;
           this.positionInfo();
         }
       }).catch(() => {
-        if (sequence === this.saveSequence) {
+        if (sequence2 === this.saveSequence) {
           this.saveFailed = true;
           this.positionInfo();
         }
@@ -3539,7 +3896,7 @@ section#layoutContentArea.pl-planner-introduction {
     }
     needsRefresh(doc) {
       const s = this.state;
-      return !!s && (doc.getElementById("layoutContentArea") !== s.layout || doc.getElementById("div_page_title_section2") !== s.description || doc.getElementById("titleText") !== s.title || !s.header.isConnected || doc.getElementById("page_title_text") !== s.text || !s.info.isConnected || !s.sidebar.isConnected || doc.getElementById(TERM)?.parentElement !== s.label.parentElement);
+      return !!s && (doc.getElementById("layoutContentArea") !== s.layout || doc.getElementById("div_page_title_section2") !== s.description || doc.getElementById("titleText") !== s.title || !s.header.isConnected || doc.getElementById("page_title_text") !== s.text || !s.info.isConnected || s.masthead && !s.masthead.isConnected || s.edge && !s.edge.isConnected || !s.sidebar.isConnected || doc.getElementById(TERM)?.parentElement !== s.label.parentElement);
     }
     mount(doc, toolbar, onLayout, workspace2) {
       if (this.state) return true;
@@ -3571,6 +3928,17 @@ section#layoutContentArea.pl-planner-introduction {
       const header = owned(doc.createElement("button"), "pl-intro-header-toggle");
       header.type = "button";
       toolbar.append(header);
+      const mastheads = doc.querySelectorAll("layout-headerwrap");
+      const masthead = mastheads.length === 1 && !mastheads[0].contains(layout) ? mastheads[0] : null;
+      const edge = masthead ? owned(doc.createElement("button"), "pl-intro-header-edge") : null;
+      if (edge) {
+        edge.type = "button";
+        edge.textContent = "UCLA menu";
+        edge.setAttribute("aria-label", "Show UCLA header temporarily");
+        edge.setAttribute("aria-expanded", "false");
+        edge.title = "Reveal UCLA's menu. Move away to return to your planner.";
+        doc.body.append(edge);
+      }
       const info = owned(doc.createElement("button"), "pl-intro-info");
       info.type = "button";
       info.textContent = workspace2 ? "Information & help" : "Links & help";
@@ -3594,11 +3962,8 @@ section#layoutContentArea.pl-planner-introduction {
       term.classList.add("pl-intro-term");
       sidebar.classList.add("pl-intro-sidebar");
       const focus = (event) => {
-        if (!this.compactHeader || !(event.target instanceof Element) || !event.target.closest("layout-headerwrap")) return;
-        this.setHeaderCompact(false);
-        doc.defaultView?.scrollTo({ top: 0, behavior: "instant" });
-        this.saveChoice(false);
-        onLayout();
+        if (!masthead || !inComposedTree(masthead, event.target)) return;
+        this.revealHeader();
       };
       let printChoice = null;
       const beforePrint = () => {
@@ -3633,20 +3998,25 @@ section#layoutContentArea.pl-planner-introduction {
         focus,
         workspace: workspace2,
         beforePrint,
-        afterPrint
+        afterPrint,
+        masthead,
+        edge,
+        onLayout,
+        cleanupReveal: () => {
+        }
       };
+      this.state.cleanupReveal = this.bindHeaderReveal(this.state);
       doc.addEventListener("focusin", focus);
       doc.defaultView?.addEventListener("beforeprint", beforePrint);
       doc.defaultView?.addEventListener("afterprint", afterPrint);
       header.addEventListener("click", () => {
-        const view = doc.defaultView;
-        if (!view) return;
-        const top = title.getBoundingClientRect().top;
-        const compact = !(this.compactHeader || top <= 13 && view.scrollY > 0);
-        this.setHeaderCompact(compact);
-        if (!compact) view.scrollTo({ top: 0, behavior: "instant" });
+        const s = this.state, view = doc.defaultView;
+        if (!view || s?.header !== header) return;
+        const compact = !this.isHeaderCompact();
+        this.compactHeader = compact;
+        this.headerRevealed = false;
+        this.moveHeader(compact ? this.compactTop() : 0);
         this.saveChoice(compact);
-        onLayout();
         header.focus({ preventScroll: true });
       });
       info.addEventListener("click", () => {
@@ -3672,14 +4042,20 @@ section#layoutContentArea.pl-planner-introduction {
     }
     positionHeader() {
       const s = this.state, view = s?.doc.defaultView;
-      if (!s || !view || !this.compactHeader || s.doc.visibilityState === "hidden") return;
+      if (!s || !view || !this.compactHeader || this.headerRevealed || this.headerMotion || s.doc.visibilityState === "hidden") return;
       const top = s.title.getBoundingClientRect().top;
       if (top > 13) view.scrollTo({ top: Math.max(0, view.scrollY + top - 12), behavior: "instant" });
     }
     positionInfo() {
       const s = this.state;
       if (!s) return;
-      const compact = this.compactHeader || (s.doc.defaultView?.scrollY || 0) > 0 && s.title.getBoundingClientRect().top <= 13;
+      const compact = this.isHeaderCompact();
+      s.doc.documentElement.classList.toggle("pl-header-compact", compact);
+      s.doc.documentElement.classList.toggle("pl-header-revealed", this.headerRevealed);
+      if (s.edge) {
+        s.edge.hidden = !compact;
+        s.edge.setAttribute("aria-expanded", String(this.headerRevealed));
+      }
       s.header.textContent = compact ? "Show header" : "Compact header";
       s.header.setAttribute("aria-pressed", String(compact));
       s.header.title = this.saveFailed ? "Could not save the header preference. Try again." : compact ? "Show UCLA's menu and stop keeping the header compact" : "Keep UCLA's banner out of view across terms and reloads";
@@ -3709,7 +4085,11 @@ section#layoutContentArea.pl-planner-introduction {
     restore() {
       const s = this.state;
       if (!s) return;
+      s.cleanupReveal();
+      this.headerRevealed = false;
       this.state = null;
+      s.doc.documentElement.classList.remove("pl-header-compact", "pl-header-revealed");
+      s.edge?.remove();
       s.doc.removeEventListener("focusin", s.focus);
       s.doc.defaultView?.removeEventListener("beforeprint", s.beforePrint);
       s.doc.defaultView?.removeEventListener("afterprint", s.afterPrint);
@@ -4256,6 +4636,12 @@ section#layoutContentArea.pl-planner-introduction {
       preview.className = "pl-panel-drop-preview";
       preview.dataset.plDockTarget = target.operation.dock;
       preview.dataset.plDropOperation = target.operation.kind;
+      if (!gesture.legacyTargets) {
+        const label = this.doc.createElement("span");
+        label.className = "pl-panel-drop-label";
+        label.textContent = target.operation.kind === "split" ? `Split ${target.operation.dock}` : "Group tabs";
+        preview.append(label);
+      }
       const box = target.preview;
       Object.assign(preview.style, { left: `${box.left}px`, top: `${box.top}px`, width: `${box.width}px`, height: `${box.height}px` });
       gesture.overlay.append(preview);
@@ -4288,7 +4674,9 @@ section#layoutContentArea.pl-planner-introduction {
       };
       const side = gesture.legacyTargets ? gesture.targets.find((target) => target.operation.dock !== "main" && contains(target)) : gesture.targets.find((target) => target.operation.kind === "split" && contains(target));
       if (side) return side;
-      if (gesture.target && contains(gesture.target, 12)) return gesture.target;
+      const current = gesture.target;
+      const withinSplitHeight = !current || gesture.legacyTargets || current.operation.kind !== "split" || y >= current.hit.top && y <= current.hit.top + current.hit.height;
+      if (current && withinSplitHeight && contains(current, 12)) return current;
       return gesture.targets.find((target) => contains(target));
     }
     initialBox(panel) {
@@ -4606,13 +4994,94 @@ section#layoutContentArea.pl-planner-introduction {
   }
   function splitWorkspaceTab(state, id, target, availableWidth) {
     if (!isWorkspacePanelId(id) || !isDock(target)) return { state, accepted: false, reason: "invalid" };
-    if (openGroupTabs(state, target).some((panel) => panel !== id)) return { state, accepted: false, reason: "occupied" };
     const proposed = copy(state);
+    proposed.panels[id] = { placement: "floating", open: true };
+    if (openGroupTabs(proposed, target).length) {
+      if (target === "main" || visibleDockGroups(proposed).length > 1) return { state, accepted: false, reason: "occupied" };
+      const remaining = target === "left" ? "right" : "left";
+      const active = activeGroupTab(proposed, target);
+      for (const peer of WORKSPACE_PANEL_IDS) if (proposed.panels[peer].placement === target) proposed.panels[peer].placement = remaining;
+      proposed.active[remaining] = active;
+      proposed.active[target] = null;
+    }
     proposed.panels[id] = { placement: target, open: true };
     if (visibleDockGroups(proposed).length > WORKSPACE_MAX_DOCK_GROUPS) return { state, accepted: false, reason: "limit" };
-    const next = mergeWorkspaceTab(state, id, target);
+    const next = mergeWorkspaceTab(proposed, id, target);
     if (!readableGroupWidths(next, availableWidth)) return { state, accepted: false, reason: "space" };
     return { state: next, accepted: true };
+  }
+
+  // src/content/workspace-presets.ts
+  var WORKSPACE_PRESETS = [
+    {
+      id: "single",
+      label: "One pane",
+      description: "Keep all open tabs together in one full-width pane.",
+      diagram: [{ kind: "tabs", share: 1 }],
+      ratios: { main: 1 }
+    },
+    {
+      id: "balanced",
+      label: "Balanced",
+      description: "Browse classes and view the schedule side by side.",
+      diagram: [{ kind: "browsing", share: 0.5 }, { kind: "schedule", share: 0.5 }],
+      ratios: { left: 0.5, right: 0.5 }
+    },
+    {
+      id: "browse-wide",
+      label: "Browse wide",
+      description: "Give classes more room, with the schedule on the right.",
+      diagram: [{ kind: "browsing", share: 0.65 }, { kind: "schedule", share: 0.35 }],
+      ratios: { left: 0.65, right: 0.35 }
+    },
+    {
+      id: "schedule-wide",
+      label: "Schedule wide",
+      description: "Give the schedule more room, with classes on the left.",
+      diagram: [{ kind: "browsing", share: 0.35 }, { kind: "schedule", share: 0.65 }],
+      ratios: { left: 0.35, right: 0.65 }
+    },
+    {
+      id: "schedule-left",
+      label: "Schedule on the left",
+      description: "Keep the schedule on the left and browse classes on the right.",
+      diagram: [{ kind: "schedule", share: 0.4 }, { kind: "browsing", share: 0.6 }],
+      ratios: { left: 0.4, right: 0.6 }
+    }
+  ];
+  function chooseActive(source, next, preferred, browsingOnly) {
+    const allowed = (id) => isWorkspacePanelId(id) && next.panels[id].open && (!browsingOnly || id !== "schedule");
+    if (allowed(preferred) && source.panels[preferred].open) return preferred;
+    for (const dock of WORKSPACE_DOCKS) {
+      const active = activeGroupTab(source, dock);
+      if (allowed(active)) return active;
+    }
+    return next.order.find(allowed);
+  }
+  function applyWorkspacePreset(state, id, preferredActive) {
+    const preset = WORKSPACE_PRESETS.find((preset2) => preset2.id === id);
+    if (!preset) return null;
+    const single = preset.id === "single", browsingDock2 = single ? "main" : preset.id === "schedule-left" ? "right" : "left";
+    const scheduleDock = single ? "main" : browsingDock2 === "left" ? "right" : "left";
+    const next = {
+      version: 1,
+      order: [...state.order],
+      active: { left: null, main: null, right: null },
+      panels: Object.fromEntries(WORKSPACE_PANEL_IDS.map((panel) => [panel, { placement: panel === "schedule" ? scheduleDock : browsingDock2, open: state.panels[panel].open }]))
+    };
+    if (single) {
+      if (!WORKSPACE_PANEL_IDS.some((panel) => next.panels[panel].open)) next.panels.classes.open = true;
+    } else {
+      if (!WORKSPACE_PANEL_IDS.some((panel) => panel !== "schedule" && next.panels[panel].open)) {
+        next.panels.classes.open = true;
+        next.panels.find.open = true;
+      }
+      next.panels.schedule.open = true;
+      next.active[scheduleDock] = "schedule";
+    }
+    const active = chooseActive(state, next, preferredActive, !single);
+    next.active[browsingDock2] = active;
+    return { state: next, ratios: { ...preset.ratios }, active };
   }
 
   // src/storage/workspace-layout.ts
@@ -4662,6 +5131,7 @@ section#layoutContentArea.pl-planner-introduction {
       panels,
       module: moduleId(candidate.module),
       mainModule: moduleId(candidate.mainModule),
+      layoutPreset: WORKSPACE_PRESETS.find((preset) => preset.id === candidate.layoutPreset)?.id ?? null,
       navigationCollapsed: candidate.navigationCollapsed === true,
       scheduleWidth: bounded(candidate.scheduleWidth, 420, 16384),
       scheduleExpanded: candidate.scheduleExpanded === true,
@@ -4671,8 +5141,236 @@ section#layoutContentArea.pl-planner-introduction {
   }
   var writes = Promise.resolve();
 
-  // src/content/planner-workspace.ts
+  // src/content/workspace-settings.ts
   var OWNED6 = "data-planner-lift-owned";
+  var sequence = 0;
+  var WorkspaceSettings = class {
+    constructor(doc, footer, callbacks) {
+      this.doc = doc;
+      this.callbacks = callbacks;
+      const id = `pl-workspace-settings-${++sequence}`;
+      this.trigger = doc.createElement("button");
+      this.trigger.type = "button";
+      this.trigger.className = "pl-workspace-settings pl-workspace-settings-trigger";
+      this.trigger.setAttribute(OWNED6, "");
+      this.trigger.setAttribute("aria-label", "Settings");
+      this.trigger.setAttribute("aria-haspopup", "dialog");
+      this.trigger.setAttribute("aria-controls", id);
+      this.trigger.setAttribute("aria-expanded", "false");
+      this.trigger.title = "Settings";
+      const icon = doc.createElementNS("http://www.w3.org/2000/svg", "svg");
+      icon.classList.add("pl-settings-icon");
+      icon.setAttribute("viewBox", "0 0 24 24");
+      icon.setAttribute("aria-hidden", "true");
+      icon.setAttribute("focusable", "false");
+      const path = doc.createElementNS("http://www.w3.org/2000/svg", "path");
+      path.setAttribute("d", "M9.6 3.5 10.2 2h3.6l.6 1.5 1.2 1.2 1.6.2 1.5-.2 1.8 3.1-1 1.2-.6 1.6.5 1.6 1 1.2-1.8 3.1-1.5-.2-1.6.2-1.2 1.2-.6 1.5h-3.6l-.6-1.5-1.2-1.2-1.6-.2-1.5.2-1.8-3.1 1-1.2.5-1.6-.6-1.6-1-1.2 1.8-3.1 1.5.2 1.6-.2Z");
+      const center = doc.createElementNS("http://www.w3.org/2000/svg", "circle");
+      center.setAttribute("cx", "12");
+      center.setAttribute("cy", "10.9");
+      center.setAttribute("r", "3.2");
+      icon.append(path, center);
+      const label = doc.createElement("span");
+      label.className = "pl-settings-trigger-label";
+      label.textContent = "Settings";
+      this.trigger.append(icon, label);
+      footer.append(this.trigger);
+      this.dialog = doc.createElement("dialog");
+      this.dialog.className = "pl-workspace-settings-dialog";
+      this.dialog.id = id;
+      this.dialog.setAttribute(OWNED6, "");
+      this.dialog.setAttribute("aria-labelledby", `${id}-title`);
+      this.dialog.setAttribute("aria-describedby", `${id}-description`);
+      const header = doc.createElement("header");
+      header.className = "pl-settings-header";
+      const title = doc.createElement("h2");
+      title.id = `${id}-title`;
+      title.textContent = "Settings";
+      this.closeButton = doc.createElement("button");
+      this.closeButton.type = "button";
+      this.closeButton.className = "pl-settings-close";
+      this.closeButton.textContent = "\xD7";
+      this.closeButton.setAttribute("aria-label", "Close settings");
+      header.append(title, this.closeButton);
+      const body = doc.createElement("div");
+      body.className = "pl-settings-body";
+      const heading = doc.createElement("h3");
+      heading.textContent = "Workspace layout";
+      const description = doc.createElement("p");
+      description.id = `${id}-description`;
+      description.className = "pl-settings-description";
+      description.textContent = "Choose a starting layout. You can still drag tabs and resize panes.";
+      const grid = doc.createElement("div");
+      grid.className = "pl-settings-presets";
+      grid.setAttribute("role", "group");
+      grid.setAttribute("aria-label", "Workspace layouts");
+      for (const preset of WORKSPACE_PRESETS) {
+        const button = doc.createElement("button");
+        button.type = "button";
+        button.className = "pl-settings-preset";
+        button.dataset.plLayoutPreset = preset.id;
+        button.setAttribute("aria-pressed", "false");
+        button.title = preset.description;
+        const drawing = doc.createElement("span");
+        drawing.className = "pl-settings-diagram";
+        drawing.setAttribute("aria-hidden", "true");
+        for (const part of preset.diagram) {
+          const pane = doc.createElement("span");
+          pane.className = `pl-settings-diagram-pane pl-settings-diagram-${part.kind}`;
+          pane.style.flex = `${part.share} 1 0`;
+          drawing.append(pane);
+        }
+        const name = doc.createElement("span");
+        name.className = "pl-settings-preset-name";
+        name.textContent = preset.label;
+        const checked = doc.createElement("span");
+        checked.className = "pl-settings-selected";
+        checked.textContent = "\u2713";
+        checked.setAttribute("aria-hidden", "true");
+        button.append(drawing, name, checked);
+        button.addEventListener("click", () => {
+          if (this.disposed) return;
+          this.callbacks.onPreset(preset.id);
+          if (!this.disposed) this.status.textContent = `${preset.label} layout applied.`;
+        });
+        this.presets.set(preset.id, button);
+        grid.append(button);
+      }
+      const legend = doc.createElement("p");
+      legend.className = "pl-settings-legend";
+      legend.setAttribute("aria-hidden", "true");
+      for (const [kind, text] of [["browsing", "Browsing"], ["schedule", "Schedule"]]) {
+        const item = doc.createElement("span");
+        item.className = `pl-settings-legend-${kind}`;
+        item.textContent = text;
+        legend.append(item);
+      }
+      this.current = doc.createElement("p");
+      this.current.className = "pl-settings-current";
+      this.compactNote = doc.createElement("p");
+      this.compactNote.className = "pl-settings-compact-note";
+      this.compactNote.textContent = "On smaller windows, switch between tabs; the split layout returns when there is room.";
+      this.compactNote.hidden = true;
+      this.status = doc.createElement("p");
+      this.status.className = "pl-settings-status";
+      this.status.setAttribute("role", "status");
+      this.status.setAttribute("aria-live", "polite");
+      this.status.setAttribute("aria-atomic", "true");
+      body.append(heading, description, grid, legend, this.current, this.compactNote, this.status);
+      const bottom = doc.createElement("footer");
+      bottom.className = "pl-settings-footer";
+      const reset = doc.createElement("button");
+      reset.type = "button";
+      reset.className = "pl-settings-default";
+      reset.textContent = "Default layout";
+      reset.addEventListener("click", () => {
+        if (this.disposed) return;
+        this.callbacks.onDefault();
+        if (!this.disposed) this.status.textContent = "Default layout restored.";
+      });
+      const immediate = doc.createElement("span");
+      immediate.textContent = "Changes apply immediately.";
+      bottom.append(reset, immediate);
+      this.dialog.append(header, body, bottom);
+      doc.body.append(this.dialog);
+      this.trigger.addEventListener("click", this.open);
+      this.closeButton.addEventListener("click", this.close);
+      this.dialog.addEventListener("cancel", this.cancel);
+      this.dialog.addEventListener("close", this.closed);
+      this.dialog.addEventListener("keydown", this.trapFocus);
+      this.dialog.addEventListener("pointerdown", this.pointerDown);
+      this.dialog.addEventListener("pointercancel", this.pointerCancel);
+      this.dialog.addEventListener("click", this.backdropClick);
+      this.update({ selectedPreset: null, compact: false });
+    }
+    trigger;
+    dialog;
+    closeButton;
+    compactNote;
+    current;
+    status;
+    presets = /* @__PURE__ */ new Map();
+    outsidePointerDown = false;
+    disposed = false;
+    update(state) {
+      if (this.disposed) return;
+      for (const [id, button] of this.presets) button.setAttribute("aria-pressed", String(id === state.selectedPreset));
+      const selected = WORKSPACE_PRESETS.find((preset) => preset.id === state.selectedPreset);
+      this.current.textContent = selected ? `Current layout: ${selected.label}` : `Current layout: ${state.defaultLayout ? "Default" : "Custom"}`;
+      this.compactNote.hidden = !state.compact;
+    }
+    destroy() {
+      if (this.disposed) return;
+      this.disposed = true;
+      this.trigger.removeEventListener("click", this.open);
+      this.closeButton.removeEventListener("click", this.close);
+      this.dialog.removeEventListener("cancel", this.cancel);
+      this.dialog.removeEventListener("close", this.closed);
+      this.dialog.removeEventListener("keydown", this.trapFocus);
+      this.dialog.removeEventListener("pointerdown", this.pointerDown);
+      this.dialog.removeEventListener("pointercancel", this.pointerCancel);
+      this.dialog.removeEventListener("click", this.backdropClick);
+      if (this.dialog.open) this.dialog.close();
+      this.dialog.remove();
+      this.trigger.remove();
+      this.presets.clear();
+    }
+    open = () => {
+      if (this.disposed || this.dialog.open || !this.dialog.isConnected) return;
+      this.status.textContent = "";
+      this.outsidePointerDown = false;
+      this.dialog.showModal();
+      this.trigger.setAttribute("aria-expanded", "true");
+      const selected = [...this.presets.values()].find((button) => button.getAttribute("aria-pressed") === "true");
+      (selected || this.presets.values().next().value || this.closeButton).focus({ preventScroll: true });
+    };
+    close = () => {
+      if (!this.disposed && this.dialog.open) this.dialog.close();
+    };
+    cancel = (event) => {
+      event.preventDefault();
+      this.close();
+    };
+    closed = () => {
+      if (this.disposed) return;
+      this.outsidePointerDown = false;
+      this.trigger.setAttribute("aria-expanded", "false");
+      if (this.trigger.isConnected) this.trigger.focus({ preventScroll: true });
+    };
+    trapFocus = (event) => {
+      if (this.disposed || !this.dialog.open || event.key !== "Tab" || event.ctrlKey || event.altKey || event.metaKey) return;
+      const buttons = [...this.dialog.querySelectorAll("button")].filter((button) => {
+        const style = this.doc.defaultView?.getComputedStyle(button);
+        return !button.disabled && !button.hidden && button.tabIndex >= 0 && style?.display !== "none" && style?.visibility !== "hidden";
+      });
+      if (!buttons.length) return;
+      const index = buttons.indexOf(this.doc.activeElement);
+      const destination = event.shiftKey && index <= 0 ? buttons.at(-1) : !event.shiftKey && (index < 0 || index === buttons.length - 1) ? buttons[0] : null;
+      if (destination) {
+        event.preventDefault();
+        event.stopPropagation();
+        destination.focus({ preventScroll: true });
+      }
+    };
+    outside(event) {
+      const box = this.dialog.getBoundingClientRect();
+      return event.target === this.dialog && (event.clientX < box.left || event.clientX > box.right || event.clientY < box.top || event.clientY > box.bottom);
+    }
+    pointerDown = (event) => {
+      this.outsidePointerDown = event.button === 0 && this.outside(event);
+    };
+    pointerCancel = () => {
+      this.outsidePointerDown = false;
+    };
+    backdropClick = (event) => {
+      const dismiss = this.outsidePointerDown && this.outside(event);
+      this.outsidePointerDown = false;
+      if (dismiss) this.close();
+    };
+  };
+
+  // src/content/planner-workspace.ts
+  var OWNED7 = "data-planner-lift-owned";
   var PANEL = "ctl00_MainContent_classPlanPanel";
   var PRIMARY = [
     ["classPlanner_ClassesInPlanSection", "plannerSectionClip", "pl-workspace-plan", "My classes"],
@@ -4714,7 +5412,7 @@ section#layoutContentArea.pl-planner-introduction {
     if (sections.length !== shapes.length || shapes.some(([cls, titleId, bodyId], index) => {
       const matches = sections.filter((section) => section.classList.contains(cls));
       if (matches.length !== 1) return true;
-      const children2 = [...matches[0].children].filter((node) => !node.hasAttribute(OWNED6));
+      const children2 = [...matches[0].children].filter((node) => !node.hasAttribute(OWNED7));
       const title = children2[0], content = children2[children2.length - 1];
       return title?.id !== titleId || !title.classList.contains("classPlanner_SectionTitle") || content?.id !== bodyId || content.tagName !== "DIV" || index < 3 && children2.length !== 2 || index >= 3 && children2.length < 2;
     })) return false;
@@ -4742,7 +5440,7 @@ section#layoutContentArea.pl-planner-introduction {
   function officialText(node) {
     if (node.matches("[hidden],.hidden") || node.style?.display === "none") return "";
     const copy2 = node.cloneNode(true);
-    copy2.querySelectorAll(`[${OWNED6}],script,input,textarea,[hidden],.hidden`).forEach((n) => n.remove());
+    copy2.querySelectorAll(`[${OWNED7}],script,input,textarea,[hidden],.hidden`).forEach((n) => n.remove());
     copy2.querySelectorAll("[style]").forEach((n) => {
       if (n.style.display === "none") n.remove();
     });
@@ -4793,6 +5491,8 @@ section#layoutContentArea.pl-planner-introduction {
     saveQueued = false;
     dragPresentation = "";
     groups = createDefaultGroups();
+    settings = null;
+    layoutPreset = null;
     gestureChoices = null;
     dockSizes = {};
     dockDrag = null;
@@ -4810,6 +5510,7 @@ section#layoutContentArea.pl-planner-introduction {
       if (!this.savedLayout) return;
       const saved = this.savedLayout;
       this.groups = normalizeWorkspaceGroups(saved.groups) || migrateLegacyGroups(saved);
+      this.layoutPreset = saved.layoutPreset;
       this.module = saved.module;
       this.mainModule = saved.mainModule;
       this.navigationCollapsed = saved.navigationCollapsed;
@@ -4827,6 +5528,7 @@ section#layoutContentArea.pl-planner-introduction {
         version: 2,
         panels,
         groups: this.groups,
+        layoutPreset: this.layoutPreset,
         module: this.module,
         mainModule: this.mainModule,
         navigationCollapsed: this.navigationCollapsed,
@@ -4848,6 +5550,7 @@ section#layoutContentArea.pl-planner-introduction {
     resetLayoutChoices() {
       this.savedLayout = null;
       this.groups = createDefaultGroups();
+      this.layoutPreset = null;
       this.gestureChoices = null;
       this.module = this.mainModule = this.previousModule = "classes";
       this.navigationCollapsed = this.showSchedule = this.scheduleExpanded = false;
@@ -4869,6 +5572,49 @@ section#layoutContentArea.pl-planner-introduction {
         collapsed: new Map(this.state.panes.map((pane) => [pane, pane.collapsed])),
         groups: normalizeWorkspaceGroups(this.groups)
       };
+    }
+    activePreset(state = this.groups) {
+      const preset = WORKSPACE_PRESETS.find((item) => item.id === this.layoutPreset);
+      if (!preset) return null;
+      const browsing = preset.id === "single" ? "main" : preset.id === "schedule-left" ? "right" : "left";
+      const schedule = preset.id === "single" ? "main" : preset.id === "schedule-left" ? "left" : "right";
+      return WORKSPACE_PANEL_IDS.every((id) => state.panels[id].placement === (id === "schedule" ? schedule : browsing)) ? preset : null;
+    }
+    applyLayoutPreset(id) {
+      const s = this.state;
+      if (!s) return;
+      s.layout.cancelActiveDrag();
+      s.navEnd();
+      s.end();
+      const preferred = this.showSchedule ? "schedule" : this.module === "information" ? this.previousModule : this.module;
+      const result = applyWorkspacePreset(this.groups, id, isWorkspacePanelId(preferred) ? preferred : void 0);
+      if (!result) return;
+      this.groups = result.state;
+      this.layoutPreset = id;
+      this.scheduleExpanded = false;
+      this.scheduleWidth = null;
+      this.dockSizes = {};
+      this.showSchedule = result.active === "schedule";
+      if (result.active !== "schedule") this.module = this.mainModule = this.previousModule = result.active;
+      else if (this.module === "information") this.module = this.mainModule;
+      this.updatingLayout = true;
+      try {
+        this.syncGroupsToPanels();
+        s.layout.dockPanel("details", "main", false);
+      } finally {
+        this.updatingLayout = false;
+      }
+      this.updatePanes();
+      this.rememberLayout();
+    }
+    /** Manual sizing starts at the visible preset widths, without a jump. */
+    releasePresetSizing() {
+      if (!this.layoutPreset || !this.state) return;
+      const geometry = this.dockGeometry();
+      this.layoutPreset = null;
+      if (geometry.wide) {
+        for (const dock of ["left", "right"]) if (geometry.boxes[dock].width) this.dockSizes[dock] = geometry.boxes[dock].width;
+      }
     }
     restoreGestureChoices() {
       const saved = this.gestureChoices;
@@ -4907,7 +5653,7 @@ section#layoutContentArea.pl-planner-introduction {
       const detailScroll = this.state?.slot.scrollTop || 0, activeModule = this.module, mainModule = this.mainModule;
       const layoutSnapshot = this.state?.layout.snapshot() || this.savedLayout, navigationCollapsed = this.navigationCollapsed;
       const active = doc.activeElement;
-      const nativeFocus = active instanceof HTMLElement && active.matches("input,select,textarea,button,a,[tabindex]") && !active.closest(`[${OWNED6}]`) && courses2.some((course) => course.node.contains(active)) ? active : null;
+      const nativeFocus = active instanceof HTMLElement && active.matches("input,select,textarea,button,a,[tabindex]") && !active.closest(`[${OWNED7}]`) && courses2.some((course) => course.node.contains(active)) ? active : null;
       this.latestCourses = courses2;
       if (this.useOriginal) {
         this.ensureReturnButton(doc);
@@ -4959,7 +5705,7 @@ section#layoutContentArea.pl-planner-introduction {
           button = doc.createElement("button");
           button.type = "button";
           button.className = "pl-workspace-detail-button";
-          button.setAttribute(OWNED6, "true");
+          button.setAttribute(OWNED7, "true");
           button.dataset.plWorkspaceDetails = "true";
           button.textContent = "Details";
           button.setAttribute("aria-label", `Details for ${course.label}`);
@@ -5023,7 +5769,7 @@ section#layoutContentArea.pl-planner-introduction {
       const button = host.ownerDocument.createElement("button");
       button.type = "button";
       button.className = "pl-workspace-actions-button";
-      button.setAttribute(OWNED6, "true");
+      button.setAttribute(OWNED7, "true");
       button.dataset.plWorkspaceActions = "true";
       button.textContent = "Class actions";
       button.setAttribute("aria-label", `Class actions for ${course.label}`);
@@ -5093,7 +5839,7 @@ section#layoutContentArea.pl-planner-introduction {
       if (!title || description?.parentElement !== title.parentElement) return;
       const toolbar = doc.createElement("div");
       toolbar.className = "pl-workspace-top pl-intro-toolbar";
-      toolbar.setAttribute(OWNED6, "true");
+      toolbar.setAttribute(OWNED7, "true");
       description.after(toolbar);
       const resize = () => {
         this.introduction.positionHeader();
@@ -5126,7 +5872,7 @@ section#layoutContentArea.pl-planner-introduction {
       const back = doc.createElement("button");
       back.type = "button";
       back.className = "pl-workspace-return";
-      back.setAttribute(OWNED6, "true");
+      back.setAttribute(OWNED7, "true");
       back.textContent = "Open planner workspace";
       host.prepend(back);
       this.returnButton = back;
@@ -5151,7 +5897,7 @@ section#layoutContentArea.pl-planner-introduction {
       if (secondary.some((matches) => matches.length > 1 || matches.some((node) => !node.firstElementChild?.matches(".classPlanner_SectionTitle") || node.children.length < 2))) return;
       const owned = (node, cls) => {
         node.className = cls;
-        node.setAttribute(OWNED6, "true");
+        node.setAttribute(OWNED7, "true");
         return node;
       };
       const placements = [];
@@ -5287,6 +6033,7 @@ section#layoutContentArea.pl-planner-introduction {
       if (panes[1].body.id) widenSchedule.setAttribute("aria-controls", panes[1].body.id);
       panes[1].toggle.before(widenSchedule);
       widenSchedule.addEventListener("click", () => {
+        this.releasePresetSizing();
         this.scheduleExpanded = !this.scheduleExpanded;
         this.updatePanes();
         this.rememberLayout();
@@ -5417,7 +6164,8 @@ section#layoutContentArea.pl-planner-introduction {
       place(panel, shell);
       let sizingBefore = null;
       const beginSizing = () => {
-        sizingBefore = { scheduleWidth: this.scheduleWidth, scheduleExpanded: this.scheduleExpanded, dockSizes: { ...this.dockSizes } };
+        sizingBefore = { scheduleWidth: this.scheduleWidth, scheduleExpanded: this.scheduleExpanded, dockSizes: { ...this.dockSizes }, layoutPreset: this.layoutPreset };
+        this.releasePresetSizing();
       };
       const splitter = owned(doc.createElement("div"), "pl-workspace-splitter");
       splitter.tabIndex = 0;
@@ -5435,6 +6183,7 @@ section#layoutContentArea.pl-planner-introduction {
         deck.classList.add("pl-workspace-resizing");
       });
       splitter.addEventListener("dblclick", () => {
+        this.releasePresetSizing();
         this.scheduleExpanded = false;
         this.scheduleWidth = null;
         this.updatePanes();
@@ -5443,6 +6192,7 @@ section#layoutContentArea.pl-planner-introduction {
       splitter.addEventListener("keydown", (event) => {
         if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
         event.preventDefault();
+        this.releasePresetSizing();
         const current = this.currentScheduleWidth();
         this.scheduleExpanded = false;
         this.scheduleWidth = event.key === "Home" ? 420 : event.key === "End" ? this.maximumScheduleWidth() : current + (event.key === "ArrowLeft" ? 1 : -1) * (event.shiftKey ? 40 : 16);
@@ -5467,6 +6217,7 @@ section#layoutContentArea.pl-planner-introduction {
           this.dockDrag = { edge, id: event.pointerId, x: event.clientX, size: Number(handle.getAttribute("aria-valuenow") || 300), ...geometry.fillSides && geometry.left && geometry.right ? { splitTotal: geometry.leftSize + geometry.rightSize } : {} };
         });
         handle.addEventListener("dblclick", () => {
+          this.releasePresetSizing();
           const geometry = this.dockGeometry();
           if (geometry.fillSides && geometry.left && geometry.right) this.dockSizes = {};
           else delete this.dockSizes[edge];
@@ -5514,7 +6265,11 @@ section#layoutContentArea.pl-planner-introduction {
       slot.addEventListener("scroll", detailsScroll, { passive: true });
       const calendarScroll = () => this.positionCalendarTools();
       panes[1].section.addEventListener("scroll", calendarScroll, { passive: true });
+      const view = doc.defaultView, printMedia = view?.matchMedia?.("print") || null;
+      let printActive = false, printFrame = null;
+      const printing = () => printActive || printMedia?.matches === true;
       const resize = () => {
+        if (printing()) return;
         this.introduction.positionHeader();
         this.positionWorkspace();
         this.updatePanes();
@@ -5576,6 +6331,7 @@ section#layoutContentArea.pl-planner-introduction {
           this.scheduleWidth = sizingBefore.scheduleWidth;
           this.scheduleExpanded = sizingBefore.scheduleExpanded;
           this.dockSizes = sizingBefore.dockSizes;
+          this.layoutPreset = sizingBefore.layoutPreset;
         } else {
           if (this.drag) this.scheduleWidth = this.currentScheduleWidth();
           if (this.dockDrag) this.resizeDock(this.dockDrag.edge, this.dockSizes[this.dockDrag.edge] || 200, this.dockDrag.splitTotal);
@@ -5589,14 +6345,30 @@ section#layoutContentArea.pl-planner-introduction {
       };
       let before = null;
       const beforePrint = () => {
+        printActive = true;
         if (before === null) before = extras.open;
         extras.open = true;
       };
       const afterPrint = () => {
+        printActive = false;
         if (before !== null) {
           extras.open = before;
           before = null;
         }
+        if (!view || this.state?.host !== host || printFrame !== null) return;
+        printFrame = view.requestAnimationFrame(() => {
+          printFrame = null;
+          if (this.state?.host === host && !printing()) resize();
+        });
+      };
+      const printChanged = () => {
+        if (printMedia?.matches) beforePrint();
+        else afterPrint();
+      };
+      const stopPrint = () => {
+        printMedia?.removeEventListener("change", printChanged);
+        if (printFrame !== null) view?.cancelAnimationFrame(printFrame);
+        printFrame = null;
       };
       const actionObserver = new MutationObserver(() => this.syncPlanSurfaces());
       const helpObserver = new MutationObserver(() => this.positionHeaderHelp());
@@ -5609,7 +6381,11 @@ section#layoutContentArea.pl-planner-introduction {
         if (!this.activePlanSurface && target && !extras.contains(target) && !target.closest('.pl-plan-action-surface,[role="dialog"],dialog[open],.ui-dialog')) extras.open = false;
       };
       const layout = new PanelLayoutController(doc, deck, (id, placement, reason, operation) => this.panelLayoutChanged(id, placement, reason, operation));
-      this.state = { doc, host, panel, deck, top, extras, menu, placements, preview, head, content, close, panes, splitters: [splitter, ...dockSplitters], empty, widenSchedule, shell, main, navMain, navFooter, slot, moduleButtons, mobileMain, mobileSchedule, scheduleNav, position, scrollRoom, hostHadStyle: host.hasAttribute("style"), resize, key, detailsScroll, calendarScroll, move, end, beforePrint, afterPrint, actionObserver, actionClick, helpObserver, layout, detailsFrame, detailIndex, navigation, navToggle, navDivider, navMove, navEnd, groupStrips, groupTabs };
+      this.state = { doc, host, panel, deck, top, extras, menu, placements, preview, head, content, close, panes, splitters: [splitter, ...dockSplitters], empty, widenSchedule, shell, main, navMain, navFooter, slot, moduleButtons, mobileMain, mobileSchedule, scheduleNav, position, scrollRoom, hostHadStyle: host.hasAttribute("style"), resize, key, detailsScroll, calendarScroll, move, end, beforePrint, afterPrint, printing, stopPrint, actionObserver, actionClick, helpObserver, layout, detailsFrame, detailIndex, navigation, navToggle, navDivider, navMove, navEnd, groupStrips, groupTabs };
+      this.settings = new WorkspaceSettings(doc, navFooter, {
+        onPreset: (id) => this.applyLayoutPreset(id),
+        onDefault: () => this.state?.layout.reset()
+      });
       for (const pane of panes) {
         const id = pane.module || "schedule", handle = owned(doc.createElement("button"), "pl-panel-grip");
         handle.type = "button";
@@ -5690,6 +6466,8 @@ section#layoutContentArea.pl-planner-introduction {
       doc.defaultView?.addEventListener("blur", end);
       doc.defaultView?.addEventListener("beforeprint", beforePrint);
       doc.defaultView?.addEventListener("afterprint", afterPrint);
+      printMedia?.addEventListener("change", printChanged);
+      if (printMedia?.matches) beforePrint();
       host.classList.add("pl-workspace-host", "pl-grouped-workspace");
       doc.documentElement.classList.add("pl-workspace-page");
       this.syncGroupsToPanels();
@@ -5697,7 +6475,7 @@ section#layoutContentArea.pl-planner-introduction {
     }
     positionWorkspace() {
       const s = this.state, view = s?.doc.defaultView;
-      if (!s || !view) return;
+      if (!s || !view || s.printing()) return;
       const marker = s.position.getBoundingClientRect(), top = Math.max(12, Math.ceil(marker.top));
       s.host.style.setProperty("--pl-workspace-top", `${top}px`);
       s.host.classList.toggle("pl-workspace-flow", view.innerHeight - top < 400);
@@ -5718,7 +6496,7 @@ section#layoutContentArea.pl-planner-introduction {
       const s = this.state;
       if (!s) return;
       const previousActive = this.activePlanSurface;
-      const candidates = [...s.host.children].filter((node) => node instanceof HTMLElement && (node.matches("div.mobileloadmenupanel.touchpanelmenu.noprint") && [...node.children].filter((child) => !child.hasAttribute(OWNED6)).length === 1 && !!node.querySelector(":scope > div.message > ul") || node.matches("div#AboutDragger.message.info,div#SaveDragger.message.info") && node.firstElementChild?.tagName === "HEADER" || node.matches("div#ResponseMessageDragger") && !!node.querySelector(":scope > table")) && node.closest("form") === s.host.closest("form"));
+      const candidates = [...s.host.children].filter((node) => node instanceof HTMLElement && (node.matches("div.mobileloadmenupanel.touchpanelmenu.noprint") && [...node.children].filter((child) => !child.hasAttribute(OWNED7)).length === 1 && !!node.querySelector(":scope > div.message > ul") || node.matches("div#AboutDragger.message.info,div#SaveDragger.message.info") && node.firstElementChild?.tagName === "HEADER" || node.matches("div#ResponseMessageDragger") && !!node.querySelector(":scope > table")) && node.closest("form") === s.host.closest("form"));
       for (const [node, record2] of this.planSurfaces) if (!candidates.includes(node)) {
         this.restorePlanSurface(record2);
         this.planSurfaces.delete(node);
@@ -5733,7 +6511,7 @@ section#layoutContentArea.pl-planner-introduction {
             close.type = "button";
             close.className = "pl-plan-action-load-close";
             close.textContent = "Close load plan";
-            close.setAttribute(OWNED6, "true");
+            close.setAttribute(OWNED7, "true");
             close.addEventListener("click", () => this.dismissPlanSurface(node));
             node.prepend(close);
             record2.close = close;
@@ -5882,7 +6660,7 @@ section#layoutContentArea.pl-planner-introduction {
       } catch {
         return null;
       }
-      const children = [...title.children].filter((node) => !node.hasAttribute(OWNED6)), button = doc.getElementById(spec.toggle);
+      const children = [...title.children].filter((node) => !node.hasAttribute(OWNED7)), button = doc.getElementById(spec.toggle);
       if (!(button instanceof HTMLButtonElement) || button.parentElement !== title || button.form !== form2 || children.length !== spec.children || children[children.length - 1] !== button || !button.matches("button.planSectionToggle.link") || button.disabled || button.matches(":disabled") || button.getAttribute("aria-disabled") === "true" || ["type", "form", "formaction", "formmethod", "formenctype", "formtarget"].some((name) => button.hasAttribute(name)) || button.getAttribute("onclick") !== `shrink('${spec.target}'); __doPostBack('${spec.toggle.replaceAll("_", "$")}','')` || button.children.length !== 2 || !button.children[0].matches("i.icon-plus-sign:not(.icon-minus-sign)") || button.children[1].tagName !== "LABEL" || button.children[1].textContent?.trim() !== spec.label) return null;
       if (spec.children === 3 && (!children[0].matches("a.planSectionHelpTip") || !children[1].matches("button#faceTip.uit-clickover-bottom.planSectionHelpTip.link"))) return null;
       for (let node = button; node && title.contains(node); node = node.parentElement) {
@@ -5896,7 +6674,7 @@ section#layoutContentArea.pl-planner-introduction {
       if (!s || this.pendingModuleOpen || !pane.toggle) return;
       const { button, target } = expansion, status = s.doc.createElement("p");
       status.className = "pl-optimizer-state";
-      status.setAttribute(OWNED6, "true");
+      status.setAttribute(OWNED7, "true");
       status.setAttribute("role", "status");
       status.textContent = `Opening ${pane.label}\u2026 If it stays closed, use Original layout to retry the native heading.`;
       pane.body.before(status);
@@ -5918,7 +6696,7 @@ section#layoutContentArea.pl-planner-introduction {
       if (pane.module === "study" || pane.module === "personal") return this.secondaryExpandButton(pane, pane.module);
       const s = this.state, doc = s?.doc, location = doc?.defaultView?.location;
       if (!s || !doc || !location || location.origin !== "https://be.my.ucla.edu" || location.pathname !== "/ClassPlanner/ClassPlan.aspx" || pane.module !== "optimizer" || !pane.section.isConnected || pane.section.parentElement !== s.main) return null;
-      const children = [...pane.section.children].filter((node) => !node.hasAttribute(OWNED6));
+      const children = [...pane.section.children].filter((node) => !node.hasAttribute(OWNED7));
       if (children.length !== 3 || children[0] !== pane.title || children[2] !== pane.body || pane.title.id !== "classOptimizerTitle" || !children[1].matches("#HelpOptimizerDiv.message.info") || pane.body.id !== "panelOptimizer" || !pane.body.classList.contains("hidden")) return null;
       const form2 = doc.getElementById("aspnetForm"), button = doc.getElementById(OPTIMIZER_TOGGLE);
       if (!(form2 instanceof HTMLFormElement) || form2.method.toLowerCase() !== "post" || !(button instanceof HTMLButtonElement) || button.parentElement !== pane.title || button.form !== form2 || pane.section.closest("form") !== form2 || doc.querySelectorAll(`#${OPTIMIZER_TOGGLE}`).length !== 1 || doc.getElementById("panelOptimizer") !== pane.body || !button.matches("button.planSectionToggle.link") || button.disabled || button.matches(":disabled") || button.getAttribute("aria-disabled") === "true" || button.getAttribute("onclick") !== OPTIMIZER_OPEN || ["type", "formaction", "formmethod", "formenctype", "formtarget"].some((name) => button.hasAttribute(name))) return null;
@@ -5932,14 +6710,14 @@ section#layoutContentArea.pl-planner-introduction {
         const style = doc.defaultView.getComputedStyle(node);
         if (node.hidden || node.getAttribute("aria-hidden") === "true" || style.display === "none" || style.visibility === "hidden" || style.visibility === "collapse") return null;
       }
-      const titleChildren = [...pane.title.children].filter((node) => !node.hasAttribute(OWNED6));
+      const titleChildren = [...pane.title.children].filter((node) => !node.hasAttribute(OWNED7));
       if (titleChildren.length !== 2 || !titleChildren[0].matches("button#ctl00_MainContent_planSectionHelpTipOpPop.planSectionHelpTip.link") || titleChildren[1] !== button || button.children.length !== 2 || !button.children[0].matches("i.icon-plus-sign:not(.icon-minus-sign)") || button.children[1].tagName !== "LABEL" || button.children[1].textContent?.trim() !== "Plan Optimizer") return null;
       return button;
     }
     secondaryExpandButton(pane, module) {
       const s = this.state, doc = s?.doc, location = doc?.defaultView?.location, spec = SECONDARY_DISCLOSURES[module];
       if (!s || !doc || !location || location.origin !== "https://be.my.ucla.edu" || location.pathname !== "/ClassPlanner/ClassPlan.aspx" || !pane.opaque || !pane.section.isConnected || pane.section.parentElement !== s.main) return null;
-      const children = [...pane.section.children].filter((node) => !node.hasAttribute(OWNED6));
+      const children = [...pane.section.children].filter((node) => !node.hasAttribute(OWNED7));
       if (children.length !== 2 || children[0] !== pane.title || children[1] !== pane.body || pane.title.id !== spec.title || pane.body.id !== spec.body || !pane.body.classList.contains("hidden")) return null;
       const form2 = doc.getElementById("aspnetForm"), button = doc.getElementById(spec.toggle);
       if (!(form2 instanceof HTMLFormElement) || form2.method.toLowerCase() !== "post" || !(button instanceof HTMLButtonElement) || button.parentElement !== pane.title || button.form !== form2 || pane.section.closest("form") !== form2 || doc.querySelectorAll(`#${spec.toggle}`).length !== 1 || doc.querySelectorAll(`#${spec.body}`).length !== 1 || doc.getElementById(spec.body) !== pane.body || !button.matches("button.planSectionToggle.link") || button.disabled || button.matches(":disabled") || button.getAttribute("aria-disabled") === "true" || button.getAttribute("onclick") !== `shrink('${spec.body}'); __doPostBack('${spec.toggle.replaceAll("_", "$")}','')` || ["type", "form", "formaction", "formmethod", "formenctype", "formtarget"].some((name) => button.hasAttribute(name))) return null;
@@ -5953,7 +6731,7 @@ section#layoutContentArea.pl-planner-introduction {
         const style = doc.defaultView.getComputedStyle(node);
         if (node.hidden || node.getAttribute("aria-hidden") === "true" || style.display === "none" || ["hidden", "collapse"].includes(style.visibility)) return null;
       }
-      const titleChildren = [...pane.title.children].filter((node) => !node.hasAttribute(OWNED6));
+      const titleChildren = [...pane.title.children].filter((node) => !node.hasAttribute(OWNED7));
       if (titleChildren.length !== spec.count || !titleChildren[spec.count - 2].matches(spec.help) || module === "study" && !titleChildren[0].matches("a.planSectionHelpTip") || titleChildren[spec.count - 1] !== button || button.children.length !== 2 || !button.children[0].matches("i.icon-plus-sign:not(.icon-minus-sign)") || button.children[1].tagName !== "LABEL" || button.children[1].textContent?.trim() !== spec.label) return null;
       return button;
     }
@@ -5965,7 +6743,7 @@ section#layoutContentArea.pl-planner-introduction {
       if (!button || !navigation) return;
       const status = s.doc.createElement("p");
       status.className = "pl-optimizer-state";
-      status.setAttribute(OWNED6, "true");
+      status.setAttribute(OWNED7, "true");
       status.setAttribute("role", "status");
       status.textContent = `Opening ${pane.module === "optimizer" ? "Plan Optimizer" : MODULE_LABELS[pane.module]}\u2026 If it stays closed, click the module heading.`;
       pane.body.before(status);
@@ -6026,6 +6804,7 @@ section#layoutContentArea.pl-planner-introduction {
       this.dragPresentation = "";
       if (reason === "geometry" && !s.layout.isInteracting()) this.restoreGestureChoices();
       else if (reason === "placement" || reason === "commit" || reason === "reset") this.gestureChoices = null;
+      if (isWorkspacePanelId(id) && (reason === "placement" || reason === "visibility")) this.releasePresetSizing();
       this.updatingLayout = true;
       try {
         if (reason === "reset") this.resetLayoutChoices();
@@ -6083,7 +6862,7 @@ section#layoutContentArea.pl-planner-introduction {
     }
     groupDropAllowed(id, operation) {
       const source = this.gestureChoices?.groups || this.groups, next = this.groupDropState(id, operation, source);
-      if (operation.kind === "split") return splitWorkspaceTab(source, id, operation.dock, this.state?.deck.getBoundingClientRect().width || 0).accepted;
+      if (operation.kind === "split") return (this.state?.doc.defaultView?.innerWidth || 0) >= 1100 && splitWorkspaceTab(source, id, operation.dock, this.state?.deck.getBoundingClientRect().width || 0).accepted;
       return next.panels[id].placement === operation.dock && WORKSPACE_DOCKS.filter((dock) => openGroupTabs(next, dock).length).length <= 2;
     }
     presentationGroups() {
@@ -6110,6 +6889,7 @@ section#layoutContentArea.pl-planner-introduction {
     }
     resizeDock(edge, requested, splitTotal) {
       const geometry = this.dockGeometry();
+      this.releasePresetSizing();
       const group = edge === "left" ? geometry.displayDocks[0] : geometry.displayDocks.at(-1), other = geometry.displayDocks.find((dock) => dock !== group);
       const minimum = group ? minimumGroupWidth(geometry.state, group) : 200, maximum = Math.max(minimum, geometry.rect.width - 12 - (other ? minimumGroupWidth(geometry.state, other) : 0));
       const size = Math.max(minimum, Math.min(maximum, requested));
@@ -6127,6 +6907,8 @@ section#layoutContentArea.pl-planner-introduction {
       const docks = WORKSPACE_DOCKS.filter((dock) => openGroupTabs(state, dock).some((id) => s.groupTabs.has(id)));
       const preferredRight = this.scheduleExpanded && state.panels.schedule.placement === "right" ? this.currentScheduleWidth() : this.dockSizes.right ?? this.currentScheduleWidth(), preferredLeft = this.scheduleExpanded && state.panels.schedule.placement === "left" ? this.currentScheduleWidth() : this.dockSizes.left ?? this.currentScheduleWidth();
       const preferred = { left: preferredLeft, right: preferredRight, main: Math.max(0, rect.width - (docks.includes("left") ? preferredLeft + 12 : 0) - (docks.includes("right") ? preferredRight + 12 : 0)) };
+      const preset = this.activePreset(state), usable = Math.max(0, rect.width - 12 * Math.max(0, docks.length - 1));
+      if (preset) for (const dock of WORKSPACE_DOCKS) preferred[dock] = usable * (preset.ratios[dock] || 0);
       const widths = readableGroupWidths(state, rect.width, preferred);
       const selected = focusId || (this.showSchedule ? "schedule" : this.module !== "information" ? this.module : null);
       const chosen = selected ? state.panels[selected].placement : null;
@@ -6156,11 +6938,12 @@ section#layoutContentArea.pl-planner-introduction {
       const s = this.state;
       if (!s) return [];
       const source = this.gestureChoices?.groups || this.groups, geometry = this.dockGeometry(void 0, source), targets = [], rect = geometry.rect;
+      const edgeWidth = Math.min(180, Math.max(80, rect.width * 0.15)), gutter = 12;
       for (const dock of ["left", "right"]) {
         const operation = { kind: "split", dock };
         if (!this.groupDropAllowed(id, operation)) continue;
         const next = this.groupDropState(id, operation, source), preview = this.dockGeometry(void 0, next, id).wholeBoxes[dock];
-        targets.push({ operation, preview, hit: { left: dock === "left" ? rect.left : rect.right - 56, top: rect.top, width: 56, height: rect.height } });
+        targets.push({ operation, preview, hit: { left: dock === "left" ? rect.left - gutter : rect.right - edgeWidth, top: rect.top + 40, width: edgeWidth + gutter, height: Math.max(0, rect.height - 40) } });
       }
       for (const dock of geometry.displayDocks) {
         const box = geometry.wholeBoxes[dock], strip = s.groupStrips.get(dock).getBoundingClientRect(), peers = openGroupTabs(source, dock).filter((peer) => peer !== id);
@@ -6286,7 +7069,7 @@ section#layoutContentArea.pl-planner-introduction {
     }
     updatePanes() {
       const s = this.state;
-      if (!s) return;
+      if (!s || s.printing()) return;
       s.host.classList.toggle("pl-navigation-collapsed", this.navigationCollapsed);
       this.refreshModulePending();
       if (this.module !== "information" && !s.panes.some((pane) => pane.module === this.module)) this.module = "classes";
@@ -6363,6 +7146,11 @@ section#layoutContentArea.pl-planner-introduction {
       this.positionHeaderHelp();
       const info = geometry.boxes.main;
       this.introduction.showInformationInWorkspace(geometry.information, new DOMRect(info.left, info.top, info.width, info.height), geometry.information);
+      this.settings?.update({
+        selectedPreset: this.activePreset()?.id ?? null,
+        compact: !geometry.wide,
+        defaultLayout: !this.layoutPreset && !this.scheduleExpanded && this.scheduleWidth === null && !Object.keys(this.dockSizes).length && JSON.stringify(this.groups) === JSON.stringify(createDefaultGroups())
+      });
     }
     restoreHeaderHelp(node) {
       const previous = this.headerHelp.get(node);
@@ -6377,7 +7165,7 @@ section#layoutContentArea.pl-planner-introduction {
     }
     positionHeaderHelp() {
       const s = this.state, view = s?.doc.defaultView;
-      if (!s || !view) return;
+      if (!s || !view || s.printing()) return;
       const visible = /* @__PURE__ */ new Set();
       for (const pane of s.panes) {
         const shown = !pane.section.classList.contains("pl-group-inactive") && !pane.section.classList.contains("pl-panel-hidden");
@@ -6453,7 +7241,7 @@ section#layoutContentArea.pl-planner-introduction {
      * Their native parents and handlers stay intact; narrow panels keep two rows. */
     positionCalendarTools() {
       const s = this.state;
-      if (!s) return;
+      if (!s || s.printing()) return;
       const pane = s.panes[1], section = pane.section;
       const menu = pane.body.querySelector(":scope > #gridDiv > .classPlanner_SectionMenu.plannerMenuLinks.checkboxStateHolder");
       const clear = () => {
@@ -6505,7 +7293,7 @@ section#layoutContentArea.pl-planner-introduction {
       previous?.node.remove();
       const summary = host.ownerDocument.createElement("div");
       summary.className = "pl-workspace-course-summary";
-      summary.setAttribute(OWNED6, "true");
+      summary.setAttribute(OWNED7, "true");
       for (const fields2 of values) {
         const line = host.ownerDocument.createElement("p");
         fields2.forEach((text, index) => {
@@ -6558,7 +7346,7 @@ section#layoutContentArea.pl-planner-introduction {
       if (!preview.hidden) {
         preview = s.doc.createElement("aside");
         preview.className = "pl-workspace-preview";
-        preview.setAttribute(OWNED6, "true");
+        preview.setAttribute(OWNED7, "true");
         preview.setAttribute("role", "region");
         head = s.doc.createElement("div");
         head.className = "pl-workspace-preview-head";
@@ -6576,7 +7364,7 @@ section#layoutContentArea.pl-planner-introduction {
       preview.setAttribute("aria-label", `Details for ${course.label}`);
       const spacer = s.doc.createElement("div");
       spacer.className = "pl-workspace-detail-space";
-      spacer.setAttribute(OWNED6, "true");
+      spacer.setAttribute(OWNED7, "true");
       spacer.setAttribute("aria-hidden", "true");
       s.slot.append(spacer);
       const cards = new SectionCards();
@@ -6647,7 +7435,7 @@ section#layoutContentArea.pl-planner-introduction {
       };
       const jump = s.doc.createElement("button");
       jump.className = "pl-workspace-detail-jump";
-      jump.setAttribute(OWNED6, "true");
+      jump.setAttribute(OWNED7, "true");
       jump.type = "button";
       jump.textContent = course.label.replace(/^Class\s+\d+:\s*/, "");
       jump.title = jump.textContent;
@@ -6723,7 +7511,7 @@ section#layoutContentArea.pl-planner-introduction {
     }
     positionPreview() {
       const s = this.state;
-      if (!s || !this.openDetails.size || this.positioningDetails) return;
+      if (!s || s.printing() || !this.openDetails.size || this.positioningDetails) return;
       this.positioningDetails = true;
       try {
         const box = s.slot.getBoundingClientRect(), width = s.slot.clientWidth || box.width;
@@ -6802,6 +7590,8 @@ section#layoutContentArea.pl-planner-introduction {
       if (focus && current) this.returnDetailsFocus(current.trigger);
     }
     restore() {
+      this.settings?.destroy();
+      this.settings = null;
       this.clearModulePending();
       for (const host of this.actionControls.keys()) this.removeActions(host);
       for (const summary of this.summaries.values()) summary.node.remove();
@@ -6847,6 +7637,7 @@ section#layoutContentArea.pl-planner-introduction {
       for (const popup of this.headerHelp.keys()) this.restoreHeaderHelp(popup);
       s.doc.defaultView?.removeEventListener("beforeprint", s.beforePrint);
       s.doc.defaultView?.removeEventListener("afterprint", s.afterPrint);
+      s.stopPrint();
       s.afterPrint();
       s.doc.defaultView?.removeEventListener("resize", s.resize);
       s.doc.defaultView?.removeEventListener("scroll", s.resize);

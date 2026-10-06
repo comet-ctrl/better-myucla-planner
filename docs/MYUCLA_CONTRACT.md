@@ -14,6 +14,16 @@ polling, replaying actions or reading additional page/account data.
 
 ## Grouped workspace (0.19 development)
 
+In 0.19.3, an extension-owned Settings dialog offers five visual presets using
+the same one/two-group model. Apply presets as a pure group transformation;
+never activate a native control, replace a node, or change input values. Move
+floating native panels by presentation only. Keep optional closed tabs closed;
+split presets reveal Schedule and supply a browsing fallback if needed. Save
+only the public preset enum in the existing layout record; ratios respect
+readable-width floors and compact fallback. Manual geometry changes clear the
+preset, while a cancelled resize restores it. Remove Settings on restoration
+and keep it out of print. UCLA's navigation and native form remain intact.
+
 The six recognized primary panels may share main/left/right tab groups, with
 one active native panel per group and at most two visible docked groups. Owned
 tab strips select, close and arrange the original panels without moving native
@@ -24,6 +34,12 @@ while its Classes tab is inactive; docked Details is concealed with Classes.
 Drop targets explicitly identify merge versus split and the destination dock.
 The preview and committed layout use the same reducer; unsupported or cramped
 splits are rejected. Cancellation restores membership, selection and geometry.
+In 0.19.2 the left/right split destination is a visual position, not a permanent
+claim on a group identifier. When only one residual docked group remains after
+removing the dragged tab, it can move to the opposite edge as a whole. Preserve
+its closed siblings, order and active choice. Keep split targets below the tab
+strip, which remains available for grouping/reordering, and never advertise a
+split while the responsive layout can display only one pane.
 Native redraw restoration never replays an action. V2 storage contains only
 allowlisted public layout fields and retains legacy v1 storage for rollback.
 Grouped pane bounds fit the visible viewport. A native Help popup directly
@@ -853,13 +869,39 @@ layout and Tidy restoration remove the owned control.
 The explicit choice is a single local boolean, `plannerLift.header.v1.compact`.
 The controller reads it before mounting. Intro remounts retain the choice;
 root-scroll, load/pageshow, resize and visibility/focus events reapply the
-minimum document scroll position while compact. There are no timers or queries.
+minimum document scroll position while compact. There are no network queries.
 Scrolling deeper is unaffected. Show header releases the minimum and saves false.
-Focus inside the original `layout-headerwrap` releases compaction and saves false
-so keyboard access to native navigation is never blocked. Only ancestry/bounds
-are inspected, never menu content. Preference writes are ordered, and failures
+Since 0.19.4, focus inside the original `layout-headerwrap` reveals the header
+temporarily without saving false. Only ancestry/bounds and native visibility
+attributes are inspected, never menu text. Preference writes are ordered, and failures
 are reported in the control tooltip. Remove all listeners on restoration.
 Native masthead/menu/term nodes, styles, handlers and forms remain unchanged.
+
+In 0.19.4 an owned top-edge button mounts only for one recognized native
+`layout-headerwrap`. Hover, click and native-menu focus smoothly reveal the
+header; reduced-motion users receive an instant change. Leave uses a bounded
+280ms grace period and respects native focus/expanded menus and held gestures.
+Escape or an outside click returns to compact view. Outside dismissal waits
+until the native target's click handler runs so it cannot move that target
+between pointerdown and pointerup.
+Escape suppresses layout-generated hover reentry until the pointer deliberately
+leaves the edge; explicit click and keyboard access remain available immediately.
+Native header web components are inspected through bounded open shadow roots
+for presentation state only. No text or field values are read; discovered root
+observers are disconnected on restoration.
+A scrollend handler plus one 800ms fallback suppress compact reapplication
+during the transition. Original layout removes the sensor, root state classes,
+observers, listeners and timers. Screen-only CSS hides only the root scrollbar;
+the document and panel scroll areas remain usable, and print stays native.
+Workspace geometry writes pause during print. Native print events and print
+media changes schedule one screen relayout afterward; restoration cancels that
+frame and removes listeners without changing layout preferences.
+
+Dark calendar hour rows precede transparent full-height `.timebox` columns.
+Preserve that layering: an opaque day column hides native hourly rules. Only
+grid surface/line colors change; event geometry, fills and native grid-size
+controls remain authoritative. Notice links retain native transparent inline
+presentation, with readable theme colors and unchanged native handlers.
 
 Bootstrap presentation only on the exact origin/path, including empty/future
 quarters. The validated introduction may mount its owned toolbar in normal flow

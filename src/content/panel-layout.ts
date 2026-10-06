@@ -400,6 +400,11 @@ export class PanelLayoutController {
     const preview = this.doc.createElement("div"); preview.className = "pl-panel-drop-preview";
     preview.dataset.plDockTarget = target.operation.dock;
     preview.dataset.plDropOperation = target.operation.kind;
+    if (!gesture.legacyTargets) {
+      const label=this.doc.createElement("span");label.className="pl-panel-drop-label";
+      label.textContent=target.operation.kind==="split"?`Split ${target.operation.dock}`:"Group tabs";
+      preview.append(label);
+    }
     const box = target.preview;
     Object.assign(preview.style, { left: `${box.left}px`, top: `${box.top}px`, width: `${box.width}px`, height: `${box.height}px` });
     gesture.overlay.append(preview);
@@ -434,7 +439,12 @@ export class PanelLayoutController {
     // active side steady at its edge instead of flickering into the main pane.
     const side = gesture.legacyTargets?gesture.targets.find(target=>target.operation.dock!=="main"&&contains(target)):gesture.targets.find(target => target.operation.kind==="split"&&contains(target));
     if (side) return side;
-    if (gesture.target && contains(gesture.target, 12)) return gesture.target;
+    // Retain an edge while moving a few pixels sideways, but never carry a
+    // body split into the tab strip above it: that strip is for grouping/order.
+    const current=gesture.target;
+    const withinSplitHeight=!current||gesture.legacyTargets||current.operation.kind!=="split"
+      ||(y>=current.hit.top&&y<=current.hit.top+current.hit.height);
+    if (current && withinSplitHeight && contains(current, 12)) return current;
     return gesture.targets.find(target=>contains(target));
   }
   private initialBox(panel: Panel): PanelBox {

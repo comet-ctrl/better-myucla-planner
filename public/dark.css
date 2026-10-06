@@ -57,7 +57,20 @@
     color: var(--pl-dark-muted) !important;
   }
   html[data-pl-appearance="dark"] .pl-planner-introduction .pl-intro-notice :is(b,strong) { color: var(--pl-dark-text); }
-  html[data-pl-appearance="dark"] .pl-workspace-host > .classPlanner_Messages { background: #312a1c; color: #f2d69b; }
+  /* UCLA presents these notices as inline text and links. Button fills create
+     disconnected dark rectangles here; keep the same native presentation. */
+  html[data-pl-appearance="dark"] .pl-workspace-host > .classPlanner_Messages { background: transparent; color: var(--pl-dark-muted); }
+  html[data-pl-appearance="dark"] .pl-workspace-host .classPlanner_Messages .errorText:not(button) { color: #f3c979; }
+  html[data-pl-appearance="dark"] .pl-workspace-host :is(.classPlanner_Messages,.plannerTopMenuLinks,.plannerMenuLinks) button.link,
+  html[data-pl-appearance="dark"] .pl-workspace-host :is(.classPlanner_Messages,.plannerTopMenuLinks,.plannerMenuLinks) button.link:hover:not(:disabled) {
+    background: transparent !important; color: var(--pl-dark-link) !important; box-shadow: none;
+  }
+  html[data-pl-appearance="dark"] .pl-workspace-host :is(.classPlanner_Messages,.plannerTopMenuLinks,.plannerMenuLinks) button.link:hover:not(:disabled) { text-decoration: underline; }
+  html[data-pl-appearance="dark"] .pl-workspace-host :is(.classPlanner_Messages,.plannerTopMenuLinks,.plannerMenuLinks) button.link:disabled { color: var(--pl-dark-muted) !important; cursor: default; }
+  html[data-pl-appearance="dark"] .pl-workspace-host button.link.text-default > :is(i,span) { color: inherit !important; }
+  html[data-pl-appearance="dark"] button.pl-intro-header-edge::after { background: #7898b9; }
+  html[data-pl-appearance="dark"] button.pl-intro-header-edge:hover::after { background: #99ccff; }
+  html[data-pl-appearance="dark"] button.pl-intro-header-edge:focus-visible { color: var(--pl-dark-link); background: var(--pl-dark-raised); border-color: #7898b9; outline-color: var(--pl-dark-focus); }
   html[data-pl-appearance="dark"] .pl-workspace-shell,
   html[data-pl-appearance="dark"] .pl-workspace-nav-footer { border-color: var(--pl-dark-line); }
   html[data-pl-appearance="dark"] .pl-workspace-nav { background: #151f2b; border-color: var(--pl-dark-line); }
@@ -158,6 +171,7 @@
   html[data-pl-appearance="dark"] .pl-panel-layout-menu { box-shadow: 0 12px 32px #0006; }
   html[data-pl-appearance="dark"] .pl-panel-layout-menu button[aria-checked="true"] { background-color: var(--pl-dark-selected) !important; color: #c6e3ff !important; }
   html[data-pl-appearance="dark"] .pl-panel-drop-preview { border-color: #94caff; color: #e3f2ff; background: #3966938c; box-shadow: inset 0 0 0 1px #a6d5ff40,0 8px 28px #0004; }
+  html[data-pl-appearance="dark"] .pl-panel-drop-label { border-color: #739bc0; color: #e3f2ff; background: #182c42; box-shadow: 0 2px 8px #0006; }
   html[data-pl-appearance="dark"] .pl-workspace-splitter,
   html[data-pl-appearance="dark"] .pl-panel-divider { background-color: var(--pl-dark-canvas); border-color: var(--pl-dark-line); }
   html[data-pl-appearance="dark"] :is(.pl-navigation-divider,.pl-workspace-splitter,.pl-panel-divider):hover { background-color: #75bfff40; }
@@ -173,7 +187,11 @@
   html[data-pl-appearance="dark"] .pl-finals-host::backdrop { background: #050a12b3; }
   /* Calendar event fill/border/geometry stay native. Only the surrounding grid
      becomes dark, and every event keeps dark readable text on its light swatch. */
-  html[data-pl-appearance="dark"] .pl-workspace-calendar :is(#gridDiv,.hourbox,.timebox) { background-color: var(--pl-dark-surface); color: var(--pl-dark-muted); border-color: var(--pl-dark-line); }
+  html[data-pl-appearance="dark"] .pl-workspace-calendar :is(#gridDiv,.hourbox) { background-color: var(--pl-dark-surface); color: var(--pl-dark-muted); border-color: var(--pl-dark-line); }
+  /* Native hour rows are behind the full-height day columns. Opaque columns
+     cover their horizontal rules; keep this overlay transparent without
+     changing the native row heights, vertical borders or meeting fills. */
+  html[data-pl-appearance="dark"] .pl-workspace-calendar #gridDiv .timebox { background-color: transparent; color: var(--pl-dark-muted); border-color: var(--pl-dark-line); }
   html[data-pl-appearance="dark"] .pl-workspace-calendar #gridDiv tr.primary.light.headerBar.classPlanner > td { background: var(--pl-dark-raised); color: var(--pl-dark-text); }
   html[data-pl-appearance="dark"] .pl-workspace-calendar .plannerMenuLinks,
   html[data-pl-appearance="dark"] .pl-workspace-calendar .plannerMenuLinks .pl-native-label { color: var(--pl-dark-muted) !important; }

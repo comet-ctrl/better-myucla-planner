@@ -94,6 +94,11 @@ and the selected tab in each group under `plannerLift.workspace.v2`. It reads
 the earlier v1 preference when needed and leaves that key intact for rollback.
 Neither preference contains course names, course IDs, search inputs, native
 selections, account identifiers or enrollment data.
+In development v0.19.3, the same v2 preference may also contain one of five
+allowlisted layout preset identifiers. It stores no new page data. Applying a
+preset rearranges existing panels and preserves native selections; it never
+submits a search, opens a native disclosure or changes a plan. Manual resizing
+or moving tabs clears the preset and retains the custom arrangement.
 Primary section-toggle clicks fold an already loaded pane locally
 inside the validated workspace. If UCLA has natively collapsed Calendar, Class
 Plan or Search, explicit expansion forwards its exact original disclosure once;
@@ -209,12 +214,14 @@ Document scrolling lets the unchanged UCLA banner scroll away. Scroll handling
 reads element bounds only and sends no requests. These choices are local to the
 page; no new storage, permissions or data collection is added.
 
-Compact header / Show header (0.14.5) changes only the document scroll position
-after an explicit click and reads the existing public heading's bounds. It does
-not read menu contents or alter native navigation. Only the boolean choice is
-stored locally. Lifecycle/scroll events restore that choice without polling or
-network requests. Show header or keyboard focus on the native menu releases
-compaction; disabling Tidy removes the behavior.
+Compact header / Show header changes only the document scroll position and
+reads the existing public heading's bounds. Only the explicit boolean choice
+is stored locally. In 0.19.4, top-edge hover or keyboard focus temporarily reveals
+the unchanged native header without changing that preference. Pointer/focus
+ancestry and native menu visibility attributes keep the header open while used;
+menu text is not read or stored. Short, bounded transition/dismissal timers and
+lifecycle events send no requests and do not poll. Show header pins it open;
+disabling Tidy removes the behavior and all owned controls/listeners.
 The same public introduction can be compacted on an empty/future quarter without
 reading its course contents or enabling course actions. The existing mutation
 observer watches native redraws; it does not fetch or retain another page.

@@ -13,17 +13,21 @@ describe("scoped planner appearance", () => {
   let appearance: PlannerAppearance, workspace: PlannerWorkspace;
   let preference: unknown, dark = false;
   let change: (value: unknown, area?: string) => void, system: (value: boolean) => void;
-  let storageListeners: Set<(changes: Record<string, {newValue?: unknown}>, area: string) => void>, mediaListeners: Set<() => void>;
+  let storageListeners: Set<(changes: Record<string, {newValue?: unknown}>, area: string) => void>, mediaListeners: Map<string, Set<() => void>>;
+  const darkQuery = "(prefers-color-scheme: dark)";
   beforeEach(() => {
     document.body.innerHTML = new DOMParser().parseFromString(introductionFixtureHtml(), "text/html").body.innerHTML;
     document.documentElement.removeAttribute("data-pl-appearance"); preference = undefined; dark = false;
-    storageListeners = new Set(); mediaListeners = new Set();
+    storageListeners = new Set(); mediaListeners = new Map();
     vi.stubGlobal("chrome", { storage: { local: { get: async () => ({ [APPEARANCE_KEY]: preference }) }, onChanged: {
       addListener: (fn: never) => storageListeners.add(fn), removeListener: (fn: never) => storageListeners.delete(fn),
     } } });
-    vi.stubGlobal("matchMedia", () => ({ get matches() { return dark; }, addEventListener: (_: string, fn: never) => mediaListeners.add(fn), removeEventListener: (_: string, fn: never) => mediaListeners.delete(fn) }));
+    vi.stubGlobal("matchMedia", (query: string) => {
+      const listeners = mediaListeners.get(query) || new Set<() => void>(); mediaListeners.set(query, listeners);
+      return { media: query, get matches() { return query === darkQuery && dark; }, addEventListener: (_: string, fn: () => void) => listeners.add(fn), removeEventListener: (_: string, fn: () => void) => listeners.delete(fn) };
+    });
     change = (value, area="local") => storageListeners.forEach(fn => fn({ [APPEARANCE_KEY]: { newValue: value } }, area));
-    system = value => { dark = value; mediaListeners.forEach(fn => fn()); };
+    system = value => { dark = value; mediaListeners.get(darkQuery)?.forEach(fn => fn()); };
     workspace = new PlannerWorkspace(); appearance = new PlannerAppearance();
   });
   afterEach(() => { appearance.dispose(); workspace.restore(); document.documentElement.removeAttribute("data-pl-appearance"); vi.unstubAllGlobals(); });
@@ -38,8 +42,10 @@ describe("scoped planner appearance", () => {
     document.querySelector<HTMLButtonElement>(".pl-workspace-original")!.click(); await flush(); expect(theme()).toBeNull();
     document.querySelector<HTMLButtonElement>(".pl-workspace-return")!.click(); await flush(); expect(theme()).toBe("light");
     expect(masthead.outerHTML).toBe(markup);
-    appearance.dispose(); expect(theme()).toBeNull(); expect(storageListeners.size).toBe(0); expect(mediaListeners.size).toBe(0);
+    appearance.dispose(); expect(theme()).toBeNull(); expect(storageListeners.size).toBe(0); expect(mediaListeners.get(darkQuery)?.size).toBe(0);
+    expect(mediaListeners.get("print")?.size).toBe(1); // The still-mounted workspace owns its separate listener.
     system(true); change("dark"); document.body.append(document.createElement("div")); await flush(); expect(theme()).toBeNull();
+    workspace.restore(); expect(mediaListeners.get("print")?.size).toBe(0);
   });
 
   it("honors explicit choices, ignores other storage areas, and restores a preexisting root attribute", async () => {

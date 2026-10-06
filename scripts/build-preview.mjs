@@ -13,7 +13,7 @@ const manifest = JSON.parse(await readFile(resolve(root, 'dist/manifest.json'), 
 const packageInfo = JSON.parse(await readFile(resolve(root, 'package.json'), 'utf8'));
 assert.equal(manifest.version, packageInfo.version, 'Build the current extension before generating its preview.');
 const css = await readFile(resolve(root, 'dist/injected.css'), 'utf8');
-const expectedCss = (await Promise.all(['injected.css', 'v019-calendar.css', 'dark.css'].map(name => readFile(resolve(root, 'public', name), 'utf8')))).join('\n');
+const expectedCss = (await Promise.all(['injected.css', 'v019-calendar.css', 'dark.css', 'workspace-settings.css'].map(name => readFile(resolve(root, 'public', name), 'utf8')))).join('\n');
 assert.equal(css, expectedCss, 'The production stylesheet is stale; run npm run build first.');
 const stylesheetHash = createHash('sha256').update(css).digest('hex');
 const contentHash = createHash('sha256').update(await readFile(resolve(root, 'dist/content.js'))).digest('hex');

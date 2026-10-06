@@ -1,7 +1,8 @@
 # v0.19 workspace
 
 Development branch: `v0.19-workspace`. Saved baseline: `flexible-panels`, commit
-`1337c94` (v0.18.6). This is a development milestone, not a published release.
+`1337c94` (v0.18.6). v0.19.1 is published; v0.19.4 adds header/calendar polish,
+including the v0.19.3 layout presets and v0.19.2 tab-splitting fix.
 
 ## Problem
 
@@ -19,6 +20,14 @@ tabs within a workspace.
   values and handlers, and scroll positions. Closed tabs can be reopened.
 - A center drop merges a tab into a group; a permitted edge drop splits it.
   Preview and commit use the same operation. At most two docked groups display.
+- v0.19.2 fixes splitting a tab toward its own occupied edge, preserves the
+  remaining group as a unit, and reserves strip drops for grouping/reordering.
+  Wider edge targets and transient Split/Group labels clarify the destination.
+- v0.19.3 adds bottom-left Settings with diagrammed One pane, Balanced, Browse
+  wide, Schedule wide and Schedule on the left presets. The chosen preset is
+  saved in the existing layout preference and scales with the viewport.
+  Custom divider sizing clears the preset; Escape during resizing restores it.
+  The picker supports light/dark appearance, keyboard access and dismissal.
 - Minimum useful widths prevent cramped splits. Narrow screens display one
   group at a time without overwriting the saved desktop arrangement.
 - Floating remains an in-page singleton panel. Details keeps the existing
@@ -35,6 +44,12 @@ tabs within a workspace.
   Selected-course presentation and focused jump survive recognized redraws.
 - Calendar labels, borders and keyboard focus receive restrained styling;
   native meeting geometry, colors and controls remain authoritative.
+- v0.19.4 preserves transparent native day overlays so dark calendar hour rules
+  remain visible. Notice links keep inline backgrounds and readable icons.
+- A top-edge grip temporarily reveals UCLA's original menu without rewriting
+  the compact-header preference. The outer scrollbar is hidden while local
+  panels retain theirs. Keyboard access, Show header, reduced motion and print
+  remain available.
 
 ## Design draft and later work
 
@@ -67,11 +82,19 @@ not a pixel-identical screenshot of the extension.
 
 v0.19.1 adds saved System / Light / Dark appearance, with screen-only dark styles
 and a themed extension popup. UCLA navigation and native event colors stay intact.
-It is installed in the user's existing unpacked folder; all 19 files are verified
-by SHA-256, with v0.19.0 backed up. Reloading the extension and checking the loaded
-Class Planner page remain pending.
+v0.19.4 is installed in the user's existing unpacked folder; all 20 files are
+verified by SHA-256, with v0.19.3 backed up. Native header/calendar structure was
+inspected live; checking the loaded new build awaits extension reload.
 
-Typecheck, production build and 477 unit tests pass. Production-browser fixtures
+Typecheck, production build and 552 unit tests pass. Ten production header cases
+cover light/dark appearance, nested native web components, hover/keyboard/touch,
+safe click timing, preference isolation, both Escape regressions, print and
+restoration. Five native-layered calendar cases verify painted gridline pixels,
+meeting geometry/colors and redraws. Seven earlier Settings browser cases
+cover saved presets, native identity/selections, keyboard dismissal/focus, print,
+responsive geometry and restoration in light/dark appearance. Existing group
+fixtures, 39 split regressions and the rebuilt preview also pass.
+Production-browser fixtures
 cover groups, course details/actions, native modules and calendar presentation,
 including widths from 390 to 2048px and short 390x600 windows. These fixtures use
 fictional data and do not establish live enrollment behavior.

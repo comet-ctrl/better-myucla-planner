@@ -2,8 +2,144 @@
 
 Last updated: 2026-10-04
 
-Current version: `0.19.1`, branch `v0.19-workspace`.
-Installed files: `0.19.1` (Chrome reload pending). Release: `v0.19.1` prerelease.
+Current development version: `0.19.4`, branch `v0.19-workspace`.
+Installed files: `0.19.4` (Chrome reload requested). Published: `v0.19.1` prerelease.
+
+## v0.19.4 header, notice and calendar polish
+
+Compared the authorized live planner in dark workspace and Original layout,
+then restored its original workspace selection. No plan/enrollment action ran
+and no account-specific content was saved. Native notices use transparent inline
+links; generic dark button fills caused rectangular patches. The notice wrapper
+and inline links now stay transparent, with readable help icons. Urgent notice
+content stays visible. Native controls, handlers and status markup are retained.
+
+Native calendar hour rows sit behind transparent full-height day columns. The
+old dark rule made those columns opaque and covered horizontal lines. Only day
+background transparency changes. A new fictional native-shaped layered fixture
+checks painted rule pixels (including a negative control reproducing the old
+bug), exact event colors/geometry, native spacing redraw, resize, print and
+Original restoration. All five widths passed, 390–2048px.
+
+PlannerIntroduction owns a thin top-edge reveal button, mounting only with one
+recognized layout-headerwrap. Hover/click/native focus temporarily scrolls the
+unchanged UCLA header into view. Leave waits 280ms and respects native menus,
+focus and held pointer gestures. Escape/outside click returns to compact view;
+outside dismissal runs after the target click to avoid moving a native control
+before its click completes. Explicit Show header still saves the pinned choice.
+Temporary access never writes preferences. Reduced motion skips animation.
+Native header nodes/styles/parents/handlers remain intact. Root scrollbar hiding
+is screen-only; document scrolling and visible local panel scrollbars remain.
+
+Live structural inspection confirmed the real layout-headerwrap is an open
+shadow host (nested components). Header visibility checks observe that structure
+without reading menu text or account values; fictional nested-shadow fixtures
+cover it. A separate print regression found old fixed panel coordinates could
+survive print media and overlap navigation. PlannerWorkspace now suspends screen
+geometry during print and measures once after screen styles return, including
+native events and media-only transitions, with complete listener/frame cleanup.
+
+Header unit tests cover interaction timing, native actions, focus, menu hold,
+preferences, animation lifecycle and cleanup. Escape only suppresses hover
+when the pointer is actually at the normal top-edge strip, measured after focus
+returns to Show header. This prevents immediate reopen without blocking the
+next deliberate hover. Typecheck/build and all 552 unit tests in 39 files pass.
+The production header matrix passes all ten cases: light/dark at 2048, 1440,
+1280 and 390px, plus nested-shadow dark variants at 2048 and 390px. Checks include
+both Escape regressions, keyboard sensor access, trusted native click timing,
+native identity, notices, preference isolation, local scrolling and post-print
+Original restoration. All five calendar pixel/geometry cases pass. Dark-mode
+and popup checks pass; the four-width fictional preview also passed and was
+rebuilt from the final sources. Screenshots are fictional and visually checked.
+
+Evidence: outputs/v0194-unit.log, outputs/v0194-header-reveal.log,
+outputs/header-reveal/report.json, outputs/calendar-gridlines/report.json,
+outputs/v0194-dark.log and outputs/v0194-preview.log. Test-driven fixes included
+outside-click timing, post-print overlap and both Escape hover sequences.
+The appearance-test media mock was corrected to keep print and color-scheme
+queries separate; production appearance behavior did not require a change.
+
+Installed all 20 production files with SHA-256 verification into the existing
+Downloads unpacked extension. Backup: outputs/installed-backup-before-v0194-20261004-225129.
+Record: outputs/v0194-installed.json. Requested Chrome extension Reload and
+Class Planner refresh for installed-page verification; that final live check
+remains pending. The authorized Chrome tab timed out to MyUCLA's logoff page
+before verification; asked the user to sign in themselves and return to Class
+Planner. No credentials were accessed. The tab is marked for handoff, without
+plan/enrollment changes. No GitHub push or new public release.
+
+## v0.19.3 Settings and layout presets
+
+The user requested a bottom-left Settings button and a visual layout picker
+like the supplied snap-layout image. Five honest presets use the existing
+one/two-group engine: One pane, Balanced, Browse wide, Schedule wide, Schedule
+on the left. The pure workspace-presets model preserves tab order and optional
+closed panels, redocks floating modules, retains current browsing selection,
+and reopens Schedule for a split. Details redocks without closing course rows.
+No native disclosures, selections or account actions run when applying layouts.
+
+WorkspaceSettings owns the footer gear and a native modal dialog. Presets
+apply immediately and remain available for comparison. Light/dark diagrams,
+selected state, Default layout, keyboard trapping, Escape/outside dismissal
+and focus return are verified. On narrow windows the gear remains at the start
+of the scrolling navigation. Original layout removes Settings; print hides it.
+The existing direct Default layout action remains available.
+
+Only a validated layoutPreset enum is added to the existing v2 local preference.
+Ratios adapt to the viewport, respecting readable-width floors and compact
+fallback. Manual sizing/tab movement returns to a custom arrangement; cancelled
+divider gestures restore the preset and cannot save intermediate geometry.
+No permissions, network APIs or other storage keys were added.
+
+Verification: typecheck/build, 526 unit tests in 37 files, all seven Settings
+browser viewport/theme cases (2048/1440 light+dark; 1280/960/390 light), existing
+group fixtures at five widths, 39 split regressions and four preview widths
+passed. An initial modal Tab escape was caught and fixed with explicit trapping.
+Checks cover native node/form/handler/status identity, native selections, saved
+fresh-document restoration, resizing, focus, print, original layout, and zero
+native actions/requests. Screenshots are fictional, visually inspected.
+Evidence: outputs/v0193-*.log and outputs/workspace-settings/report.json.
+Picker screenshot: outputs/workspace-settings/settings-dialog-1440-dark.png.
+
+Installed and SHA-256 verified all 20 production files into the existing
+Downloads extension folder. Backup: outputs/installed-backup-before-v0193-20261004-220619.
+Installation record: outputs/v0193-installed.json. The user has been asked to
+reload the extension and refresh Class Planner; installed-page verification
+remains pending. Changes are local; no new release or GitHub push this turn.
+
+## v0.19.2 tab-splitting repair
+
+Live v0.19.1 reproduction on the authorized Class Planner tab found that a single
+left group containing Classes and Schedule would not split Schedule at the left
+edge; the same drag to the right edge worked. Restored the original grouping
+and selected Classes afterward, without invoking account/plan actions.
+
+Root cause: `splitWorkspaceTab` rejected an occupied logical dock, including
+the dragged tab's own group. Its missing target fell through to the whole-pane
+merge target. The reducer now removes the dragged tab first, and moves the sole
+remaining group to the opposite edge when needed. It preserves closed siblings,
+selection and order. Two singleton groups can exchange sides. More than two
+groups or insufficient width still reject without changing committed state.
+
+Split targets cover 15% of the deck, bounded at 80–180px, plus a 12px outer gutter.
+The 40px tab strip is reserved for grouping/order; split hysteresis cannot extend
+back into it. Narrow (<1100px) layouts do not advertise invisible splits. Filled
+previews now show Split left/right or Group tabs on a readable light/dark badge.
+
+Typecheck/build and 485 unit tests passed; the final label-only markup refinement
+also passed its 12 focused operation tests. Existing grouped-workspace browser
+checks passed at five widths. New production split suite passes 39/39 cases at
+1440/2048px plus 1024px fallback: both edges from main/left/right, singleton swaps,
+wide targets, strip grouping, outside gutter, dark appearance, cancellation, native identity and
+pixel-matched preview/final geometry. v0.19.1 failed 24 of the original 32 cases.
+Evidence: outputs/v0192-*.log and outputs/workspace-split-regressions/.
+The rebuilt fictional preview also passes at 1440/1280/960/390px.
+
+Installed all 19 v0.19.2 files with matching SHA-256 into the existing Downloads
+folder. Backup: outputs/installed-backup-before-v0192-20261004-213812.
+Record: outputs/v0192-installed.json. User has been asked to reload extension and
+refresh Class Planner; fixed-build live verification is pending. No new release
+was requested or published this turn. Changes remain local for review.
 
 ## v0.19.1 dark appearance
 

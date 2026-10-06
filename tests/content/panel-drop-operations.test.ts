@@ -43,6 +43,7 @@ describe("explicit panel drop operations", () => {
     const input=panel.querySelector("input")!,parent=input.parentElement,form=input.form;input.value="fictional choice";
     dragTo(x);
     expect(preview()?.dataset.plDropOperation).toBe(operation.kind);expect(preview()?.dataset.plDockTarget).toBe(operation.dock);
+    expect(preview()?.textContent).toBe(operation.kind==="split"?"Split left":"Group tabs");
     expect(preview()?.style.left).toBe(`${left}px`);expect(preview()?.style.width).toBe(`${width}px`);
     pointer(document,"pointerup",x,200);
     expect(placements()).toEqual([["find",operation.dock,"placement",operation]]);
@@ -54,6 +55,18 @@ describe("explicit panel drop operations", () => {
     register([target({kind:"merge",dock:"right",index:0},600,120,600,380),target({kind:"merge",dock:"right",index:3},720,260,600,380)]);
     dragTo(650);pointer(document,"pointermove",850,200);pointer(document,"pointerup",850,200);
     expect(placements()).toEqual([["find","right","placement",{kind:"merge",dock:"right",index:3}]]);
+  });
+
+  it("releases a split preview immediately when the pointer returns to the tab strip", () => {
+    const split=target({kind:"split",dock:"left"},20,120,20,440);
+    split.hit.top=80;split.hit.height=560;
+    const strip=target({kind:"merge",dock:"main",index:0},20,980);strip.hit.height=40;
+    register([split,strip]);dragTo(40,200);
+    expect(preview()?.textContent).toBe("Split left");
+    pointer(document,"pointermove",40,79);
+    expect(preview()?.textContent).toBe("Group tabs");
+    pointer(document,"pointerup",40,79);
+    expect(placements()).toEqual([["find","main","placement",{kind:"merge",dock:"main",index:0}]]);
   });
 
   it("copies target operations and preview bounds before activation changes the workspace", () => {

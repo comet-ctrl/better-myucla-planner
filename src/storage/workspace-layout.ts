@@ -1,5 +1,6 @@
 import type { PanelLayoutSnapshot } from "../content/panel-layout";
 import { migrateLegacyGroups, normalizeWorkspaceGroups, WORKSPACE_PANEL_IDS, type WorkspaceGroups } from "../content/workspace-groups";
+import { WORKSPACE_PRESETS, type WorkspacePresetId } from "../content/workspace-presets";
 
 export const WORKSPACE_LAYOUT_KEY = "plannerLift.workspace.v2";
 export const LEGACY_WORKSPACE_LAYOUT_KEY = "plannerLift.workspace.v1";
@@ -19,6 +20,8 @@ export interface WorkspaceLayoutPreference extends PanelLayoutSnapshot {
   scheduleExpanded: boolean;
   dockSizes: Partial<Record<"left" | "right", number>>;
   collapsedPanes: string[];
+  /** Optional public preset id; ratios adapt to the available viewport. */
+  layoutPreset: WorkspacePresetId | null;
 }
 
 const record = (value: unknown): Record<string, unknown> | null =>
@@ -63,6 +66,7 @@ export function normalizeWorkspaceLayout(value: unknown): WorkspaceLayoutPrefere
   const sizes = record(candidate.dockSizes), left = bounded(sizes?.left, 200, 16384), right = bounded(sizes?.right, 200, 16384);
   return {
     version: 2, groups, panels, module: moduleId(candidate.module), mainModule: moduleId(candidate.mainModule),
+    layoutPreset: WORKSPACE_PRESETS.find(preset => preset.id === candidate.layoutPreset)?.id ?? null,
     navigationCollapsed: candidate.navigationCollapsed === true,
     scheduleWidth: bounded(candidate.scheduleWidth, 420, 16384), scheduleExpanded: candidate.scheduleExpanded === true,
     dockSizes: {...(left === null ? {} : {left}), ...(right === null ? {} : {right})},

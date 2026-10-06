@@ -111,10 +111,66 @@ describe("bounded workspace tab groups",()=>{
     expect(readableGroupWidths(exact.state,992)).toEqual({left:560,main:420,right:0});
   });
 
-  it("never evicts an occupied edge on a split; a center drop can group there",()=>{
+  it("does not split an occupied edge when two other groups would remain; a center drop can group there",()=>{
     const state=createDefaultGroups(),result=splitWorkspaceTab(state,'find','right',3000);
     expect(result).toEqual({state,accepted:false,reason:'occupied'});
     const merged=mergeWorkspaceTab(state,'find','right');expect(openGroupTabs(merged,'right')).toEqual(['schedule','find']);
+  });
+
+  it.each(['left','right'] as const)("splits either tab toward its own occupied %s edge",target=>{
+    let state=closeWorkspaceTab(createDefaultGroups(),'find');
+    state=mergeWorkspaceTab(state,'classes',target);state=mergeWorkspaceTab(state,'schedule',target);
+    const before=JSON.stringify(state),opposite=target==='left'?'right':'left';
+    for(const id of ['classes','schedule'] as const){
+      const result=splitWorkspaceTab(state,id,target,1440),other=id==='classes'?'schedule':'classes';
+      expect(result.accepted).toBe(true);expect(openGroupTabs(result.state,target)).toEqual([id]);
+      expect(openGroupTabs(result.state,opposite)).toEqual([other]);
+      expect(activeGroupTab(result.state,target)).toBe(id);expect(activeGroupTab(result.state,opposite)).toBe(other);
+      expect(JSON.stringify(state)).toBe(before);
+    }
+  });
+
+  it("moves the remaining group's closed tabs, selection and visible order together",()=>{
+    let state=mergeWorkspaceTab(createDefaultGroups(),'schedule','main');
+    state=mergeWorkspaceTab(state,'classes','left');
+    state=mergeWorkspaceTab(state,'find','left');state=mergeWorkspaceTab(state,'schedule','left');
+    state=mergeWorkspaceTab(state,'optimizer','left',1);state=closeWorkspaceTab(state,'find');
+    state=selectWorkspaceTab(state,'optimizer');
+    const before=JSON.stringify(state),remaining=openGroupTabs(state,'left').filter(id=>id!=='schedule');
+    const result=splitWorkspaceTab(state,'schedule','left',1600);
+    expect(result.accepted).toBe(true);expect(openGroupTabs(result.state,'left')).toEqual(['schedule']);
+    expect(openGroupTabs(result.state,'right')).toEqual(remaining);expect(result.state.active.right).toBe('optimizer');
+    expect(result.state.panels.find).toEqual({placement:'right',open:false});
+    const reopened=selectWorkspaceTab(result.state,'find');expect(reopened.panels.find.placement).toBe('right');
+    expect(openGroupTabs(reopened,'left')).toEqual(['schedule']);expect(JSON.stringify(state)).toBe(before);
+  });
+
+  it.each(['left','right'] as const)("exchanges two singleton groups when a tab is split toward occupied %s",target=>{
+    let state=closeWorkspaceTab(createDefaultGroups(),'find');
+    state=mergeWorkspaceTab(state,'classes','left');
+    const id=target==='left'?'schedule':'classes',other=id==='classes'?'schedule':'classes',opposite=target==='left'?'right':'left';
+    const before=JSON.stringify(state),result=splitWorkspaceTab(state,id,target,1000);
+    expect(result.accepted).toBe(true);expect(openGroupTabs(result.state,target)).toEqual([id]);
+    expect(openGroupTabs(result.state,opposite)).toEqual([other]);expect(JSON.stringify(state)).toBe(before);
+  });
+
+  it("rejects an unreadable same-edge split without relocating any committed group",()=>{
+    let state=closeWorkspaceTab(createDefaultGroups(),'find');
+    state=mergeWorkspaceTab(state,'classes','left');state=mergeWorkspaceTab(state,'schedule','left');
+    const before=JSON.stringify(state),rejected=splitWorkspaceTab(state,'schedule','left',851);
+    expect(rejected).toEqual({state,accepted:false,reason:'space'});expect(rejected.state).toBe(state);
+    expect(JSON.stringify(state)).toBe(before);
+    const exact=splitWorkspaceTab(state,'schedule','left',852);
+    expect(exact.accepted).toBe(true);expect(readableGroupWidths(exact.state,852)).toEqual({left:420,main:0,right:420});
+  });
+
+  it("retains occupied-main rejection and rejects a third pane from the same edge",()=>{
+    const original=createDefaultGroups();
+    expect(splitWorkspaceTab(original,'schedule','main',2000)).toEqual({state:original,accepted:false,reason:'occupied'});
+    let state=mergeWorkspaceTab(closeWorkspaceTab(original,'find'),'classes','left');
+    state=mergeWorkspaceTab(state,'find','left');
+    const before=JSON.stringify(state),result=splitWorkspaceTab(state,'find','left',3000);
+    expect(result).toEqual({state,accepted:false,reason:'occupied'});expect(JSON.stringify(state)).toBe(before);
   });
 
   it("ignores closed tabs in width floors but reserves readable Find width in an open browsing group",()=>{

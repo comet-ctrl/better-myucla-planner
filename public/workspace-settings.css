@@ -1,0 +1,86 @@
+/* Owned layout settings only. Native UCLA controls and menus are untouched. */
+@media screen {
+  .pl-workspace-nav-footer > button.pl-workspace-settings {
+    display: flex; align-items: center; justify-content: flex-start; gap: 10px;
+  }
+  .pl-workspace-nav-footer > button.pl-workspace-settings::before { content: none; }
+  .pl-settings-icon { display: block; flex: none; width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width: 1.65; stroke-linejoin: round; }
+  .pl-navigation-collapsed .pl-workspace-nav-footer > button.pl-workspace-settings { justify-content: center; }
+  .pl-navigation-collapsed .pl-settings-trigger-label { display: none; }
+
+  dialog.pl-workspace-settings-dialog {
+    --pl-settings-surface: #fff; --pl-settings-text: #24354a; --pl-settings-muted: #63748a;
+    --pl-settings-line: #dbe3ed; --pl-settings-hover: #f5f8fc; --pl-settings-selected: #eaf2fc;
+    --pl-settings-accent: #2d68a6; --pl-settings-browse: #dce9f8; --pl-settings-calendar: #ddefeb;
+    --pl-settings-browse-line: #729bc9; --pl-settings-calendar-line: #73a69a;
+    box-sizing: border-box; width: min(450px,calc(100vw - 32px)); max-width: none;
+    max-height: calc(100vh - 32px); max-height: calc(100dvh - 32px);
+    margin: auto; padding: 0; overflow: hidden; border: 1px solid var(--pl-settings-line);
+    border-radius: 16px; box-shadow: 0 24px 90px #13253d30,0 4px 16px #13253d12;
+    background: var(--pl-settings-surface); color: var(--pl-settings-text); color-scheme: light;
+    font: 14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    text-align: left;
+  }
+  dialog.pl-workspace-settings-dialog:not([open]) { display: none; }
+  dialog.pl-workspace-settings-dialog[open] { display: flex; flex-direction: column; }
+  dialog.pl-workspace-settings-dialog::backdrop { background: #10223961; backdrop-filter: blur(3px); }
+  .pl-workspace-settings-dialog .pl-settings-header { display: flex; flex: none; align-items: center; justify-content: space-between; gap: 16px; padding: 20px 22px 16px; margin: 0; border-bottom: 1px solid var(--pl-settings-line); background: none; }
+  .pl-workspace-settings-dialog h2 { margin: 0; padding: 0; border: 0; color: var(--pl-settings-text); font: 650 21px/1.35 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+  .pl-workspace-settings-dialog h3 { margin: 0 0 6px; padding: 0; border: 0; color: var(--pl-settings-text); font: 600 15px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+  .pl-workspace-settings-dialog button { box-sizing: border-box; min-height: 0; margin: 0; float: none; background-image: none; text-shadow: none; box-shadow: none; font: inherit; color: var(--pl-settings-text); cursor: pointer; }
+  .pl-workspace-settings-dialog button:focus-visible { outline: 3px solid var(--pl-settings-accent); outline-offset: 3px; }
+  .pl-workspace-settings-dialog button.pl-settings-close { display: inline-flex; flex: none; align-items: center; justify-content: center; width: 32px; height: 32px; padding: 0; border: 1px solid var(--pl-settings-line); border-radius: 8px; background: var(--pl-settings-surface); color: var(--pl-settings-muted); font-size: 24px; line-height: 1; }
+  .pl-workspace-settings-dialog button.pl-settings-close:hover { background: var(--pl-settings-hover); color: var(--pl-settings-text); }
+  .pl-settings-body { min-height: 0; padding: 20px 22px 12px; overflow: auto; overscroll-behavior: contain; scrollbar-width: thin; }
+  .pl-workspace-settings-dialog p { margin: 0; padding: 0; }
+  .pl-workspace-settings-dialog .pl-settings-description { color: var(--pl-settings-muted); margin-bottom: 18px; }
+  .pl-settings-presets { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 10px; }
+  .pl-workspace-settings-dialog button.pl-settings-preset { position: relative; display: flex; flex-direction: column; align-items: stretch; gap: 10px; min-width: 0; padding: 12px 9px 10px; border: 1px solid var(--pl-settings-line); border-radius: 10px; background: var(--pl-settings-surface); text-align: center; }
+  .pl-workspace-settings-dialog button.pl-settings-preset:hover { border-color: var(--pl-settings-browse-line); background: var(--pl-settings-hover); }
+  .pl-workspace-settings-dialog button.pl-settings-preset[aria-pressed="true"] { border-color: var(--pl-settings-accent); background: var(--pl-settings-selected); box-shadow: inset 0 0 0 1px var(--pl-settings-accent); }
+  .pl-settings-preset-name { display: block; font-size: 12px; font-weight: 500; line-height: 1.4; min-height: 34px; }
+  .pl-settings-diagram { display: flex; gap: 3px; height: 56px; padding: 3px; border: 1px solid var(--pl-settings-line); border-radius: 5px; background: var(--pl-settings-surface); }
+  .pl-settings-diagram-pane { position: relative; display: block; min-width: 0; overflow: hidden; border: 1px solid var(--pl-settings-browse-line); border-radius: 2px; background: var(--pl-settings-browse); }
+  .pl-settings-diagram-pane::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 8px; border-bottom: 1px solid var(--pl-settings-browse-line); }
+  .pl-settings-diagram-browsing::after, .pl-settings-diagram-tabs::after { content: ""; position: absolute; top: 15px; left: 5px; right: 5px; height: 21px; background: repeating-linear-gradient(to bottom,var(--pl-settings-browse-line) 0 2px,transparent 2px 8px); opacity: .55; }
+  .pl-settings-diagram-tabs::before { background: linear-gradient(to right,transparent 32%,var(--pl-settings-browse-line) 32% 34%,transparent 34% 65%,var(--pl-settings-browse-line) 65% 67%,transparent 67%); }
+  .pl-settings-diagram-schedule { background: var(--pl-settings-calendar); border-color: var(--pl-settings-calendar-line); }
+  .pl-settings-diagram-schedule::before { border-color: var(--pl-settings-calendar-line); }
+  .pl-settings-diagram-schedule::after { content: ""; position: absolute; top: 13px; left: 4px; right: 4px; bottom: 5px; opacity: .5; background: repeating-linear-gradient(to right,var(--pl-settings-calendar-line) 0 1px,transparent 1px 20%),repeating-linear-gradient(to bottom,var(--pl-settings-calendar-line) 0 1px,transparent 1px 8px); }
+  .pl-settings-selected { display: none; position: absolute; top: -6px; right: -5px; width: 19px; height: 19px; border: 2px solid var(--pl-settings-surface); border-radius: 50%; background: var(--pl-settings-accent); color: #fff; font: 600 12px/19px sans-serif; text-align: center; }
+  [aria-pressed="true"] > .pl-settings-selected { display: block; }
+  .pl-workspace-settings-dialog .pl-settings-legend { display: flex; align-items: center; gap: 16px; margin-top: 14px; color: var(--pl-settings-muted); font-size: 12px; }
+  .pl-settings-legend > span { display: inline-flex; align-items: center; gap: 6px; }
+  .pl-settings-legend > span::before { content: ""; width: 9px; height: 9px; border: 1px solid var(--pl-settings-browse-line); border-radius: 2px; background: var(--pl-settings-browse); }
+  .pl-settings-legend > .pl-settings-legend-schedule::before { border-color: var(--pl-settings-calendar-line); background: var(--pl-settings-calendar); }
+  .pl-workspace-settings-dialog .pl-settings-current { margin-top: 14px; color: var(--pl-settings-muted); font-size: 12px; }
+  .pl-workspace-settings-dialog .pl-settings-compact-note { margin-top: 10px; padding: 10px 12px; border-radius: 7px; background: var(--pl-settings-hover); color: var(--pl-settings-muted); font-size: 12px; }
+  .pl-workspace-settings-dialog .pl-settings-compact-note[hidden] { display: none; }
+  .pl-workspace-settings-dialog .pl-settings-status { min-height: 18px; margin-top: 10px; color: var(--pl-settings-accent); font-size: 12px; }
+  .pl-workspace-settings-dialog .pl-settings-footer { display: flex; flex: none; align-items: center; justify-content: space-between; gap: 12px; margin: 0; padding: 14px 22px; border-top: 1px solid var(--pl-settings-line); background: none; color: var(--pl-settings-muted); font-size: 11px; }
+  .pl-workspace-settings-dialog button.pl-settings-default { flex: none; padding: 7px 10px; border: 1px solid var(--pl-settings-line); border-radius: 7px; background: var(--pl-settings-surface); font-size: 12px; }
+  .pl-workspace-settings-dialog button.pl-settings-default:hover { border-color: var(--pl-settings-browse-line); background: var(--pl-settings-hover); }
+  html[data-pl-appearance="dark"] dialog.pl-workspace-settings-dialog {
+    --pl-settings-surface: #18222e; --pl-settings-text: #e7eef7; --pl-settings-muted: #afbed1;
+    --pl-settings-line: #394c61; --pl-settings-hover: #202d3c; --pl-settings-selected: #263e57;
+    --pl-settings-accent: #99ccff; --pl-settings-browse: #294969; --pl-settings-calendar: #244d48;
+    --pl-settings-browse-line: #7aa3cd; --pl-settings-calendar-line: #82b6a9; color-scheme: dark;
+    box-shadow: 0 24px 90px #0008,0 4px 16px #0006;
+  }
+  html[data-pl-appearance="dark"] .pl-settings-selected { color: #13263b; }
+  html[data-pl-appearance="dark"] dialog.pl-workspace-settings-dialog::backdrop { background: #03081099; }
+}
+@media screen and (max-width:1279px) {
+  /* Keep the owned gear discoverable at the start of the scrolling nav row. */
+  .pl-workspace-nav > .pl-workspace-nav-footer { display: contents; }
+  .pl-workspace-nav-footer > button.pl-workspace-settings { position: sticky; left: 0; order: -1; z-index: 5; flex: none; justify-content: center; width: 40px; min-width: 40px; padding: 8px; background: #f8fafc; box-shadow: 3px 0 0 #f8fafc; }
+  .pl-workspace-nav-footer > button.pl-workspace-settings .pl-settings-trigger-label { display: none; }
+  html[data-pl-appearance="dark"] .pl-workspace-host .pl-workspace-nav-footer > button.pl-workspace-settings { background-color: #151f2b !important; box-shadow: 3px 0 0 #151f2b; }
+}
+@media screen and (max-width:430px) {
+  .pl-settings-presets { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .pl-settings-body { padding: 18px 18px 10px; }
+  .pl-workspace-settings-dialog .pl-settings-header { padding: 18px; }
+  .pl-workspace-settings-dialog .pl-settings-footer { padding: 12px 18px; }
+}
+@media print { .pl-workspace-settings,dialog.pl-workspace-settings-dialog,dialog.pl-workspace-settings-dialog::backdrop { display: none !important; } }

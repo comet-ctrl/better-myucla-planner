@@ -196,10 +196,23 @@ export interface SplitWorkspaceResult { state: WorkspaceGroups; accepted: boolea
 /** Edge drops create a separate readable pane, or leave the committed layout. */
 export function splitWorkspaceTab(state: WorkspaceGroups, id: WorkspacePanelId, target: PanelDock, availableWidth: number): SplitWorkspaceResult {
   if (!isWorkspacePanelId(id) || !isDock(target)) return {state,accepted:false,reason:"invalid"};
-  if (openGroupTabs(state,target).some(panel=>panel!==id)) return {state,accepted:false,reason:"occupied"};
-  const proposed=copy(state);proposed.panels[id]={placement:target,open:true};
+  const proposed=copy(state);
+  // Edges describe a position on screen, not a permanently occupied group id.
+  // Remove the dragged tab first: splitting its own group or exchanging two
+  // singleton panes both leave just one remaining group to place beside it.
+  proposed.panels[id]={placement:"floating",open:true};
+  if (openGroupTabs(proposed,target).length) {
+    if (target==="main" || visibleDockGroups(proposed).length>1) return {state,accepted:false,reason:"occupied"};
+    const remaining:PanelDock=target==="left"?"right":"left";
+    const active=activeGroupTab(proposed,target);
+    // Closed siblings still belong to this group when the user reopens them.
+    // Move the whole remaining group without changing its order or selection.
+    for(const peer of WORKSPACE_PANEL_IDS) if(proposed.panels[peer].placement===target) proposed.panels[peer].placement=remaining;
+    proposed.active[remaining]=active;proposed.active[target]=null;
+  }
+  proposed.panels[id]={placement:target,open:true};
   if(visibleDockGroups(proposed).length>WORKSPACE_MAX_DOCK_GROUPS)return {state,accepted:false,reason:"limit"};
-  const next = mergeWorkspaceTab(state,id,target);
+  const next = mergeWorkspaceTab(proposed,id,target);
   if (!readableGroupWidths(next,availableWidth)) return {state,accepted:false,reason:"space"};
   return {state:next,accepted:true};
 }

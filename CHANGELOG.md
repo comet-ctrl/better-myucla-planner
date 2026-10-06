@@ -1,5 +1,40 @@
 # Changelog
 
+## 0.19.4 — unreleased header and calendar polish
+
+- Reveal UCLA's unchanged header temporarily by hovering at the top edge or
+  focusing its native menu. Moving away returns to the compact planner; Show
+  header still pins it open. Temporary reveals do not change the saved choice.
+- Hide the outer page scrollbar while retaining local panel scrolling,
+  keyboard access, reduced-motion support and the original printable layout.
+- Restore dark calendar hour lines by keeping UCLA's day overlays transparent.
+  Native event positions, course colors and grid-size controls are preserved.
+- Keep native notice links inline without disconnected filled backgrounds;
+  improve dark help-icon contrast and remove the added notice-strip fill.
+- Restore panel positions after printing so panes cannot overlap navigation.
+
+## 0.19.3 — unreleased layout presets
+
+- Bottom-left Settings opens a visual layout picker: One pane, Balanced, Browse
+  wide, Schedule wide, and Schedule on the left. Thumbnails describe the actual
+  supported one- or two-pane layout. Existing drag and resize controls remain.
+- Preset proportions adapt to available space and are remembered with the
+  existing local layout preference. Manual resizing or moving a tab returns to
+  a custom layout; cancelling a resize restores the preset.
+- Settings supports keyboard focus, Escape, outside-click dismissal, light and
+  dark appearance, and a compact navigation button on smaller windows. Native
+  controls, course selections and UCLA's menu are unchanged.
+
+## 0.19.2 — unreleased tab splitting fix
+
+- Split a tab at either workspace edge even when its current tab group already
+  occupies that side. Remaining tabs keep their grouping and selections.
+- Swap two single-tab panes at an occupied edge without silently grouping them.
+- Widen the split target and keep the tab strip available for grouping/reordering.
+  Preview labels distinguish Split left/right from Group tabs.
+- Offer splits only where both panes can be shown at readable widths. Keep the
+  two-pane limit, cancellation, saved-layout behavior and native controls intact.
+
 ## 0.19.1 — dark appearance prerelease
 
 - Add a saved System / Light / Dark choice in the extension popup. System is

@@ -17,6 +17,25 @@ describe("local workspace preference", () => {
     expect(JSON.stringify(stored)).not.toContain("discard");
   });
 
+  it("round-trips only the five public preset ids and discards unknown preset metadata", async () => {
+    const stored:Record<string,unknown>={};
+    vi.stubGlobal("chrome",{storage:{local:{get:async(key:string)=>({[key]:stored[key]}),set:async(value:Record<string,unknown>)=>Object.assign(stored,value)}}});
+    for(const id of ["single","balanced","browse-wide","schedule-wide","schedule-left"] as const){
+      const source={...layout(),layoutPreset:id,presetName:"discard-private-label",presetCourses:["discard-private-course"]};
+      await saveWorkspaceLayout(source);
+      expect((await readWorkspaceLayout())!.layoutPreset).toBe(id);
+      expect(stored[WORKSPACE_LAYOUT_KEY]).toEqual({...layout(),layoutPreset:id});
+      expect(JSON.stringify(stored)).not.toContain("discard-private");
+    }
+    for(const unknown of [undefined,null,"custom","BALANCED"," balanced ","private-course-id",{id:"balanced"},["balanced"],1]){
+      const normalized=normalizeWorkspaceLayout({...layout(),layoutPreset:unknown})!;
+      expect(normalized.layoutPreset).toBeNull();
+      await saveWorkspaceLayout(normalized);
+      expect((await readWorkspaceLayout())!.layoutPreset).toBeNull();
+    }
+    expect(normalizeWorkspaceLayout({version:1,panels:[]})!.layoutPreset).toBeNull();
+  });
+
   it("ignores unknown versions and malformed entries and bounds geometry", () => {
     for(const value of [null,{},true,{version:2,panels:[]},{version:1,panels:"bad"}])expect(normalizeWorkspaceLayout(value)).toBeNull();
     const result=normalizeWorkspaceLayout({...layout(),version:1,module:"unknown",mainModule:7,navigationCollapsed:"true",scheduleWidth:Infinity,dockSizes:{left:-3,right:99999},collapsedPanes:["course-id","classSearchTitle","classSearchTitle"],panels:[
