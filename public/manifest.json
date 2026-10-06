@@ -1,7 +1,8 @@
 {
   "manifest_version": 3,
   "name": "Better MyUCLA — Planner Tools",
-  "version": "0.17.11",
+  "version": "0.18.6",
+  "version_name": "0.18.6 development — compact panel controls",
   "description": "Drag, reorder, filter and annotate your MyUCLA Class Planner. Saving replays your arrangement through MyUCLA's own up and down buttons.",
   "icons": {
     "16": "icons/icon-16.png",

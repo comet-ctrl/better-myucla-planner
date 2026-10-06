@@ -41,6 +41,12 @@ Everything below lives in this browser only.
 - **Compact header.** One boolean in `chrome.storage.local` remembers your
   Compact header / Show header choice across terms and reloads. It contains no
   account, term, course or page content.
+- **Workspace layout (0.18.4 development).** A versioned preference in
+  `chrome.storage.local` remembers public module identifiers, panel placement,
+  floating coordinates and sizes, closed panels, divider sizes and navigation
+  choices and local primary-pane folding. It contains no course or plan identifiers, search text, native input
+  values, account information or page content. It stays in this browser profile;
+  **Default layout** resets this arrangement.
 - **An unsaved arrangement.** While you have rearranged a plan but not saved it,
   the order is kept so a timeout or a stray navigation does not cost you the
   work. Class identifiers only. It expires after 24 hours and is deleted as soon
@@ -53,6 +59,16 @@ extension never constructs a network request of its own.
 
 ## What you control
 
+The floating-panel layout saves only the display preferences listed above in
+v0.18.4 development. The published v0.18.2 keeps these in page memory only.
+The shaded docking preview uses element bounds only. Dragging a blank header,
+grip or navigation tab changes presentation within the same native form;
+header buttons and Help keep their native behavior. Saving layout uses the
+existing storage permission, with no network request or external window.
+Explicitly opening a collapsed
+module uses the same validated native disclosure as the existing navigation; restoring
+or resizing the layout does not open a module or replay its actions.
+
 Multiple expanded course details and their scroll position remain in memory.
 The extension retains their existing course identifiers only through updates
 within the same plan, and clears them on plan/term changes. Native enrollment
@@ -61,14 +77,16 @@ display never submits or repeats their actions.
 
 The optional workspace rearranges the original sections within the same MyUCLA
 form. It reads only the course titles/exam text already allowed on this page,
-for an ephemeral details heading; it stores no new data and sends no requests.
+for an ephemeral details heading; that heading is never stored or sent.
 The original section table remains under its original course card. Original
 layout restores section placement, and turning tidy off restores presentation.
 Unknown section structures keep the native layout.
 
-Pane folding changes only local presentation. Named pane choices are kept in
-memory for this page session, using public section identifiers; pane widths are also in memory only. They are not
-stored or sent. Primary section-toggle clicks fold an already loaded pane locally
+Pane folding changes only local presentation. In v0.18.4, local primary-pane
+folding, workspace widths and navigation preferences are saved using public
+section identifiers as described above. A saved choice never overrides a
+natively closed body or triggers a request to expand it.
+Primary section-toggle clicks fold an already loaded pane locally
 inside the validated workspace. If UCLA has natively collapsed Calendar, Class
 Plan or Search, explicit expansion forwards its exact original disclosure once;
 mounting never opens it. Their original handlers return with Original

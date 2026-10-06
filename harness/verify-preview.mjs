@@ -79,7 +79,7 @@ try {
     // HTML parsing normalizes Windows CRLF to LF; compare every CSS byte after
     // that required parser normalization, while metadata checks the raw file.
     assert.equal(digest(await page.locator('#preview-production-css').textContent()), digest(productionCss.replace(/\r\n?/g, '\n')), 'preview uses the exact production stylesheet after HTML newline normalization');
-    assert.equal(await page.locator('.pl-workspace-nav [data-pl-module]').count(), 6, 'all six named destinations are present');
+    assert.equal(await page.locator('.pl-workspace-nav [data-pl-module]').count(), 7, 'all named destinations, including Schedule and Information, are present');
     assert.equal(await page.locator('.pl-workspace-original').count(), 1, 'Original layout is present');
     assert.equal(await page.locator('.pl-workspace-main > section').count(), 5, 'all original main modules are retained');
     await snapshotNative(page);

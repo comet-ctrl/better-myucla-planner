@@ -1,5 +1,86 @@
 # Changelog
 
+## 0.18.6 — unreleased development
+
+- Place the schedule's title and original display switches on one row when
+  space allows, with a wrapping fallback in smaller panels.
+- Remove the native navigation shadow from the extension's sidebar.
+- Recalculate docked panels after navigation collapses or expands.
+- Show one close button for a single expanded course; keep individual course
+  controls and a distinct Close all class details action for multiple courses.
+
+## 0.18.5 — unreleased development
+
+- Let docked panels occupy unused main-workspace space. One remaining panel
+  fills the available width; two edge panels share it with one divider.
+- Restore space for a reopened module using the remembered width preferences.
+  Automatic filling does not overwrite those preferences.
+- Hide unavailable schedule-width controls in custom dock layouts.
+
+## 0.18.4 — unreleased development
+
+- Remember panel placement, floating bounds, closed panels, divider sizes and
+  navigation preferences locally when Class Planner is reopened.
+- Add **Default layout** to navigation to reset the workspace arrangement.
+  Course selections, plans, notes and the compact-header preference are unchanged.
+- Render drag updates once per animation frame. Let the grabbed panel follow
+  the pointer during movement, then keep floating panels inside the viewport on
+  release. Escape cancels movement without saving a partial layout.
+- Store only validated public module names and display settings. No course,
+  account, search or enrollment data is included in the new preference.
+
+## 0.18.3 — unreleased development
+
+- Reserve the blank area beside native panel titles for dragging. Native title
+  buttons fit their labels instead of stretching invisibly across the header.
+  Their original click handlers and neighboring controls remain unchanged.
+
+## 0.18.2 — 2026-10-04 (docking preview prerelease)
+
+- Show a full shaded destination preview while moving a panel. Generous left
+  and right regions and the main panel's header accept drops.
+- Remove the bottom dock from dragging, layout menus and keyboard shortcuts.
+- Drag blank panel-header space as well as the dotted grip or navigation tab.
+  Native buttons, links, fields and Help retain their normal behavior.
+- Keep the actual panel following the pointer and Escape cancellation. Closing,
+  reopening, resizing, selections and expanded course details remain supported.
+- Reveal focused native Details controls immediately after a scroll change,
+  including on small screens, so they do not remain clipped below the panel.
+- Keep layout state in page memory; permissions, storage and native action
+  boundaries are unchanged. v0.18.1 remains available for rollback.
+- Typecheck, 389 unit tests, production build and fictional browser regressions
+  pass. Installed-page verification after Chrome reload remains pending.
+
+## 0.18.1 — 2026-10-03 (flexible-panels prerelease)
+
+Includes the flexible-panel changes developed in 0.18.0, plus close controls
+and live dragging. This is the first published release of those panel changes.
+
+- Close any panel with its header ×; reopen it from navigation. Schedule now
+  has a navigation entry. A course's Details button reopens the details group.
+  Hiding retains native controls, selections, open courses and panel placement.
+- Move the actual panel continuously with the pointer, with stable dock targets.
+  Escape cancels the gesture and restores its original position and stacking.
+- Preserve hidden panels across same-plan redraws and reveal them with Reset
+  layout. Keep hidden content out of keyboard/pointer interaction; return focus
+  to a visible control when closing. No new storage or permissions.
+- Typecheck, 375 unit tests, the production build and fictional browser fixtures
+  pass. Installed-page verification after reload is pending; actual enrollment
+  completion and the native Optimizer backend response remain unverified.
+
+## 0.18.0 — unreleased development baseline (included in 0.18.1)
+
+- Drag panel grips or navigation tabs to dock at an edge or float inside the
+  existing Class Planner tab. Multiple floating panels can remain open together.
+- Resize floating panels at their corner and docked regions at their dividers.
+  Double-click a grip to float/return; right-click or Shift+F10 offers layout
+  choices and Reset layout. Keyboard docking/resizing is also available.
+- Collapse navigation with its chevron or by dragging its edge. Keep native
+  navigation, controls, handlers, status wording and form association intact.
+- Retain layout through same-plan native redraws, using page memory only.
+  Reset layout on reload/context changes; restore native flow for print and
+  Original layout. No new permissions, persistent storage or external windows.
+
 ## 0.17.11 — 2026-10-03 (multiple details and native action continuity)
 
 - Keep multiple My classes details open in a shared scrolling area, with an

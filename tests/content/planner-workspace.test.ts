@@ -144,6 +144,30 @@ describe("one-page native planner workspace", () => {
       workspace.restore();expect(touch(row,"touchmove",[200]).defaultPrevented).toBe(false);
     } finally {metrics.forEach(spy=>spy.mockRestore());}
   });
+  it("reveals a native Details control focused before the pending stack scroll event", () => {
+    const course=adapter.inspectContract().courses[0];mount();
+    course.node.querySelector<HTMLButtonElement>("[data-pl-workspace-details]")!.click();
+    const destination=course.node.children[2].firstElementChild as HTMLElement,slot=document.querySelector<HTMLElement>(".pl-workspace-details-slot")!;
+    const control=document.createElement("button");control.type="button";control.textContent="Example native action";destination.append(control);
+    const rect=(top:number,height:number)=>({left:320,right:730,top,bottom:top+height,width:410,height,x:320,y:top,toJSON:()=>({})}) as DOMRect;
+    const metrics=[
+      vi.spyOn(slot,"getBoundingClientRect").mockReturnValue(rect(200,160)),
+      vi.spyOn(destination,"getBoundingClientRect").mockReturnValue(rect(0,500)),
+      vi.spyOn(control,"getBoundingClientRect").mockImplementation(()=>rect(parseFloat(course.node.style.getPropertyValue("--pl-detail-top"))+180,30)),
+      vi.spyOn(window,"scrollTo").mockImplementation(()=>{})
+    ];
+    try {
+      slot.scrollTop=100;slot.dispatchEvent(new Event("scroll"));
+      expect(control.getBoundingClientRect().top).toBe(280);
+      // DOM scrolling can precede its event. Focus must use the new projection.
+      slot.scrollTop=0;control.focus();
+      expect(document.activeElement).toBe(control);expect(control.parentElement).toBe(destination);
+      expect(slot.scrollTop).toBe(50);
+      expect(control.getBoundingClientRect().top).toBeGreaterThanOrEqual(200);
+      expect(control.getBoundingClientRect().bottom).toBeLessThanOrEqual(360);
+      expect(metrics[metrics.length-1]).not.toHaveBeenCalled();
+    } finally {metrics.forEach(spy=>spy.mockRestore());}
+  });
   it("shows exact per-section native summaries and refreshes changed statuses without aggregating", () => {
     const course=adapter.inspectContract().courses[0],table=course.node.querySelector<HTMLTableElement>('table.coursetable')!;
     const rows=[...table.rows].filter(row=>row.cells.length===9&&row.cells[0].tagName==='TD');
@@ -317,7 +341,7 @@ describe("one-page native planner workspace", () => {
   it("resizes supporting panes with the keyboard and restores original controls", () => {
     const controls = [...document.querySelectorAll(".ClassSearchWidget input,.ClassSearchWidget select")];
     mount();
-    const separators = [...document.querySelectorAll<HTMLElement>('[role="separator"]')];
+    const separators = [...document.querySelectorAll<HTMLElement>('[role="separator"][aria-label="Resize schedule"]')];
     expect(separators).toHaveLength(1);
     separators[0].dispatchEvent(new KeyboardEvent('keydown',{key:'ArrowRight',bubbles:true}));
     expect(separators[0].getAttribute('aria-valuenow')).toBe('516');
@@ -330,7 +354,7 @@ describe("one-page native planner workspace", () => {
     workspace.restore(); expect(document.querySelector('[role="separator"]')).toBeNull();
   });
   it("reserves the main workspace when clamping schedule width and reports its responsive size", () => {
-    mount();const deck=document.querySelector<HTMLElement>('.pl-workspace-deck')!,main=document.querySelector<HTMLElement>('.pl-workspace-main')!,splitter=document.querySelector<HTMLElement>('[role=separator]')!;
+    mount();const deck=document.querySelector<HTMLElement>('.pl-workspace-deck')!,main=document.querySelector<HTMLElement>('.pl-workspace-main')!,splitter=document.querySelector<HTMLElement>('[role=separator][aria-label="Resize schedule"]')!;
     const width=vi.spyOn(deck,'clientWidth','get').mockReturnValue(1100),bounds=vi.spyOn(main,'getBoundingClientRect').mockReturnValue({width:568} as DOMRect);
     try {
       splitter.dispatchEvent(new KeyboardEvent('keydown',{key:'End',bubbles:true}));expect(splitter.getAttribute('aria-valuenow')).toBe('668');expect(splitter.getAttribute('aria-valuemax')).toBe('668');
@@ -339,7 +363,7 @@ describe("one-page native planner workspace", () => {
     } finally {width.mockRestore();bounds.mockRestore();}
   });
   it("widens beyond the old cap and restores a custom width after viewport changes", () => {
-    mount();const deck=document.querySelector<HTMLElement>('.pl-workspace-deck')!,splitter=document.querySelector<HTMLElement>('[role=separator]')!,widen=document.querySelector<HTMLButtonElement>('.pl-workspace-schedule-widen')!;
+    mount();const deck=document.querySelector<HTMLElement>('.pl-workspace-deck')!,splitter=document.querySelector<HTMLElement>('[role=separator][aria-label="Resize schedule"]')!,widen=document.querySelector<HTMLButtonElement>('.pl-workspace-schedule-widen')!;
     const width=vi.spyOn(deck,'clientWidth','get').mockReturnValue(1500);
     try {
       splitter.dispatchEvent(new KeyboardEvent('keydown',{key:'ArrowRight',bubbles:true}));
@@ -385,7 +409,7 @@ describe("one-page native planner workspace", () => {
   });
   it("lists every module and restores all six sections in original layout", () => {
     const sections=[...document.querySelectorAll('#ctl00_MainContent_classPlanPanel > section')];mount();
-    expect([...document.querySelectorAll('.pl-workspace-nav-main button')].map(n=>n.textContent)).toEqual(['My classes','Find classes','Optimizer','Study list','Personal entries']);
+    expect([...document.querySelectorAll('.pl-workspace-nav-main button')].map(n=>n.textContent)).toEqual(['My classes','Find classes','Optimizer','Study list','Personal entries','Schedule']);
     expect(document.querySelector('.pl-workspace-extras')).toBeNull();
     for(const module of ['classes','find','optimizer','study','personal']){
       document.querySelector<HTMLButtonElement>('button[data-pl-module="'+module+'"]')!.click();
@@ -421,7 +445,7 @@ describe("one-page native planner workspace", () => {
       const fields=[...row.querySelectorAll('input,select,button')],details=course.node.querySelector<HTMLButtonElement>('[data-pl-workspace-details]')!;details.click();
       const find=document.querySelector<HTMLButtonElement>('button[data-pl-module=find]')!;find.click();
       expect(details.getAttribute('aria-expanded')).toBe('true');expect(course.node.classList.contains('pl-preview-docked')).toBe(true);expect(document.activeElement).toBe(find);
-      document.querySelector<HTMLButtonElement>('[data-pl-mobile-view=schedule]')!.click();expect(document.querySelector('.pl-show-schedule')).not.toBeNull();
+      document.querySelector<HTMLButtonElement>('[data-pl-mobile-view=schedule]')!.click();expect(!!document.querySelector('.pl-show-schedule')).toBe(width<1100);
       document.querySelector<HTMLButtonElement>('[data-pl-mobile-view=main]')!.click();expect(document.querySelector('.pl-show-schedule')).toBeNull();
       document.querySelector<HTMLButtonElement>('button[data-pl-module=classes]')!.click();expect(document.querySelector('.pl-has-docked-details')).not.toBeNull();
       expect(row.parentElement).toBe(parent);expect(fields.every(field=>row.contains(field))).toBe(true);
@@ -859,5 +883,170 @@ describe("one-page native planner workspace", () => {
     expect(document.getElementById('page_title_text')).toBe(next); expect(old.isConnected).toBe(false);
     workspace.restore(); expect(next.parentElement?.id).toBe('div_page_title_section2');
     expect(document.querySelectorAll('#page_title_text')).toHaveLength(1);
+  });
+
+  describe("flexible panel presentation", () => {
+    const panelKey=(id:string,key:string,options:KeyboardEventInit={})=>{
+      const handle=document.querySelector<HTMLElement>(`.pl-panel-grip[data-pl-panel-handle='${id}'], .pl-panel-details-handle[data-pl-panel-handle='${id}']`)!;
+      expect(handle).not.toBeNull();handle.dispatchEvent(new KeyboardEvent('keydown',{key,bubbles:true,cancelable:true,...options}));
+    };
+    const float=(id:string)=>panelKey(id,'f',{altKey:true,shiftKey:true});
+    let widthDescriptor:PropertyDescriptor|undefined;
+    beforeEach(()=>{widthDescriptor=Object.getOwnPropertyDescriptor(window,'innerWidth');Object.defineProperty(window,'innerWidth',{configurable:true,value:1440});});
+    afterEach(()=>{if(widthDescriptor)Object.defineProperty(window,'innerWidth',widthDescriptor);});
+
+    const hide=(id:string)=>document.querySelector<HTMLButtonElement>(`[data-pl-panel-close='${id}']`)!.click();
+
+    it("hides and reopens the calendar with the same native controls and selected values",()=>{
+      const control=document.createElement('input');control.type='checkbox';document.getElementById('gridDiv')!.prepend(control);
+      mount();const calendar=document.querySelector<HTMLElement>('.pl-workspace-calendar')!;
+      const parent=control.parentElement,form=control.form;
+      control.checked=true;const calls=vi.fn();control.addEventListener('change',calls);
+      hide('schedule');expect(calendar.classList.contains('pl-panel-hidden')).toBe(true);
+      const reopen=document.querySelector<HTMLButtonElement>('button[data-pl-module=schedule]')!;
+      expect(reopen.getAttribute('aria-pressed')).toBe('false');expect(document.activeElement).toBe(reopen);
+      reopen.click();expect(calendar.classList.contains('pl-panel-hidden')).toBe(false);expect(reopen.getAttribute('aria-pressed')).toBe('true');
+      expect(control.checked).toBe(true);expect(control.parentElement).toBe(parent);expect(control.form).toBe(form);expect(calls).not.toHaveBeenCalled();
+    });
+
+    it("hides the whole details panel without closing its courses or replacing native selections",()=>{
+      mount();const courses=adapter.inspectContract().courses.slice(0,2);
+      for(const course of courses)course.node.querySelector<HTMLButtonElement>('[data-pl-workspace-details]')!.click();
+      const nativeRows=courses.map(course=>course.node.children[2]),parents=nativeRows.map(row=>row.parentElement);
+      hide('details');expect(document.querySelector<HTMLElement>('.pl-workspace-details-frame')!.hidden).toBe(true);
+      for(const course of courses){expect(course.node.classList.contains('pl-details-concealed')).toBe(true);expect(course.node.querySelector('[data-pl-workspace-details]')!.getAttribute('aria-expanded')).toBe('false');}
+      courses[0].node.querySelector<HTMLButtonElement>('[data-pl-workspace-details]')!.click();
+      expect(document.querySelector<HTMLElement>('.pl-workspace-details-frame')!.hidden).toBe(false);
+      for(const [index,course] of courses.entries()){
+        expect(course.node.classList.contains('pl-details-concealed')).toBe(false);expect(course.node.classList.contains('pl-preview-docked')).toBe(true);
+        expect(course.node.children[2]).toBe(nativeRows[index]);expect(nativeRows[index].parentElement).toBe(parents[index]);
+      }
+    });
+
+    it("keeps floating details visible when My classes closes and reveals both independently",()=>{
+      mount();const course=adapter.inspectContract().courses[0];course.node.querySelector<HTMLButtonElement>('[data-pl-workspace-details]')!.click();float('details');
+      hide('classes');const plan=document.querySelector<HTMLElement>('.pl-workspace-plan')!,frame=document.querySelector<HTMLElement>('.pl-workspace-details-frame')!;
+      expect(plan.classList.contains('pl-panel-hidden')).toBe(true);expect(plan.classList.contains('pl-details-only')).toBe(true);expect(frame.hidden).toBe(false);expect(course.node.classList.contains('pl-details-concealed')).toBe(false);
+      hide('details');expect(plan.classList.contains('pl-details-only')).toBe(false);expect(frame.hidden).toBe(true);
+      document.querySelector<HTMLButtonElement>('button[data-pl-module=classes]')!.click();expect(plan.classList.contains('pl-panel-hidden')).toBe(false);expect(frame.hidden).toBe(true);
+      course.node.querySelector<HTMLButtonElement>('[data-pl-workspace-details]')!.click();expect(frame.hidden).toBe(false);expect(frame.dataset.plPanelPlacement).toBe('floating');
+    });
+
+    it("resolves a hidden pane's occupied dock when reopened without submitting native actions",()=>{
+      mount();panelKey('find','ArrowLeft',{altKey:true});hide('find');panelKey('schedule','ArrowLeft',{altKey:true});
+      document.querySelector<HTMLButtonElement>('button[data-pl-module=find]')!.click();
+      expect(document.querySelector<HTMLElement>('.pl-workspace-search')!.dataset.plPanelPlacement).toBe('left');
+      expect(document.querySelector<HTMLElement>('.pl-workspace-calendar')!.dataset.plPanelPlacement).toBe('floating');expect(optimizerPostback).not.toHaveBeenCalled();
+    });
+
+    it("makes space when docking Details back into hidden My classes at an occupied edge",()=>{
+      mount();panelKey('classes','ArrowLeft',{altKey:true});const course=adapter.inspectContract().courses[0];course.node.querySelector<HTMLButtonElement>('[data-pl-workspace-details]')!.click();float('details');
+      hide('classes');panelKey('find','ArrowLeft',{altKey:true});panelKey('details','ArrowUp',{altKey:true});
+      const plan=document.querySelector<HTMLElement>('.pl-workspace-plan')!;
+      expect(plan.classList.contains('pl-panel-hidden')).toBe(false);expect(plan.dataset.plPanelPlacement).toBe('left');
+      expect(document.querySelector<HTMLElement>('.pl-workspace-search')!.dataset.plPanelPlacement).toBe('main');
+      expect(document.querySelector<HTMLElement>('.pl-workspace-details-frame')!.dataset.plPanelPlacement).toBe('main');expect(optimizerPostback).not.toHaveBeenCalled();
+    });
+
+    it("preserves closed panes across native redraw and reveals everything on Reset layout",()=>{
+      mount();hide('schedule');hide('classes');hide('optimizer');
+      const fixture=new DOMParser().parseFromString(workspaceFixtureHtml(),'text/html');
+      document.getElementById('ctl00_MainContent_classPlanPanel')!.replaceWith(document.importNode(fixture.getElementById('ctl00_MainContent_classPlanPanel')!,true));mount();
+      expect(document.querySelectorAll('.pl-panel-hidden')).toHaveLength(3);
+      panelKey('find','ContextMenu');[...document.querySelectorAll<HTMLButtonElement>('.pl-panel-layout-menu button')].find(button=>button.textContent==='Reset layout')!.click();
+      expect(document.querySelectorAll('.pl-panel-hidden')).toHaveLength(0);expect(optimizerPostback).not.toHaveBeenCalled();
+    });
+
+    it("removes all close controls and visibility changes in Original layout",()=>{
+      const original=document.body.innerHTML;mount();hide('classes');hide('schedule');hide('find');workspace.restore();expect(document.body.innerHTML).toBe(original);
+    });
+
+    it("does not dismiss preserved hidden course details when Escape is pressed",()=>{
+      mount();const course=adapter.inspectContract().courses[0];course.node.querySelector<HTMLButtonElement>('[data-pl-workspace-details]')!.click();hide('details');
+      document.activeElement!.dispatchEvent(new KeyboardEvent('keydown',{key:'Escape',bubbles:true,cancelable:true}));
+      expect(course.node.classList.contains('pl-preview-docked')).toBe(true);expect(course.node.classList.contains('pl-details-concealed')).toBe(true);
+    });
+
+    it("returns focus to visible navigation after closing a floating course while My classes is hidden",()=>{
+      mount();const course=adapter.inspectContract().courses[0];course.node.querySelector<HTMLButtonElement>('[data-pl-workspace-details]')!.click();float('details');hide('classes');
+      document.querySelector<HTMLButtonElement>('.pl-workspace-preview-close')!.click();expect(document.activeElement).toBe(document.querySelector('button[data-pl-module=classes]'));
+    });
+
+    it("includes the Schedule reopening action in keyboard navigation",()=>{
+      mount();hide('schedule');const personal=document.querySelector<HTMLButtonElement>('button[data-pl-module=personal]')!;
+      personal.dispatchEvent(new KeyboardEvent('keydown',{key:'ArrowDown',bubbles:true,cancelable:true}));
+      expect(document.activeElement).toBe(document.querySelector('button[data-pl-module=schedule]'));expect(document.querySelector('.pl-workspace-calendar.pl-panel-hidden')).toBeNull();
+      document.activeElement!.dispatchEvent(new KeyboardEvent('keydown',{key:'Home',bubbles:true,cancelable:true}));expect(document.activeElement).toBe(document.querySelector('button[data-pl-module=classes]'));
+    });
+
+    it("floats and docks the original calendar without replacing controls or invoking native handlers",()=>{
+      const calendar=document.querySelector<HTMLElement>('.classPlanner_CalendarSection')!,body=document.getElementById('ctl00_MainContent_panelGrid')!;
+      const controls=[...body.querySelectorAll<HTMLInputElement|HTMLButtonElement>('input,button')],parents=controls.map(control=>control.parentElement),forms=controls.map(control=>control.form);
+      const calls=vi.fn();controls.forEach(control=>control.addEventListener('click',calls));mount();const parent=calendar.parentElement;
+      float('schedule');expect(calendar.dataset.plPanelPlacement).toBe('floating');expect(calendar.classList.contains('pl-floating-panel')).toBe(true);
+      panelKey('schedule','ArrowLeft',{altKey:true});expect(calendar.dataset.plPanelPlacement).toBe('left');expect(calendar.classList.contains('pl-panel-docked')).toBe(true);
+      expect(calendar.parentElement).toBe(parent);expect(controls.every((control,index)=>control.parentElement===parents[index]&&control.form===forms[index])).toBe(true);
+      expect(calls).not.toHaveBeenCalled();expect(adapter.inspectContract().ok).toBe(true);
+    });
+
+    it("retains floating details and an independent main module without moving native section rows",()=>{
+      const course=adapter.inspectContract().courses[0],table=course.node.querySelector<HTMLTableElement>('table.coursetable')!,parent=table.parentElement,form=table.closest('form');
+      mount();course.node.querySelector<HTMLButtonElement>('[data-pl-workspace-details]')!.click();float('details');
+      document.querySelector<HTMLButtonElement>('button[data-pl-module=find]')!.click();
+      const plan=document.querySelector<HTMLElement>('.pl-workspace-plan')!,frame=document.querySelector<HTMLElement>('.pl-workspace-details-frame')!;
+      expect(document.querySelector('.pl-workspace-search')!.classList.contains('pl-module-active')).toBe(true);
+      expect(plan.classList.contains('pl-details-only')).toBe(true);expect(frame.hidden).toBe(false);expect(frame.dataset.plPanelPlacement).toBe('floating');
+      expect(table.parentElement).toBe(parent);expect(table.closest('form')).toBe(form);expect(course.node.classList.contains('pl-preview-docked')).toBe(true);
+      expect(course.node.querySelector('[data-pl-workspace-details]')!.getAttribute('aria-expanded')).toBe('true');
+      const before=Number(frame.style.getPropertyValue('--pl-panel-z'));table.dispatchEvent(new Event('pointerdown',{bubbles:true}));
+      expect(Number(frame.style.getPropertyValue('--pl-panel-z'))).toBeGreaterThan(before);
+    });
+
+    it("restores panel placements across the same-plan native redraw without resurrecting old panels",()=>{
+      mount();float('schedule');panelKey('find','ArrowLeft',{altKey:true});
+      const oldCalendar=document.querySelector('.pl-workspace-calendar')!,oldSearch=document.querySelector('.pl-workspace-search')!;
+      const oldBox=(oldCalendar as HTMLElement).style.getPropertyValue('--pl-panel-width');
+      const fixture=new DOMParser().parseFromString(workspaceFixtureHtml(),'text/html'),replacement=document.importNode(fixture.getElementById('ctl00_MainContent_classPlanPanel')!,true);
+      document.getElementById('ctl00_MainContent_classPlanPanel')!.replaceWith(replacement);mount();
+      const calendar=document.querySelector<HTMLElement>('.pl-workspace-calendar')!,search=document.querySelector<HTMLElement>('.pl-workspace-search')!;
+      expect(oldCalendar.isConnected).toBe(false);expect(oldSearch.isConnected).toBe(false);
+      expect(calendar.dataset.plPanelPlacement).toBe('floating');expect(calendar.style.getPropertyValue('--pl-panel-width')).toBe(oldBox);
+      expect(search.dataset.plPanelPlacement).toBe('left');expect(search.classList.contains('pl-panel-docked')).toBe(true);
+      expect(document.querySelectorAll('.pl-workspace-calendar')).toHaveLength(1);expect(adapter.inspectContract().ok).toBe(true);
+    });
+
+    it("keeps exact native Optimizer disclosure recognition after adding owned drag handles",()=>{
+      const native=optimizerToggle(),parent=native.parentElement,handler=native.onclick;mount();
+      expect(optimizerPostback).not.toHaveBeenCalled();float('optimizer');
+      expect(optimizerPostback).toHaveBeenCalledExactlyOnceWith('ctl00$MainContent$toggleOptimizer','');
+      expect(native.parentElement).toBe(parent);expect(native.onclick).toBe(handler);expect(document.getElementById('panelOptimizer')!.classList.contains('hidden')).toBe(false);
+      expect(document.querySelector<HTMLElement>('.classPlanner_ClassOptimizerSection')!.dataset.plPanelPlacement).toBe('floating');
+      mount();expect(optimizerPostback).toHaveBeenCalledTimes(1);
+    });
+
+    it.each(['study','personal'] as const)("opens %s explicitly when floated but not while its layout snapshot remounts",module=>{
+      const original=secondaryToggle(module);mount();float(module);expect(original.postback).toHaveBeenCalledOnce();
+      const fixture=new DOMParser().parseFromString(workspaceFixtureHtml(),'text/html'),replacement=document.importNode(fixture.getElementById('ctl00_MainContent_classPlanPanel')!,true);
+      document.getElementById('ctl00_MainContent_classPlanPanel')!.replaceWith(replacement);const next=secondaryToggle(module);mount();
+      expect(next.postback).not.toHaveBeenCalled();expect(next.body.classList.contains('hidden')).toBe(true);
+      expect(next.body.parentElement!.dataset.plPanelPlacement).toBe('floating');
+      document.querySelector<HTMLButtonElement>(`button[data-pl-module='${module}']`)!.click();expect(next.postback).toHaveBeenCalledOnce();
+    });
+
+    it("atomically resets custom edge placements, floating panels and collapsed navigation",()=>{
+      mount();panelKey('find','ArrowLeft',{altKey:true});panelKey('classes','ArrowRight',{altKey:true});float('schedule');
+      document.querySelector<HTMLButtonElement>('.pl-navigation-toggle')!.click();expect(document.querySelector('.pl-workspace-host')!.classList.contains('pl-navigation-collapsed')).toBe(true);
+      panelKey('schedule','ContextMenu');const reset=[...document.querySelectorAll<HTMLButtonElement>('.pl-panel-layout-menu button')].find(button=>button.textContent==='Reset layout')!;reset.click();
+      expect(document.querySelector<HTMLElement>('.pl-workspace-calendar')!.dataset.plPanelPlacement).toBe('right');
+      for(const section of document.querySelectorAll<HTMLElement>('.pl-workspace-main > section'))expect(section.dataset.plPanelPlacement).toBe('main');
+      expect(document.querySelectorAll('.pl-floating-panel,.pl-panel-docked')).toHaveLength(0);
+      expect(document.querySelector('.pl-workspace-host')!.classList.contains('pl-navigation-collapsed')).toBe(false);
+      expect(document.querySelector('button[data-pl-module=classes]')!.getAttribute('aria-pressed')).toBe('true');expect(optimizerPostback).not.toHaveBeenCalled();
+    });
+
+    it("restores exact native markup after floating and edge docking",()=>{
+      const original=document.body.innerHTML;mount();panelKey('find','ArrowLeft',{altKey:true});float('schedule');workspace.restore();
+      expect(document.body.innerHTML).toBe(original);
+    });
   });
 });

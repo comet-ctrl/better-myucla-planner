@@ -216,7 +216,7 @@ describe("MyUclaPlannerController UI", () => {
     const controls=[...document.querySelectorAll('input,select')],parents=controls.map(node=>node.parentElement),submit=vi.fn();document.querySelector('form')!.addEventListener('submit',submit);
     expect(adapter.inspectContract().ok).toBe(false);expect(isKnownEmptyPlanner(document)).toBe(true);
     vi.mocked(chrome.storage.local.get).mockClear();controller=new MyUclaPlannerController(adapter);await controller.start();await settle();
-    expect(document.querySelector('.pl-workspace-empty-plan')).not.toBeNull();expect(document.querySelectorAll('.pl-workspace-nav-main button')).toHaveLength(5);
+    expect(document.querySelector('.pl-workspace-empty-plan')).not.toBeNull();expect(document.querySelectorAll('.pl-workspace-nav-main button')).toHaveLength(6);
     expect(document.querySelector('.pl-workspace-calendar')).not.toBeNull();expect(document.querySelector('.pl-search-widget')).not.toBeNull();expect(document.documentElement.classList.contains('pl-calm-page')).toBe(true);
     expect(document.querySelector('#planner-lift-toolbar')).toBeNull();expect(document.querySelector('[data-pl-real-tools]')).toBeNull();expect(document.querySelector('#planner-lift-actionbar')).toBeNull();
     expect(document.querySelector('.pl-workspace-empty')!.textContent).toContain('No classes in this plan yet');expect(body.innerHTML).toBe(native);

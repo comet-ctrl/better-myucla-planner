@@ -101,8 +101,30 @@ try {
       check(await page.locator('[data-pl-workspace-details][aria-expanded="true"]').count() === 2, named('two independent details stay open'));
     }
     const menu = page.locator('[data-fixture-menu="0"]');
-    await page.locator('.pl-workspace-details-slot').evaluate(node => { node.scrollTop = 0; });
-    await menu.focus(); await menu.click();
+    const beforeFocus = await page.locator('.pl-workspace-details-slot').evaluate(node => {
+      node.scrollTop = 0;
+      const target = document.querySelector('[data-fixture-menu="0"]');
+      const before = { scrollTop: node.scrollTop, slot: node.getBoundingClientRect().toJSON(), control: target.getBoundingClientRect().toJSON(), active: document.activeElement?.className };
+      // Reproduce focus before the asynchronous scroll event updates native rows.
+      target.focus();
+      return before;
+    });
+    const afterFocus = await menu.evaluate(node => ({ slotScroll: document.querySelector('.pl-workspace-details-slot').scrollTop, control: node.getBoundingClientRect().toJSON(), active: document.activeElement === node }));
+    try { await menu.click(); }
+    catch (error) {
+      const geometry = await menu.evaluate(node => {
+        const inspect = element => {
+          if (!element) return null;
+          const style = getComputedStyle(element);
+          return { tag: element.tagName, id: element.id, classes: element.className, box: element.getBoundingClientRect().toJSON(), scrollTop: element.scrollTop, display: style.display, visibility: style.visibility, pointerEvents: style.pointerEvents, position: style.position, zIndex: style.zIndex, clipPath: style.clipPath, inline: element.getAttribute('style') };
+        };
+        const box = node.getBoundingClientRect();
+        return { control: inspect(node), hit: inspect(document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2)), row: inspect(node.closest('tbody.courseItem').children[2]), card: inspect(node.closest('tbody.courseItem')), slot: inspect(document.querySelector('.pl-workspace-details-slot')), frame: inspect(document.querySelector('.pl-workspace-details-frame')), plan: inspect(document.querySelector('.pl-workspace-plan')), main: inspect(document.querySelector('.pl-workspace-main')), deck: inspect(document.querySelector('.pl-workspace-deck')), pageScroll: scrollY, bodyScroll: document.body.scrollTop };
+      });
+      await writeFile(resolve(output, `menu-failure-${width}-${redraw}.json`), JSON.stringify({ beforeFocus, afterFocus, ...geometry }, null, 2));
+      await page.screenshot({ path: resolve(output, `menu-failure-${width}-${redraw}.png`) });
+      throw new Error(named(`native menu click failed: ${error.message}`));
+    }
     const next = page.locator('[data-fixture-next="0"]');
     await next.focus();
     check(await next.isVisible(), named('native action menu is visible'));

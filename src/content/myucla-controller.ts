@@ -30,6 +30,7 @@ import { FastReorderCoordinator } from "./fast-reorder";
 import { ClassSearchPresentation } from "./class-search";
 import { restorePlannerFrame, tidyPlannerFrame } from "./planner-frame";
 import { isKnownEmptyPlanner, PlannerWorkspace } from "./planner-workspace";
+import { readWorkspaceLayout, saveWorkspaceLayout } from "../storage/workspace-layout";
 import { buildFinalsWeek, type FinalsEntry } from "./finals-week";
 import {
   conflictCodes,
@@ -138,7 +139,7 @@ const IDLE_STATUS: QueueProgress = { kind: "idle", message: "", completed: 0, to
 export class MyUclaPlannerController {
   private readonly repository = new AnnotationRepository();
   private readonly classSearch = new ClassSearchPresentation();
-  private readonly workspace = new PlannerWorkspace(compact => saveHeaderSettings({ compact }));
+  private readonly workspace = new PlannerWorkspace(compact => saveHeaderSettings({ compact }), saveWorkspaceLayout);
   private readonly fastCoordinator: FastReorderCoordinator;
   private annotations: Record<string, CourseAnnotation> = {};
   private observer: MutationObserver | null = null;
@@ -206,6 +207,8 @@ export class MyUclaPlannerController {
       this.tidyLayout = (await readLayoutSettings()).tidy;
       if (this.disposed) return;
       this.workspace.setHeaderCompact((await readHeaderSettings()).compact);
+      if (this.disposed) return;
+      this.workspace.setSavedLayout(await readWorkspaceLayout());
       if (this.disposed) return;
       this.stopLayoutWatch = watchLayoutSettings(({ tidy }) => this.setTidyLayout(tidy));
       // The native UpdatePanel is replaced wholesale on partial postbacks.

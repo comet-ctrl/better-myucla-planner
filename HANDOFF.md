@@ -1,8 +1,346 @@
 # Better MyUCLA — Agent handoff
 
-Last updated: 2026-10-03
+Last updated: 2026-10-04
 
-Current version: `0.17.11` (multiple details and native action continuity).
+Current development version: `0.18.6`, branch `flexible-panels`.
+Published prerelease: `0.18.2`; keep it unchanged while validating this local fix.
+
+## Compact headers and panel control fixes (0.18.6 development)
+
+The user reported excess schedule header space, a dark navigation shadow,
+misplaced panels after collapsing navigation and duplicate Details close icons.
+Live inspection found the extension NAV inherited UCLA's global box-shadow
+(rgba(0,0,0,.4) 0 0 4px 2px). Scoped CSS removes that shadow without touching
+UCLA's masthead. Dock coordinates now measure after applying navigation collapse,
+including keyboard toggles and cancellation. One open course retains only its
+individual close; multiple courses get independent closes plus Close all class
+details. Group hiding preserves the existing reopened-detail behavior.
+
+The native calendar menu is #ctl00_MainContent_panelGrid > #gridDiv >
+.classPlanner_SectionMenu.plannerMenuLinks.checkboxStateHolder. Its observed
+ancestors are static-positioned. At roomy widths, the same node projects into
+the measured gap between the native title and header controls, without moving
+parents or changing values/handlers. It tracks the sticky header on scroll.
+Overflow, an unexpected offset parent, hidden/collapsed panes or insufficient
+space retain normal flow. Print and restore remove projection. Native menu
+spacing is reduced in both forms. Disabled Widen is hidden; Restore remains.
+
+Browser checks also exposed native absolute checkbox buttons wider than their
+reserved inline slots. Each native icon-toggle pair now reserves 36px and keeps
+its existing checked/unchecked visibility. A 34px fixture button verifies that
+neighboring labels do not overlap its hit area.
+
+Typecheck/build and all 419 unit tests passed. Three new focused regressions
+cover navigation geometry, close control semantics and native menu projection,
+fallback and cleanup. The full production panel suite passed 2048/1440/390,
+including seven-document persistence, autofill, compact controls, native click
+targets, collapsed navigation, floating geometry and Details close/focus. Broader
+workspace checks passed nine widths plus empty/future, redraw, print and header
+cases; course detail action checks passed 2048/1440/1280/390. Evidence:
+outputs/panel-polish-{unit,workspace,details,panels}.log. Successful fictional
+screenshots are in outputs/panel-layout/compact-schedule-2048.png,
+collapsed-navigation-details-1440.png and single-details-floating-390.png.
+
+Installed and SHA-256 verified all 17 files. Backup:
+outputs/installed-backup-before-panel-polish-20261004-162552.
+Record: outputs/panel-polish-installed.json.
+content.js: fced197fd8096149a86416a21ac54d9a71c4ca8fe9b9e11ff696295225674e94.
+injected.css: 48a9b799c82e9de59be2eaf1ae98f627e8b54bcbf76e1932e539b1b92bd0ce19.
+
+The user reloaded/refreshed. Verified directly on the existing Chrome tab:
+1399px Schedule uses an inline menu (header58.8px; menu36.05px, vertically
+centered), native menu stays in #gridDiv, nav shadow is none, and disabled Widen
+is hidden. All 12 visible native display buttons were reachable at their center;
+toggle buttons fit inside their reserved slots. Opening one course showed one
+course close and a hidden group close. Docked Schedule left, collapsed navigation
+and measured exact alignment (deck/calendar left both72.8px, previously184.8px).
+Restored expanded navigation and the user's right calendar1399px/main420.4px
+split, with the first course details open as in their report. No native plan or
+enrollment action was used, and no private page content was saved. No commit or
+publication was requested for this follow-up.
+
+## Automatic space filling (0.18.5 development)
+
+User identified unused main space beside the sole visible left calendar. Empty
+main groups now consume no width: one edge panel fills the deck; two edge panels
+share it with a single divider. Explicit divider gestures update both preferred
+sizes; automatic filling never overwrites preferences. Reopening a main module
+restores the remembered split. Drop previews use the same occupancy calculation
+as the final layout. Floating panels and Details remain accessible even when
+their original main ancestor has zero width. Explicit hidden CSS suppresses the
+Widen button in layouts where it is not applicable. Official design reference:
+https://obsidian.md/help/tabs.
+
+Typecheck, production build and all 416 tests passed. Production panel suite
+passed 2048/1440/390px, including persistence and Default reset. Fill cases passed
+2048/1440: one/two edges, shared divider gestures and reload, remembered widths,
+float/drop previews, native identity and restoration. Broader workspace checks
+passed nine widths plus empty/future, long content, redraw, print and header
+cases; native Details checks passed 2048/1440/1280/390. Evidence:
+outputs/autofill-panel-final.log and outputs/dock-fill-{unit,workspace,details}.log.
+
+Installed all 17 files with matching SHA-256 hashes in the existing Downloads
+extension. Record: outputs/dock-fill-installed.json. Backup:
+outputs/installed-backup-before-dock-fill-20261004-155038.
+content.js: 62146ce27592f91322a48f39a812f423eebab534e20e80287022733357470496.
+injected.css: 26f2457913efb49ac376ea68ac95b01d2dfa568cb94c58aaf6377b09ab9553e5.
+
+User reloaded v0.18.5. On their actual page, My classes was open (420.4px), Find
+closed, and Schedule docked right (1399px). Closing My classes made Schedule fill
+the complete 1831.4px deck; main width became zero and Widen was visibly hidden.
+After refresh, full width and closed panels remained. Reopening My classes
+restored the prior 420.4/1399px split. Left the page in that original arrangement.
+Only layout controls were used; no private content was saved and no plan or
+enrollment actions were performed. No commit or publication this turn.
+
+## Remembered layout and smoother dragging (0.18.4 development)
+
+The user explicitly authorized saving their customized layout and requested a
+Default layout button. This supersedes the prior memory-only layout restriction.
+New `plannerLift.workspace.v1` local storage contains only allowlisted public
+module identifiers, placement, bounded floating boxes, hidden flags, navigation
+choice/collapse, schedule/dock widths and primary-pane folds. Reads and writes
+reconstruct the schema; no course, term, plan, account or search data is included.
+Startup awaits the preference before mounting. Restoration forwards no native
+actions, preserves controls in their original parents, and leaves closed native
+bodies closed. User changes coalesce in a microtask and storage writes serialize.
+
+Default layout sits above Original layout in navigation (↺ when collapsed). It
+resets placements, widths, hidden flags, module/navigation and local folds, and
+saves the reset. Plans, native selections, notes, open Details and the compact
+header preference remain unchanged. Original layout still restores native flow.
+
+Live v0.18.3 inspection confirmed the native title buttons now fit their labels
+and blank header dragging works. It also reproduced a tall panel failing to
+follow vertical pointer movement because every move was clamped. Runtime now
+coalesces movement once per animation frame, allows exact grabbed-point tracking
+during dragging and clamps the final floating placement on release. Workspace
+geometry is recalculated once when detaching, then only projected Details move.
+Release flushes the last pointer position; cancellation removes pending frames.
+
+Canceled navigation drags and divider gestures roll back their presentation and
+never save temporary choices. Reconciliation cancels all gestures BEFORE taking
+its snapshot, including table-only native redraws. Three tests reproduced the
+prior transient module/navigation/width leak and pass with this correction.
+Keyboard width changes clamp before persistence so shrinking at a boundary
+does not restore a different width on reopening.
+
+Production fixtures cover stored geometry across fresh documents, hidden/folded
+panels, native-closed Optimizer restoration without disclosure, mobile bounds,
+durable Default reset, canceled gestures, native identity and exclusion of course
+content. Broader native module/Plan Actions/Details checks passed four widths;
+workspace checks passed nine widths plus long, empty/future, redraw, print and
+header preference cases. Evidence is in outputs/layout-memory-*.log and
+outputs/persistent-panel-*.log. Final typecheck, production build and all 410
+unit tests passed. The final interruption fix was rechecked in the complete
+1440px panel suite and seven fresh-document persistence scenarios (including
+390px restoration). Earlier full panel checks passed 2048/1440/390.
+
+Installed and SHA-256 verified all 17 files in the existing
+Downloads/better-myucla-v0.10.3/dist directory. Backup:
+outputs/installed-backup-before-layout-memory-20261004-153725.
+Record: outputs/layout-memory-installed.json.
+content.js: e2c71f05a9e32893f259d01f5d16f2d05d2dff98ab4388a0ed83cdbd09d02e2e.
+injected.css: 745cbcc2c580a7a38786fcdf743531dd761774a65ddb01460de0ca73051605c0.
+The user reloaded and refreshed; live checks confirmed their custom left-docked
+1519px schedule with Classes/Find hidden survived refresh. Default layout reset
+the calendar to the right, 640px width, with both browsing panels available; a
+second refresh retained that default. Restored the user's left-docked/widened
+arrangement afterward using layout controls only. Browser connection this turn is
+Chrome id 3, existing tab 505443073, accessible through cua_repl. The initial
+live check restored schedule to its original right dock and 640px width; no
+private page content was saved. See outputs/layout-memory-live-baseline.json.
+No publication or commit was requested this turn; changes remain local.
+
+## Live header drag correction (0.18.3 development)
+
+Live Chrome checks confirmed v0.18.2 schedule float, close/reopen, keyboard
+left/right docking and pointer grip float/left docking. The original right-side
+placement and width were restored; no account action was performed. Pointer
+preview during a held gesture was covered by fictional browser fixtures, not
+captured by the atomic live drag call. No private page content was saved.
+
+Live inspection also exposed a real blank-header problem: native title buttons
+flex across the apparent empty region, so drag ignores it as an interactive
+control. CSS now fits native title buttons to their labels with an automatic
+trailing margin belonging to the parent drag surface. Classes/Search overrides
+no longer grow the button; small Search titles align to the start of their cell.
+Native controls/handlers and adjacent button groups remain unchanged.
+
+The panel harness previously used plain text for some native titles and probed
+edge padding. Its regression now models native button titles and checks the
+meaningful blank space between title text and trailing controls. The new check
+fails the v0.18.2 build because that region hits the native button.
+Typecheck, production build and 389 unit tests passed. Final production panel
+fixtures passed at 2048/1440/390, including meaningful center-header pointer
+dragging, native title clicks, all six modules' control reachability, close,
+reopen, cancellation, preview/drop geometry, redraw and restoration. Native
+module controls passed at 1440/1280/960/390. Narrow header probes at 326/390/480
+confirmed controls stay inside their panels and long labels wrap internally.
+Evidence: outputs/header-grab-unit.log, header-grab-panels.log and
+header-grab-module-controls.log; fictional baseline failure retained as
+outputs/panel-layout/header-gap-baseline-0.18.2.json and PNG.
+
+All 17 v0.18.3 build files installed and SHA-256 verified in the existing
+Downloads/better-myucla-v0.10.3/dist folder. Backup:
+outputs/installed-backup-before-header-grab-20261004-110343.
+Install record: outputs/header-grab-installed.json.
+injected.css SHA-256:
+314498562b55f0ac7deea1e4bdc5e51829b168250b9c0e2354dd518570268783.
+Runtime content.js is unchanged from v0.18.2. Asked the user to reload the
+extension and refresh Class Planner for final blank-header live verification.
+This is a local development fix, not a new published release; source edits are
+uncommitted. The published archive and fictional site preview remain v0.18.2.
+Sanitized live check record: outputs/live-dock-check-v0.18.2.json.
+
+For this Chrome connection use the existing tab through cua_repl. Its
+getScreenshot()/drag() methods worked. The standalone Windows helper could not
+validate the browser URL; do not use it as the browser fallback. Browser menus
+use menuitemradio for Float/Dock, menuitem for Hide/Reset.
+
+## Filled docking preview and simpler placement (0.18.2)
+
+Removed bottom docking from runtime, menus, keyboard and dividers. Dragging
+blank native header space, the dotted grip or navigation tab moves the actual
+panel. One shaded rectangle fills its predicted destination. Generous side
+regions and the main header accept drops; empty space leaves the panel floating.
+Targets are captured before movement, with edge hysteresis and Escape/blur
+cancellation. Native header controls and Help popovers cannot start a drag.
+
+Preview and committed layout share geometry, including collisions, narrow
+Details stacking, and returning Details to hidden/floating My classes. Revealing
+hidden Classes frees an occupied edge first. Details focus synchronizes its
+projected native row before measuring, fixing a reproduced small-screen action
+that stayed clipped after a synchronous scroll/focus change. Native nodes,
+parents, form association, selections and statuses remain intact. No additional
+storage, permission, API, server or background requests.
+
+Typecheck, production build and 389 unit tests pass. Browser fixtures pass:
+panel dragging/destination bounds within 2px at 2048/1440/390; native Details
+actions at 2048/1440/1280/390 across four redraw modes; Plan Actions and native
+module controls at four widths; broader workspace at nine widths plus long,
+empty/future, header/quarter redraw, resize, print and restoration cases. The
+resize fixture now waits for the actual schedule geometry after viewport
+changes, rather than accepting the previous main-pane frame. Screenshots and
+requests are fictional/intercepted. Evidence: outputs/dock-preview-*.log and
+outputs/panel-layout/. No live enrollment action was performed. User has been
+asked to reload Chrome's extension and refresh; installed-page QA is pending.
+
+All 17 built files installed and SHA-256 matched in
+`C:/Users/freeb/Downloads/better-myucla-v0.10.3/dist`.
+Backup: outputs/installed-backup-before-dock-preview-20261004-002511.
+Record: outputs/dock-preview-installed.json.
+Build content.js SHA-256:
+106c50090b346a7a369d486afac104617f02bafe993e8396937ed1e799b61317.
+Build injected.css SHA-256:
+37fcee649c1cb75a7799f9661136f9b07c67fe527e6d673f78e071cee3fab77b.
+Verified 17-file ZIP: outputs/release-v0.18.2/better-myucla-v0.18.2.zip.
+ZIP SHA-256: 39bdd9e1b6d4d738bcc893b9639500e38530b310211c1a3592492e5a69522139.
+
+Production source commit: `f4c2729`. Fictional site preview regenerated from
+that source with matching production hashes; preview checks pass at
+1440/1280/960/390. Its data and actions are local fixture demonstrations only.
+
+Release workflow note: pushing/creating a v* tag triggers Release, which rebuilds
+and replaces the ZIP and release notes. Wait for that workflow to finish, then
+restore the verified local ZIP and notes, and check remote asset digests against
+SHA256SUMS.txt. Do not claim published hashes before that final verification.
+
+## Prior release packaging (0.18.1)
+
+The user explicitly requested a downloadable GitHub release after the branch
+push. Package v0.18.1 as a prerelease; keep v0.17.11 available for rollback.
+
+Release ZIP: outputs/release-v0.18.1/better-myucla-v0.18.1.zip, containing all
+17 verified dist files. Its SHA-256 is
+0640d8f972594c555aabd69b8c7fca0e009cbc771039a0478d85e22ecdba2131.
+Only manifest.version_name changed from development to prerelease; runtime
+JavaScript and CSS exactly match the hashes and checks below. The installed
+manifest label was updated too. The prior installation record describes the
+development-label manifest, while this release ZIP contains the prerelease label.
+
+## Close panels and live dragging (0.18.1)
+
+Every native module and the owned Details frame now has a header × that hides
+its presentation without removing controls or clearing selections. Navigation
+reopens modules and includes Schedule; a course's Details button reopens the
+whole retained details group. A floating Details panel can remain visible when
+My classes is hidden. Escape does not close concealed course records, and
+closing a visible course returns focus to visible navigation when necessary.
+
+Dragging moves the real panel on every pointermove. Original nodes stay in
+their native parents. Fixed dock targets avoid shifting during the gesture;
+Escape/blur/pointer cancellation restores position, placement and stacking.
+Snapshots taken during dragging use committed geometry. Explicitly dragging or
+floating a closed pane does not displace another pane from its former dock.
+Hidden flags remain in memory through same-context redraws. Reset reveals all;
+print and Original layout restore native content. No storage/permission changes.
+
+Typecheck, production build and all 375 unit tests pass. Final production
+browser fixtures pass at 2048/1440/390 for hide/reopen, live drag before release,
+cancellation, dock/resize, independent Details, native identity, selection
+retention, redraw, reset, print and restoration. Inspected real-drag screenshots
+with fictional data, including mobile close controls. Native Details actions,
+Plan Actions and module-control regressions pass four viewports each. Broad
+workspace checks pass nine widths plus long/empty/future/redraw/print cases.
+Proof: outputs/panel-close-*.log and outputs/panel-layout/. No live enrollment
+was attempted; final installed-page verification still requires Chrome reload.
+
+Build hashes: content.js SHA-256
+24633268db65a0389674ad402189ccf79cee0ba18469ede0bcd11ed0f359ddcc;
+injected.css SHA-256
+f0c24378083d53a1ff4b5278d357b5bb540d7990a61e40233223634774cf626d.
+
+Development source commit: `4cf2edf`. All 17 files installed in
+`C:/Users/freeb/Downloads/better-myucla-v0.10.3/dist` and SHA-256 matched.
+Backup: outputs/installed-backup-before-panel-close-20261003-223943;
+install record: outputs/panel-close-installed.json. Matching fictional preview
+regenerated from that source commit and verified at 1440/1280/960/390 with the
+exact production CSS and content hashes. Asked the user to Reload the extension
+and refresh Class Planner; actual installed-page check remains pending.
+
+## Prior flexible-panel baseline (0.18.0)
+
+User requested Obsidian-like draggable tabs, floating schedule/details and
+retractable navigation without a toolbar full of new buttons. Implemented an
+in-page PanelLayoutController: owned dotted grips/nav proxies, thresholded
+pointer dragging, edge docking targets, bounded/resizable floating panels,
+dock dividers, keyboard/context-menu alternatives and atomic Reset layout.
+Navigation can collapse with its chevron or drag edge. Multiple details and
+other modules remain usable together. Floating means within the same document.
+
+Native sections stay under their existing main/deck parents; original course
+third rows remain inside their TBODY, projected into the owned details frame.
+No native controls/handlers/values are cloned or moved out of the original
+form. Existing strict native disclosure forwarding is explicit-user-only;
+layout reset, displaced panes and snapshot remounts never open a module.
+The current plan/term boundary still clears old details and layout. Same-plan
+redraw restores only public panel IDs/geometry from memory. No new persistent
+storage, permission or request is introduced. Print/Original restore native flow.
+
+Typecheck/build and 354 unit tests pass. Production panel-layout fixtures pass
+2048/1440/390, including overlapping floating My classes/Details/Find, trusted
+drag/dock/resize/sidebar gestures, native review focus and hit-testing, same-plan
+redraw, reset, print and exact control identity/ancestry/status. Native detail
+actions passed four widths x four redraw types. Plan Actions and original
+module controls passed four viewports each; broader workspace passed nine
+widths plus long/empty plans, quarter/header redraw and print. Matching preview
+uses the same production source and CSS. Final installed-page verification
+still requires the user's Chrome reload/open Class Planner tab; no enrollment
+was attempted. Fictional proof: outputs/panel-layout/ and flexible-panels logs.
+
+Development source commit: `7d40af3`. Installed all 17 build files in
+`C:/Users/freeb/Downloads/better-myucla-v0.10.3/dist`; every SHA-256 matches.
+Backup: outputs/installed-backup-before-flexible-panels-20261003-221052.
+Content JS SHA-256: 8be6aa9833bcd993d27358499564884b2a3ae09f33d061ef8fdf5b32c401caac.
+CSS SHA-256: 58035ab4a153f2a466f79e1c5d058b7b9daf2b7d2ae52ebc869ada34872f5ffd.
+The final three-width docking run includes the empty-center placeholder rather
+than implicit selection of unopened Optimizer. Preview metadata identifies
+the source commit and exact production hashes; preview checks pass four widths.
+An exact-URL Chrome lookup could not find Class Planner. Asked the user to reload
+the extension and open/refresh that page; installed live verification is pending.
+
+## v0.17.11 published baseline
 
 Merged `planner-redesign` through `0fa3f46` into the fork's `main` by
 fast-forward at the user's request. Local `main` now tracks `fork/main`;

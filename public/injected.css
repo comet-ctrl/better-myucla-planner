@@ -1464,7 +1464,7 @@ section#layoutContentArea.pl-planner-introduction {
 .pl-workspace-top > button, .pl-workspace-top > details > summary { border-color: #b3c3d4; background: #f7f9fc; color: #405b77; }
 .pl-workspace-top button:focus-visible, .pl-pane-toggle:focus-visible, .pl-browser-toolbar button:focus-visible, .pl-browser-index button:focus-visible { outline: 2px solid #4184c2; outline-offset: 2px; }
 .pl-workspace-shell { grid-column: 1 / -1; grid-row: 3; display: grid; grid-template-columns: 168px minmax(0,1fr); min-height: 0; min-width: 0; border-top: 1px solid #e1e7ee; }
-.pl-workspace-nav { display: flex; flex-direction: column; min-height: 0; padding: 16px 8px 12px; box-sizing: border-box; background: #f8fafc; border-right: 1px solid #e1e7ee; }
+.pl-workspace-nav { display: flex; flex-direction: column; min-height: 0; padding: 16px 8px 12px; box-sizing: border-box; background: #f8fafc; border-right: 1px solid #e1e7ee; box-shadow: none; }
 .pl-workspace-nav-main, .pl-workspace-nav-footer { display: flex; flex-direction: column; gap: 6px; }
 .pl-workspace-nav-footer { margin-top: auto; padding-top: 16px; border-top: 1px solid #e1e7ee; }
 .pl-workspace-nav button { min-height: 44px; padding: 10px 12px; border: 0; border-radius: 5px; background: transparent; color: #46566a; text-align: left; font: 500 14px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; cursor: pointer; }
@@ -1499,12 +1499,15 @@ section#layoutContentArea.pl-planner-introduction {
   margin: 0 !important; transform: none !important; z-index: 10;
 }
 .pl-workspace-main > section > .pl-pane-title > .popover.clickover > .arrow { display: none; }
-.pl-pane-title > button.planSectionToggle { flex: 1; min-width: 0; min-height: 38px; padding: 0; text-align: left; color: inherit; background: transparent; border: 0; font: inherit; }
+/* Keep native title hit areas on their labels. The remaining header margin
+   belongs to the noninteractive drag surface, not the disclosure button. */
+.pl-pane-title > button.planSectionToggle { flex: 0 1 auto; width: fit-content; max-width: 100%; min-width: 0; min-height: 38px; margin-right: auto; padding: 0; text-align: left; color: inherit; background: transparent; border: 0; font: inherit; }
 .pl-pane-title > button.planSectionHelpTip { box-sizing: border-box; min-width: 32px; min-height: 32px; margin: 0; padding: 5px; border: 1px solid #b3c3d4; border-radius: 6px; background: #f7f9fc; color: #405b77; cursor: pointer; }
 .pl-pane-title > button.planSectionHelpTip:hover { border-color: #7895b3; background: #eaf1f9; }
 .pl-pane-title > button.planSectionHelpTip:focus-visible { outline: 2px solid #3477b5; outline-offset: 2px; }
 .pl-pane-title > button.planSectionToggle > .icon-minus-sign, .pl-pane-title > button.planSectionToggle > .icon-plus-sign { display: none; }
 .classPlannerWrapper .pl-pane-title > button.pl-pane-toggle { flex: none; display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; width: 38px; height: 38px; padding: 0; margin-left: auto; border: 1px solid #91a8c0; border-radius: 7px; background: #f1f5fa; color: #315776; font-size: 0; cursor: pointer; }
+.classPlannerWrapper .pl-pane-title > button.planSectionToggle ~ button.pl-pane-toggle { margin-left: 0; }
 /* Draw a consistent chevron instead of the tiny font-dependent down character.
    The real button retains its accessible label, title and expanded state. */
 .classPlannerWrapper .pl-pane-title > button.pl-pane-toggle::before { content: ""; width: 8px; height: 8px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: translateY(-2px) rotate(45deg); }
@@ -1518,6 +1521,8 @@ section#layoutContentArea.pl-planner-introduction {
 .pl-workspace-main > .pl-module-active:not(.pl-workspace-plan):not(.pl-workspace-search) > .pl-pane-body { flex: none; min-height: auto; overflow: visible; padding: 16px; box-sizing: border-box; }
 .pl-workspace-information-placeholder { padding: 24px; color: #59687a; }
 .pl-workspace-information-placeholder:not(.pl-module-active) { display: none; }
+/* Long labels wrap within their native buttons, keeping header controls together. */
+.pl-workspace-main > :is(.pl-workspace-search,.classPlanner_ClassOptimizerSection,.classPlanner_EnrolledNotInPlanSection,.classPlanner_PersonalTimeBlocksSection) > .pl-pane-title { flex-wrap: nowrap; }
 /* Opaque secondary modules retain their own server-backed disclosures. */
 .pl-workspace-main > :is(.classPlanner_ClassOptimizerSection,.classPlanner_EnrolledNotInPlanSection,.classPlanner_PersonalTimeBlocksSection) > .pl-pane-title > button.planSectionToggle { display: flex; align-items: center; gap: 10px; box-sizing: border-box; padding: 7px 10px; border: 1px solid #b3c3d4; border-radius: 6px; background: #f7f9fc; cursor: pointer; order: 0; }
 .pl-workspace-main > :is(.classPlanner_ClassOptimizerSection,.classPlanner_EnrolledNotInPlanSection,.classPlanner_PersonalTimeBlocksSection) > .pl-pane-title > button.planSectionToggle:hover { border-color: #7895b3; background: #eaf1f9; }
@@ -1528,7 +1533,7 @@ section#layoutContentArea.pl-planner-introduction {
 .pl-workspace-main > section > .pl-optimizer-state, .pl-workspace-calendar > .pl-optimizer-state { margin: 0; padding: 24px 20px; color: #59687a; font: 14px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
 .pl-workspace-main > section > .pl-optimizer-state[hidden], .pl-workspace-calendar > .pl-optimizer-state[hidden] { display: none; }
 .pl-workspace-plan > .pl-optimizer-state { grid-column: 1 / -1; grid-row: 2; }
-.pl-workspace-plan:has(> .pl-optimizer-state) > .pl-workspace-details-slot { display: none; }
+.pl-workspace-plan:has(> .pl-optimizer-state) > .pl-workspace-details-frame { display: none; }
 .pl-planner-introduction right-sidebar.pl-intro-sidebar-workspace.pl-intro-sidebar-open { top: var(--pl-info-top); left: var(--pl-info-left); right: auto; width: var(--pl-info-width); height: var(--pl-info-height); max-height: none; border: 0; border-radius: 0; box-shadow: none; padding: 48px 20px 20px; }
 .pl-workspace-splitter { align-self: stretch; cursor: col-resize; touch-action: none; display: flex; justify-content: center; align-items: center; border-left: 1px solid #e1e7ee; margin-left: 5px; }
 .pl-workspace-splitter::after { content: ""; width: 3px; height: 32px; margin-left: -7px; background: #c6cfda; border-radius: 3px; }
@@ -1538,17 +1543,34 @@ section#layoutContentArea.pl-planner-introduction {
 .pl-workspace-resizing { user-select: none; cursor: col-resize; }
 .pl-workspace-empty { margin: 32px; color: #647080; }
 .pl-workspace-empty[hidden] { display: none; }
-.pl-workspace-calendar #gridDiv { margin-top: 16px; }
+.pl-workspace-calendar #gridDiv { margin-top: 8px; }
 .pl-workspace-calendar .pl-workspace-schedule-widen { flex: none; min-height: 38px; padding: 7px 10px; border: 1px solid #91a8c0; border-radius: 7px; background: #f1f5fa; color: #315776; font: 500 13px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; cursor: pointer; }
 .pl-workspace-calendar .pl-workspace-schedule-widen:hover, .pl-workspace-calendar .pl-workspace-schedule-widen[aria-pressed="true"] { border-color: #5f82a6; background: #e4eef9; }
 .pl-workspace-calendar .pl-workspace-schedule-widen:focus-visible { outline: 2px solid #3477b5; outline-offset: 2px; }
 .pl-workspace-calendar .pl-workspace-schedule-widen:disabled { opacity: .55; cursor: default; }
-.pl-workspace-calendar .plannerMenuLinks { display: flex; align-items: center; flex-wrap: wrap; gap: 4px 6px; justify-content: flex-start; padding: 0 12px; color: #526174; font: 13px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+.pl-workspace-host .pl-workspace-schedule-widen[hidden] { display: none !important; }
+.pl-workspace-calendar .plannerMenuLinks { display: flex; align-items: center; flex-wrap: wrap; gap: 4px 6px; justify-content: flex-start; margin: 0 0 8px; padding: 0 12px; color: #526174; font: 13px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
 .pl-workspace-calendar .plannerMenuLinks button { min-height: 34px; padding: 5px 7px; border: 1px solid transparent; border-radius: 5px; background: transparent; color: #526174; font: inherit; }
 .pl-workspace-calendar .plannerMenuLinks button:hover { background: #f0f3f6; }
 .pl-workspace-calendar .plannerMenuLinks button:focus-visible { outline: 2px solid #4184c2; outline-offset: 2px; }
+/* Native checked/unchecked buttons overlap by design; reserve their full hit
+   area so the next control group cannot overlap the visible checkbox. */
+.pl-workspace-calendar .plannerMenuLinks .icontoggle.gridsizeicons { display: inline-block; position: relative; min-width: 36px; min-height: 34px; padding: 0 !important; vertical-align: middle; }
+.pl-workspace-calendar .plannerMenuLinks .icontoggle.gridsizeicons > button { left: 0; top: 0; }
 .pl-workspace-calendar .plannerMenuLinks input[type="checkbox"] { width: 16px; height: 16px; vertical-align: middle; accent-color: #246297; }
 .pl-workspace-calendar .plannerMenuLinks .pl-native-label { color: #46617d !important; font-weight: 500; }
+@media screen {
+  /* Project the measured native menu into spare header space without moving it
+     out of its native grid or form. Narrow panels retain the normal menu row. */
+  .pl-workspace-calendar.pl-calendar-inline-tools { position: relative; }
+  .pl-workspace-calendar.pl-calendar-inline-tools .pl-calendar-header-tools {
+    position: absolute; left: var(--pl-calendar-tools-left); top: var(--pl-calendar-tools-top);
+    width: var(--pl-calendar-tools-width); box-sizing: border-box; flex-wrap: nowrap;
+    margin: 0; padding: 0; z-index: 5;
+  }
+  .pl-workspace-calendar.pl-calendar-inline-tools .pl-calendar-header-tools > span { flex: none; white-space: nowrap; }
+  .pl-workspace-calendar.pl-calendar-inline-tools #gridDiv { margin-top: 4px; }
+}
 .pl-workspace-calendar #gridDiv tr.primary.light.headerBar.classPlanner > td { background: #eef3f7; color: #465b70; font-weight: 600; }
 @media (min-width: 781px) {
   .pl-workspace-calendar #gridDiv .planneritembox[data-pl-grid="tidy"] { font-size: 12px; }
@@ -1557,8 +1579,9 @@ section#layoutContentArea.pl-planner-introduction {
 .pl-workspace-main > .pl-workspace-plan.pl-module-active { display: grid; grid-template-columns: clamp(248px,27%,288px) minmax(0,1fr); grid-template-rows: auto minmax(0,1fr); }
 .pl-workspace-plan > .classPlanner_SectionTitle { grid-column: 1 / -1; grid-row: 1; }
 .pl-workspace-plan > #panelPlan { grid-column: 1; grid-row: 2; overflow: auto; border-right: 1px solid #e1e7ee; }
-.pl-workspace-details-slot { grid-column: 2; grid-row: 2; min-width: 0; min-height: 0; display: flex; align-items: center; justify-content: center; padding: 24px; box-sizing: border-box; color: #68798b; text-align: center; font-size: 14px; }
-.pl-has-docked-details > .pl-workspace-details-slot { display: block; overflow: auto; overscroll-behavior: contain; padding: 0; color: transparent; scrollbar-gutter: stable; }
+.pl-workspace-details-frame { grid-column: 2; grid-row: 2; min-width: 0; min-height: 0; display: flex; flex-direction: column; background: #fff; }
+.pl-workspace-details-slot { flex: 1; min-width: 0; min-height: 0; display: flex; align-items: center; justify-content: center; padding: 24px; box-sizing: border-box; color: #68798b; text-align: center; font-size: 14px; }
+.pl-has-docked-details .pl-workspace-details-slot { display: block; overflow: auto; overscroll-behavior: contain; padding: 0; color: transparent; scrollbar-gutter: stable; }
 .pl-workspace-detail-space { width: 100%; pointer-events: none; }
 .pl-workspace-details-slot:focus-visible { outline: 2px solid #3477b5; outline-offset: -2px; }
 @media screen {
@@ -1566,7 +1589,7 @@ section#layoutContentArea.pl-planner-introduction {
   .pl-workspace-empty-plan .pl-workspace-main > .pl-workspace-plan.pl-module-active { grid-template-columns: minmax(0,1fr); }
   .pl-workspace-empty-plan .pl-workspace-plan > #panelPlan { grid-column: 1 / -1; border-right: 0; padding: 32px; box-sizing: border-box; }
   .pl-workspace-empty-plan .pl-workspace-plan > #panelPlan > .classPlanner_SectionData { max-width: 480px; padding: 12px 0; color: #59687a; line-height: 1.6; }
-  .pl-workspace-empty-plan .pl-workspace-plan > .pl-workspace-details-slot { display: none; }
+  .pl-workspace-empty-plan .pl-workspace-plan > .pl-workspace-details-frame { display: none; }
 }
 .pl-workspace-plan #div_landing, .pl-workspace-plan #panelPlan > div:first-child:not(#div_landing) { margin: 0 !important; }
 .pl-workspace-plan #div_landing > table { display: block; width: 100%; }
@@ -1623,7 +1646,6 @@ section#layoutContentArea.pl-planner-introduction {
 .pl-workspace-plan button.pl-workspace-detail-button:focus-visible, .pl-workspace-plan button.pl-workspace-actions-button:focus-visible { outline: 2px solid #4184c2; outline-offset: 2px; }
 .pl-workspace-plan .pl-conflict-badge, .pl-workspace-plan .pl-tag-badge { white-space: normal; max-width: 100%; margin-left: 0; font: 12px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
 .pl-workspace-plan #plannerSectionClip { gap: 4px; }
-.pl-workspace-plan #plannerSectionClip > button.planSectionToggle { flex: 1; }
 .pl-workspace-plan .pl-bar { display: block; flex: 0 1 320px; width: min(320px,100%); margin-left: auto; }
 .pl-workspace-plan .pl-bar-main { flex-wrap: nowrap; }
 .pl-workspace-plan .pl-bar input[type="search"] { flex: 1; width: 100%; min-width: 0; height: 40px; padding: 8px 12px; border: 1px solid #cfd7e1; border-radius: 6px; font: 14px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
@@ -1641,7 +1663,7 @@ section#layoutContentArea.pl-planner-introduction {
 .pl-workspace-search .ClassSearchWidget.pl-search-widget .searchFields { display: grid; gap: 6px 10px; }
 .pl-workspace-search .goPanel { align-self: end; }
 .pl-workspace-search label.pl-search-field-label:not(:first-child) { margin-top: 0; }
-.pl-workspace-search > .pl-pane-title > button.planSectionToggle { order: 0; flex: 1; min-width: 0; }
+.pl-workspace-search > .pl-pane-title > button.planSectionToggle { order: 0; }
 .pl-workspace-search > .pl-pane-title > a { order: 1; margin-left: auto; font-size: 13px; }
 .pl-workspace-search > .pl-pane-title > .pl-pane-toggle { order: 2; }
 .pl-workspace-search .ClassSearchList { overflow: auto; }
@@ -1834,7 +1856,7 @@ section#layoutContentArea.pl-planner-introduction {
 .pl-workspace-preview button.pl-workspace-preview-close:focus-visible { outline: 2px solid #4184c2; outline-offset: -3px; }
 .pl-workspace-plan tbody.pl-workspace-preview-card { transform: none !important; background: #f5f8fc; box-shadow: inset 3px 0 #4184c2; }
 .pl-workspace-plan .pl-plan-root tbody.courseItem.pl-preview-docked > tr:nth-child(3) {
-  display: block !important; position: fixed; z-index: 108; left: var(--pl-detail-left); top: var(--pl-detail-top);
+  display: block !important; position: fixed; z-index: var(--pl-detail-z,108); left: var(--pl-detail-left); top: var(--pl-detail-top);
   width: var(--pl-detail-width); height: var(--pl-detail-height); max-height: none;
   clip-path: inset(var(--pl-detail-clip-top,0px) 0 var(--pl-detail-clip-bottom,0px) 0);
   margin: 0; padding: 20px; box-sizing: border-box; overflow: visible; background: #fff; border-bottom: 1px solid #dce4ee; font: 14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
@@ -1921,15 +1943,15 @@ section#layoutContentArea.pl-planner-introduction {
 .pl-workspace-main[data-pl-main-size="medium"] > .pl-workspace-plan.pl-module-active { grid-template-columns: 228px minmax(0,1fr); }
 .pl-workspace-main[data-pl-main-size="narrow"] > .pl-workspace-plan.pl-module-active { grid-template-columns: minmax(0,1fr); grid-template-rows: auto minmax(0,1fr); }
 .pl-workspace-main[data-pl-main-size="narrow"] .pl-workspace-plan > #panelPlan { grid-column: 1; grid-row: 2; border-right: 0; }
-.pl-workspace-main[data-pl-main-size="narrow"] .pl-workspace-details-slot { display: none; }
+.pl-workspace-main[data-pl-main-size="narrow"] .pl-workspace-details-frame { display: none; }
 .pl-workspace-main[data-pl-main-size="narrow"] > .pl-workspace-plan.pl-module-active.pl-has-docked-details { grid-template-rows: auto minmax(120px,180px) minmax(200px,1fr); }
-.pl-workspace-main[data-pl-main-size="narrow"] .pl-has-docked-details > .pl-workspace-details-slot { display: block; grid-column: 1; grid-row: 3; border-top: 1px solid #e1e7ee; }
+.pl-workspace-main[data-pl-main-size="narrow"] .pl-has-docked-details > .pl-workspace-details-frame { display: flex; grid-column: 1; grid-row: 3; border-top: 1px solid #e1e7ee; }
 .pl-workspace-main[data-pl-main-size="narrow"] .pl-workspace-plan .pl-bar { flex-basis: 100%; width: 100%; margin: 0; order: 2; }
 .pl-workspace-main[data-pl-main-size="narrow"] .pl-workspace-plan .pl-pane-toggle { order: 1; }
 .pl-workspace-main[data-pl-main-size="narrow"] .pl-workspace-plan .pl-plan-root tbody.courseItem.pl-preview-docked > tr:nth-child(3) { padding: 14px; }
 @container pl-search (max-width: 420px) {
   .pl-workspace-search > .pl-pane-title { display: grid; grid-template-columns: minmax(0,1fr) 38px; gap: 8px 10px; }
-  .pl-workspace-search > .pl-pane-title > button.planSectionToggle { grid-column: 1; grid-row: 1; }
+  .pl-workspace-search > .pl-pane-title > button.planSectionToggle { grid-column: 1; grid-row: 1; justify-self: start; }
   .pl-workspace-search > .pl-pane-title > button.pl-pane-toggle { grid-column: 2; grid-row: 1; }
   .pl-workspace-search > .pl-pane-title > a { grid-column: 1; grid-row: 2; margin: 0; justify-self: start; }
   .pl-workspace-search > .pl-pane-title > button.planSectionHelpTip { grid-column: 2; grid-row: 2; justify-self: center; }
@@ -2030,4 +2052,116 @@ section#layoutContentArea.pl-planner-introduction {
   .pl-browser-body:not(.pl-browser-body-active) { display: block !important; }
   .pl-browser-list { max-height: none; }
   .pl-browser-result-actions { position: static; }
+}
+
+/* Flexible workspace: owned drag surfaces, native panels in their original form. */
+.pl-panel-handle { touch-action: none; cursor: grab; user-select: none; }
+.pl-panel-handle:active { cursor: grabbing; }
+.pl-workspace-host button.pl-panel-grip { flex: none; order: -10; min-width: 26px; width: 26px; height: 32px; min-height: 32px; padding: 0; border: 1px solid transparent; border-radius: 5px; background: transparent; color: #718399; font: 22px/1 sans-serif; cursor: grab; }
+.pl-workspace-host button.pl-panel-grip:hover { background: #edf2f8; border-color: #c5d0df; color: #315776; }
+.pl-workspace-host button.pl-panel-grip:focus-visible { outline: 2px solid #3477b5; }
+.pl-panel-details-handle { flex: none; position: relative; z-index: 1; box-sizing: border-box; width: 100%; min-height: 36px; padding: 7px 14px; border: 0; border-bottom: 1px solid #dfe6ef; background: #f7f9fc; color: #516178; text-align: left; font: 600 12px/20px -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; cursor: grab; }
+.pl-panel-details-handle::before { content: '⠿'; margin-right: 9px; color: #718399; }
+.pl-workspace-details-frame[hidden] { display: none !important; }
+.pl-workspace-nav { position: relative; }
+.pl-workspace-nav button.pl-navigation-toggle { flex: none; align-self: flex-end; box-sizing: border-box; min-height: 28px; width: 30px; padding: 0; margin-bottom: 8px; border: 1px solid #c7d3e0; text-align: center; font-size: 23px; line-height: 26px; }
+.pl-navigation-divider { position: absolute; right: -4px; top: 0; bottom: 0; width: 8px; z-index: 6; cursor: col-resize; touch-action: none; }
+.pl-navigation-divider:hover, .pl-navigation-divider:focus-visible { background: #3477b533; outline: none; }
+.pl-navigation-collapsed .pl-workspace-shell { grid-template-columns: 56px minmax(0,1fr); }
+.pl-navigation-collapsed .pl-workspace-nav { padding: 8px 5px; }
+.pl-navigation-collapsed .pl-workspace-nav :is(.pl-workspace-nav-main,.pl-workspace-nav-footer) > button { width: 44px; min-height: 42px; padding: 8px 0; font-size: 0; text-align: center; }
+.pl-navigation-collapsed .pl-workspace-nav-main > button::before { font: 600 13px/24px -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; }
+.pl-navigation-collapsed [data-pl-module='classes']::before { content: 'My'; }
+.pl-navigation-collapsed [data-pl-module='find']::before { content: 'Find'; }
+.pl-navigation-collapsed [data-pl-module='optimizer']::before { content: 'Opt'; }
+.pl-navigation-collapsed [data-pl-module='study']::before { content: 'Study'; }
+.pl-navigation-collapsed [data-pl-module='personal']::before { content: 'Own'; }
+.pl-navigation-collapsed .pl-workspace-nav-footer > button::before { content: 'i'; font: 600 16px/24px sans-serif; }
+.pl-navigation-collapsed .pl-workspace-nav-footer > .pl-workspace-original::before { content: '↶'; }
+.pl-navigation-collapsed .pl-workspace-nav-footer > .pl-workspace-default::before { content: '↺'; }
+@media screen {
+  .pl-custom-docks { position: relative; display: block; }
+  .pl-custom-docks > .pl-workspace-main { position: absolute; left: var(--pl-main-left,0px); right: var(--pl-main-right,0px); top: 0; bottom: 0; }
+  .pl-no-main-dock > .pl-workspace-main { min-width: 0; overflow: visible; }
+  .pl-no-main-dock > .pl-workspace-main > .pl-workspace-dock-placeholder { display: none; }
+  .pl-custom-docks > .pl-workspace-splitter { display: none; }
+  .pl-workspace-host .pl-panel-docked { position: fixed !important; left: var(--pl-dock-left) !important; top: var(--pl-dock-top) !important; width: var(--pl-dock-width) !important; height: var(--pl-dock-height) !important; box-sizing: border-box; border: 1px solid #dfe6ef !important; display: flex; flex-direction: column; }
+  .pl-workspace-host .pl-floating-panel { position: fixed !important; left: var(--pl-panel-left) !important; top: var(--pl-panel-top) !important; width: var(--pl-panel-width) !important; height: var(--pl-panel-height) !important; max-width: none !important; max-height: none !important; min-width: 0 !important; min-height: 0 !important; margin: 0 !important; box-sizing: border-box; z-index: var(--pl-panel-z,130); background: #fff; border: 1px solid #aebed0 !important; border-radius: 10px !important; box-shadow: 0 14px 44px #142c4933,0 2px 8px #142c491a; overflow: auto; }
+  .pl-workspace-host .pl-workspace-main > section.pl-floating-panel:not(.pl-workspace-plan), .pl-workspace-host .pl-workspace-deck > .pl-workspace-calendar.pl-floating-panel { display: flex !important; flex-direction: column; }
+  .pl-workspace-host .pl-workspace-details-frame.pl-floating-panel { display: flex !important; overflow: visible; }
+  .pl-workspace-host .pl-workspace-details-frame.pl-floating-panel[hidden] { display: none !important; }
+  .pl-floating-panel > .pl-panel-details-handle { border-radius: 10px 10px 0 0; }
+  .pl-workspace-main > .pl-workspace-plan.pl-details-floating { grid-template-columns: minmax(0,1fr) !important; grid-template-rows: auto minmax(0,1fr) !important; }
+  .pl-workspace-main > .pl-workspace-plan.pl-details-floating > #panelPlan { grid-column: 1 / -1; grid-row: 2; border-right: 0; }
+  .pl-workspace-main > .pl-workspace-plan.pl-details-only { display: block !important; position: static !important; width: 0 !important; height: 0 !important; overflow: visible !important; visibility: hidden; pointer-events: none; }
+  .pl-workspace-plan.pl-details-only .pl-workspace-details-frame, .pl-workspace-plan.pl-details-only .pl-preview-docked > tr:nth-child(3) { visibility: visible; pointer-events: auto; }
+  .pl-panel-small.pl-workspace-plan.pl-module-active { grid-template-columns: minmax(0,1fr) !important; grid-template-rows: auto minmax(120px,160px) minmax(180px,1fr) !important; }
+  .pl-panel-small.pl-workspace-plan > #panelPlan { grid-column: 1; grid-row: 2; }
+  .pl-panel-small.pl-workspace-plan > .pl-workspace-details-frame { grid-column: 1; grid-row: 3; border-top: 1px solid #dfe6ef; }
+}
+.pl-panel-resize { display: none; }
+.pl-floating-panel > button.pl-panel-resize:not([hidden]) { display: block; position: absolute; right: 0; bottom: 0; width: 22px; height: 22px; min-height: 0; padding: 0; border: 0; border-radius: 0 0 10px 0; background: linear-gradient(135deg,transparent 45%,#7b91ab 46%,#7b91ab 49%,transparent 50%,transparent 60%,#7b91ab 61%,#7b91ab 64%,transparent 65%); cursor: nwse-resize; touch-action: none; z-index: 220; }
+.pl-panel-resize:focus-visible { outline: 2px solid #3477b5; outline-offset: -2px; }
+.pl-panel-drop-overlay { position: fixed; inset: 0; z-index: 2147483500; pointer-events: none; }
+.pl-panel-drop-preview { position: fixed; display: flex; align-items: center; justify-content: center; box-sizing: border-box; padding: 20px; pointer-events: none; border: 2px solid #6b9bcbbb; border-radius: 10px; background: #438ddd30; box-shadow: inset 0 0 0 1px #ffffff66,0 8px 28px #14344f12; color: #194a79; text-align: center; font: 600 14px/1.5 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; animation: pl-dock-reveal 120ms ease-out; }
+@keyframes pl-dock-reveal { from { opacity: .35; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .pl-panel-drop-preview { animation: none; } }
+.pl-pane-title.pl-panel-handle { cursor: grab; touch-action: auto; }
+.pl-pane-title.pl-panel-handle :is(.popover,.clickover,[role="dialog"],[popover]) { cursor: auto; touch-action: auto; }
+.pl-pane-title.pl-panel-handle :is(input,select,textarea,button,a,summary,label) { touch-action: auto; }
+.pl-panel-layout-menu { position: fixed; z-index: 2147483600; display: flex; flex-direction: column; width: 230px; max-height: calc(100dvh - 24px); overflow: auto; box-sizing: border-box; padding: 6px; border: 1px solid #c5d1de; border-radius: 9px; background: #fff; box-shadow: 0 10px 34px #142c4933; }
+.pl-panel-layout-menu button { padding: 10px 12px; border: 0; border-radius: 5px; background: transparent; color: #334b66; text-align: left; font: 14px/1.4 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; cursor: pointer; }
+.pl-panel-layout-menu button:hover,.pl-panel-layout-menu button:focus-visible { background: #eaf2fc; outline: none; }
+.pl-panel-layout-menu button[aria-checked='true'] { color: #1766a9; background: #f0f5fc; }
+.pl-panel-layout-menu button:last-child { border-top: 1px solid #e1e7ef; border-radius: 0; margin-top: 4px; }
+@media screen and (max-width:1279px) {
+  .pl-workspace-nav button.pl-navigation-toggle { align-self: center; margin-bottom: 0; }
+  .pl-navigation-divider { display: none; }
+  .pl-navigation-collapsed .pl-workspace-shell { grid-template-columns: minmax(0,1fr); }
+  .pl-navigation-collapsed .pl-workspace-nav { padding: 5px; gap: 4px; }
+  .pl-navigation-collapsed .pl-workspace-nav-footer { padding-left: 4px; }
+}
+@media screen and (max-width:1099px) {
+  .pl-workspace-host.pl-show-schedule .pl-workspace-main:has(.pl-floating-panel) { display: block !important; width: 0; height: 0; overflow: visible; }
+  .pl-workspace-host.pl-show-schedule .pl-workspace-main:has(.pl-floating-panel) > section:not(.pl-floating-panel):not(.pl-details-only) { display: none !important; }
+}
+@media print {
+  .pl-panel-grip,.pl-panel-details-handle,.pl-panel-resize,.pl-panel-drop-overlay,.pl-panel-layout-menu,.pl-navigation-toggle,.pl-navigation-divider,.pl-workspace-details-frame { display: none !important; }
+  .pl-workspace-host .pl-panel-docked,.pl-workspace-host .pl-floating-panel,.pl-workspace-main > .pl-workspace-plan.pl-details-only { position: static !important; display: block !important; width: auto !important; height: auto !important; max-height: none !important; overflow: visible !important; visibility: visible; box-shadow: none; border: 0 !important; z-index: auto; }
+  .pl-workspace-host .pl-workspace-details-frame { display: none !important; }
+}
+@media screen {
+  .pl-dock-divider { position: fixed; z-index: 115; cursor: col-resize; touch-action: none; }
+  .pl-dock-divider:hover,.pl-dock-divider:focus-visible { background: #3477b526; outline: none; }
+  .pl-dock-divider[hidden] { display: none; }
+  .pl-workspace-plan-actions[open] > .plannerTopMenuLinks { z-index: 230; }
+}
+@media print { .pl-dock-divider { display: none !important; } }
+.pl-workspace-dock-placeholder { display: none; }
+.pl-main-empty > .pl-workspace-dock-placeholder { display: flex; align-items: center; justify-content: center; height: 100%; box-sizing: border-box; padding: 48px; color: #718096; text-align: center; font: 14px/1.7 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; }
+@media print { .pl-workspace-dock-placeholder { display: none !important; } }
+
+/* Closing a pane hides its presentation; native controls and selections stay put. */
+.pl-workspace-host button.pl-panel-close { flex: none; order: 30; display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; width: 30px; height: 30px; min-width: 30px; min-height: 30px; padding: 0; border: 1px solid #c8d3e0; border-radius: 6px; background: #f8fafc; color: #5b6e84; font: 22px/1 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; cursor: pointer; }
+.pl-workspace-host button.pl-panel-close[hidden] { display: none !important; }
+.pl-workspace-host button.pl-panel-close:hover { background: #eaf1fa; border-color: #8ea9c4; color: #24527b; }
+.pl-workspace-host button.pl-panel-close:focus-visible { outline: 2px solid #3477b5; outline-offset: 2px; }
+.pl-workspace-main[data-pl-main-size="narrow"] .pl-workspace-plan > .pl-pane-title > button.pl-panel-close,
+.pl-panel-small.pl-workspace-plan > .pl-pane-title > button.pl-panel-close { order: 1; }
+.pl-workspace-details-frame { position: relative; }
+.pl-workspace-details-frame > .pl-panel-details-handle { padding-right: 48px; }
+.pl-workspace-details-frame > button.pl-panel-close { position: absolute; right: 5px; top: 3px; z-index: 2; }
+.pl-navigation-collapsed [data-pl-module='schedule']::before { content: 'Week'; }
+.pl-workspace-nav button.pl-panel-nav-closed { color: #69798c; }
+@media screen {
+  .classPlannerWrapper.pl-workspace-host .pl-panel-hidden:not(.pl-details-only) { display: none !important; }
+  .classPlannerWrapper.pl-workspace-host .pl-workspace-plan.pl-details-only { box-shadow: none; border: 0 !important; }
+  .pl-workspace-plan .pl-plan-root tbody.courseItem.pl-details-concealed > tr:nth-child(3) { display: none !important; }
+  .pl-workspace-host .pl-panel-dragging { z-index: 225 !important; cursor: grabbing; pointer-events: none; box-shadow: 0 20px 60px #142c4940,0 0 0 2px #5a90c1 !important; }
+  .pl-workspace-plan .pl-plan-root tbody.courseItem.pl-details-moving > tr:nth-child(3) { pointer-events: none; }
+  html.pl-panel-drag-in-progress,html.pl-panel-drag-in-progress * { cursor: grabbing !important; user-select: none !important; }
+}
+@media print {
+  .pl-panel-close { display: none !important; }
+  .classPlannerWrapper.pl-workspace-host section.pl-panel-hidden { display: block !important; }
 }
