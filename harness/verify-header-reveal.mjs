@@ -213,6 +213,7 @@ try {
       assert.ok(await page.locator('layout-headerwrap').isVisible(), 'print retains native UCLA masthead content');
       assert.ok(await page.locator('.classPlanner_CalendarSection').isVisible(), 'print retains native schedule content');
       await page.emulateMedia({ media: 'screen' }); await frame(page); report.afterPrint = await geometry(page);
+      await page.locator('.pl-workspace-layout-settings > summary').click();
       await page.getByRole('button', { name: 'Original layout', exact: true }).click();
       await page.waitForFunction(() => !document.querySelector('.pl-workspace-deck'));
       assert.equal(await page.locator('.pl-intro-header-edge').count(), 0, 'Original layout removes the reveal sensor');

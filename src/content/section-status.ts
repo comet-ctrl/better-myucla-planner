@@ -19,12 +19,18 @@ export function formatSectionStatus(value: string): SectionStatus | null {
   if (/^Waitlist(?:ed)?(?:\s+Class Full\s*\(\d{1,6}\))?$/i.test(text)) {
     return { label: "Waitlist", tone: "waitlist", detail: "" };
   }
-  const counted = /^(Open|Waitlist(?:ed)?)\s*:?\s+(\d{1,6})\s+of\s+(\d{1,6})\s+(Left|Taken)$/i.exec(text);
+  const counted = /^(Enrolled|Open|Waitlist(?:ed)?|Closed)\s*:?\s+(\d{1,6})\s+of\s+(\d{1,6})\s+(Left|Taken)$/i.exec(text);
   if (!counted) return null;
   const [, state, rawCount, rawCapacity, meaning] = counted;
   const count = Number(rawCount);
   const capacity = Number(rawCapacity);
   if (capacity < 1 || count > capacity) return null;
+  if (/^Enrolled$/i.test(state)) {
+    return { label: "Enrolled", tone: "enrolled", detail: /^Left$/i.test(meaning) ? `${count} ${count === 1 ? "seat" : "seats"} left` : `${count}/${capacity} places filled` };
+  }
+  if (/^Closed$/i.test(state) && count === 0 && /^Left$/i.test(meaning)) {
+    return { label: "Closed", tone: "closed", detail: "0 seats left" };
+  }
   if (/^Open$/i.test(state) && /^Left$/i.test(meaning)) {
     return { label: "Open", tone: "open", detail: `${count} ${count === 1 ? "seat" : "seats"} left` };
   }

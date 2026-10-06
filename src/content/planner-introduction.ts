@@ -39,6 +39,8 @@ export class PlannerIntroduction {
     this.compactHeader = compact; this.positionHeader(); this.positionInfo();
   }
 
+  isHeaderCompact(): boolean { return this.compactHeader && !this.headerRevealed; }
+
   private stopHeaderMotion(): void {
     if (this.headerMotion) this.state?.doc.defaultView?.clearTimeout(this.headerMotion.timer);
     this.headerMotion = null;
@@ -49,7 +51,7 @@ export class PlannerIntroduction {
     return s && view ? Math.max(0, view.scrollY + s.title.getBoundingClientRect().top - 12) : 0;
   }
 
-  private isHeaderCompact(): boolean {
+  private isHeaderAtCompactPosition(): boolean {
     const s = this.state;
     return this.compactHeader || this.headerRevealed || !!(s && (s.doc.defaultView?.scrollY || 0) > 0 && s.title.getBoundingClientRect().top <= 13);
   }
@@ -71,7 +73,7 @@ export class PlannerIntroduction {
   }
 
   private revealHeader(): void {
-    if (!this.state?.masthead || !this.isHeaderCompact() || this.headerRevealed) return;
+    if (!this.state?.masthead || !this.isHeaderAtCompactPosition() || this.headerRevealed) return;
     this.headerRevealed = true; this.moveHeader(0);
   }
 
@@ -309,7 +311,7 @@ export class PlannerIntroduction {
       const s = this.state, view = doc.defaultView; if (!view || s?.header !== header) return;
       // Scroll the original banner away; never hide, move or restyle its menu.
       // Stop at the title so the term selector and notices remain accessible.
-      const compact = !this.isHeaderCompact();
+      const compact = !this.isHeaderAtCompactPosition();
       this.compactHeader = compact; this.headerRevealed = false;
       this.moveHeader(compact ? this.compactTop() : 0);
       this.saveChoice(compact);
@@ -337,7 +339,7 @@ export class PlannerIntroduction {
 
   positionInfo(): void {
     const s = this.state; if (!s) return;
-    const compact = this.isHeaderCompact();
+    const compact = this.isHeaderAtCompactPosition();
     s.doc.documentElement.classList.toggle("pl-header-compact", compact);
     s.doc.documentElement.classList.toggle("pl-header-revealed", this.headerRevealed);
     if (s.edge) { s.edge.hidden = !compact; s.edge.setAttribute("aria-expanded", String(this.headerRevealed)); }

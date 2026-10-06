@@ -84,7 +84,7 @@
   #panelSearch .ClassSearchList .data_row:nth-child(even) > [class*="span"] { background:#eaeaea; }
   .ClassSearchList .example-native-rating { display:inline-block; padding:2px 4px; background:#dcecff; }
   .ClassSearchList .icon-unlock::before { content:"◇"; }
-</style><style>html,body{height:100%;overflow:auto}body{margin:0}form{height:100%;padding:0}#layoutContentArea{width:min(1280px,100%);box-sizing:border-box;margin:-20px auto 100px;padding:50px 30px;background:white}#titleText{font-size:35px;line-height:42px;margin:0 0 20px;border-bottom:1px solid #ccd}#page_title_text{padding:0 0 10px;margin:0 0 10px;line-height:18.5px}layout-columnwrapper{display:inline-block;width:100%}main-content{display:block;float:left;width:calc(100% - 280px)}right-sidebar{display:block;float:right;width:260px;height:1200px}right-sidebar>*{padding:12px;margin:0 0 12px;border:1px solid #ccc;display:block}.enroll_term{padding:5px 12px;margin-bottom:10px;border:1px solid #888;background:#ddd;height:42px;box-sizing:border-box}.term_display{float:left}.term{float:right}</style><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="planner-build-version" content="0.19.4"><meta name="planner-source-revision" content="254f7d99281e83381f55d16af42478f1b7b071b9"><meta name="planner-production-css-sha256" content="54864268bcbc58dd850e9b7531550033d5b9c8332ea8be178a6117b1611bc410"><meta name="planner-production-content-sha256" content="eac14a23ca4bf7939f79c61f3469f0be7c4613368481acddaed7cdf996ee0fac"><meta name="description" content="Interactive fictional preview using the Better MyUCLA production presentation code. No account connection or network requests."><style id="preview-production-css">/* Better MyUCLA — injected UI.
+</style><style>html,body{height:100%;overflow:auto}body{margin:0}form{height:100%;padding:0}#layoutContentArea{width:min(1280px,100%);box-sizing:border-box;margin:-20px auto 100px;padding:50px 30px;background:white}#titleText{font-size:35px;line-height:42px;margin:0 0 20px;border-bottom:1px solid #ccd}#page_title_text{padding:0 0 10px;margin:0 0 10px;line-height:18.5px}layout-columnwrapper{display:inline-block;width:100%}main-content{display:block;float:left;width:calc(100% - 280px)}right-sidebar{display:block;float:right;width:260px;height:1200px}right-sidebar>*{padding:12px;margin:0 0 12px;border:1px solid #ccc;display:block}.enroll_term{padding:5px 12px;margin-bottom:10px;border:1px solid #888;background:#ddd;height:42px;box-sizing:border-box}.term_display{float:left}.term{float:right}</style><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="planner-build-version" content="0.19.4"><meta name="planner-source-revision" content="aa60c130390f7765a66646b0a09c852e0c0e839e"><meta name="planner-production-css-sha256" content="8b8987d923a99c18d16ddcf9b6d5cc2f7c5b715ef78340b5244d6ef5bd05683c"><meta name="planner-production-content-sha256" content="7f8ecc9a90e649b6bf17f30fd8cd0943f0dca3839d82e6e4e37c60ba5d88a8d4"><meta name="description" content="Interactive fictional preview using the Better MyUCLA production presentation code. No account connection or network requests."><style id="preview-production-css">/* Better MyUCLA — injected UI.
    Tokens are read off the live Class Planner so the injected controls read as
    part of MyUCLA rather than as a strip bolted on top of it. Measured on the
    real page: section title bars are #2C5E91 with a 7px radius, course titles
@@ -1509,15 +1509,15 @@ html.pl-workspace-page body, html.pl-intro-page body { height: auto; min-height:
 html.pl-intro-page section#layoutContentArea.pl-planner-introduction { min-height: calc(100dvh - 12px); }
 .pl-intro-toolbar { justify-content: flex-end; }
 .classPlannerWrapper.pl-workspace-host {
-  position: fixed; top: var(--pl-workspace-top,12px); left: 16px; z-index: 100;
-  height: calc(100dvh - var(--pl-workspace-top,12px) - var(--pl-workspace-bottom,16px));
-  display: grid; grid-template-columns: minmax(0,1fr) auto; grid-template-rows: auto auto minmax(0,1fr); min-width: 0; width: var(--pl-workspace-width,calc(100vw - 32px)) !important;
+  position: fixed; top: var(--pl-workspace-top,0px); left: 0; z-index: 100;
+  height: calc(100dvh - var(--pl-workspace-top,0px) - var(--pl-workspace-bottom,0px));
+  display: grid; grid-template-columns: minmax(0,1fr) auto; grid-template-rows: auto auto minmax(0,1fr); min-width: 0; width: var(--pl-workspace-width,100%) !important;
   margin: 0 !important;
-  padding: 0; box-sizing: border-box; border: 1px solid #dce3eb;
-  border-radius: 8px; background: #fff; overflow: hidden;
+  padding: 0; box-sizing: border-box; border: 0;
+  border-radius: 0; background: #fff; overflow: hidden;
   color: #263344; font: 14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
 }
-html.pl-workspace-page.pl-has-actionbar .pl-workspace-host { --pl-workspace-bottom: 68px; }
+html.pl-workspace-page.pl-has-actionbar .pl-workspace-host { --pl-workspace-bottom: 56px; }
 .classPlannerWrapper.pl-workspace-host.pl-workspace-flow { position: relative; top: auto; left: auto; height: 640px; margin-left: calc(16px - var(--pl-workspace-left,16px)) !important; }
 .pl-workspace-position { height: 0; margin: 0; padding: 0; }
 .pl-workspace-scroll-room { margin: 0; padding: 0; pointer-events: none; }
@@ -2443,6 +2443,69 @@ section#layoutContentArea.pl-planner-introduction {
 }
 @media print { .pl-workspace-detail-index { display: none !important; } }
 
+/* Project existing controls beside the headline without changing native ancestry. */
+@media screen {
+  .pl-workspace-plan tbody.courseItem { position: relative; }
+  .pl-workspace-plan p.pl-headline { box-sizing: border-box; padding-left: 34px; padding-right: 48px; min-height: 32px; }
+  .pl-workspace-plan td.linkPanelRight:not(.pl-course-actions-open) > .pl-real-tools,
+  .pl-workspace-plan td.linkPanelRight.pl-course-actions-open > .pl-real-tools { display: contents !important; }
+  .pl-workspace-plan .pl-real-tools > .pl-rail { display: contents; }
+  .pl-workspace-plan .pl-grip { position: absolute; left: 8px; top: 10px; width: 30px; height: 32px; touch-action: none; }
+  .pl-workspace-plan td.linkPanelRight:not(.pl-course-actions-open) > .OrderingButtons { display: block !important; height: 0; margin: 0; padding: 0; }
+  .pl-workspace-plan td.linkPanelRight:not(.pl-course-actions-open) > .OrderingButtons > :not(input[type="color"]):not(:has(input[type="color"])) { display: none; }
+  .pl-workspace-plan .OrderingButtons :has(input[type="color"]) { display: contents; }
+  .pl-workspace-plan .OrderingButtons input[type="color"] { position: absolute; top: 12px; right: 12px; box-sizing: border-box; width: 36px; height: 28px; margin: 0; padding: 2px; cursor: pointer; }
+  .pl-workspace-plan .pl-course-menu { width: 100%; }
+  .pl-workspace-plan .pl-course-menu-items { display: flex; flex-wrap: wrap; gap: 6px; padding: 0; border: 0; background: transparent; }
+  .pl-workspace-plan .pl-course-menu-items button { flex: 1 1 130px; border: 1px solid #cbd8e5; border-radius: 5px; }
+  .pl-workspace-plan .pl-position-label { display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; margin: 6px 0; font-size: 13px; }
+  .pl-workspace-plan td.linkPanelRight:not(.pl-course-actions-open) .pl-position-label,
+  .pl-workspace-plan td.linkPanelRight:not(.pl-course-actions-open) .pl-course-menu,
+  .pl-workspace-plan td.linkPanelRight:not(.pl-course-actions-open) .pl-tag-editor { display: none !important; }
+}
+.pl-position-label { display: contents; }
+/* Flat secondary tools also remain usable in the original presentation. */
+div.pl-course-menu > .pl-course-menu-items { position: static; }
+
+/* Native feedback and section-action content remain in their original forms. */
+@media screen {
+  .pl-workspace-search .message,
+  .pl-workspace-search .planClass,
+  .pl-workspace-plan .planClass,
+  .pl-workspace-plan .enrl-plan-actions {
+    box-sizing: border-box; max-width: 100%; min-width: 0;
+    overflow-wrap: anywhere; font: 14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  }
+  .pl-workspace-search .message,
+  .pl-workspace-plan .enrl-plan-actions {
+    margin: 12px 0; padding: 14px; border: 1px solid #cbd8e5; border-radius: 6px;
+    background-color: #f7f9fc; color: #263344;
+  }
+  .pl-workspace-search .message header,
+  .pl-workspace-plan .enrl-plan-actions header { padding: 8px 12px; line-height: 1.5; }
+  .pl-workspace-search .message :is(p,ul),
+  .pl-workspace-plan .enrl-plan-actions :is(p,ul) { margin: 8px 0; }
+  .pl-workspace-search .message :is(button,input[type="button"],input[type="submit"]),
+  .pl-workspace-plan .enrl-plan-actions :is(button,input[type="button"],input[type="submit"]) {
+    max-width: 100%; min-height: 36px; white-space: normal; padding: 6px 10px;
+    border: 1px solid #b3c3d4; border-radius: 5px; background: #fff; color: #315776;
+  }
+  .pl-workspace-plan tr.mobilemenupanel > td { min-width: 0; }
+  .pl-workspace-plan .enrl-plan-actions .row-fluid { display: flex; flex-wrap: wrap; gap: 16px; margin: 0; }
+  .pl-workspace-plan .enrl-plan-actions .row-fluid::before,
+  .pl-workspace-plan .enrl-plan-actions .row-fluid::after { display: none; }
+  .pl-workspace-plan .enrl-plan-actions .row-fluid > [class*="span"] { float: none; flex: 1 1 200px; min-width: 0; width: auto; margin: 0; }
+  .pl-workspace-plan .enrl-plan-actions a { display: inline-block; margin: 4px 0; line-height: 1.5; }
+}
+.pl-workspace-layout-settings { position: relative; }
+.pl-workspace-layout-settings > summary { cursor: pointer; padding: 12px 10px; border-radius: 6px; font: inherit; font-weight: 600; }
+.pl-workspace-layout-options { position: fixed; z-index: 2147483600; padding: 6px; box-sizing: border-box; border: 1px solid #c5d1de; border-radius: 8px; background: #fff; box-shadow: 0 8px 24px #142c4933; }
+.pl-workspace-layout-options[popover] { margin: 0; right: auto; bottom: auto; }
+.pl-workspace-layout-options > button { display: block; width: 100%; }
+.pl-workspace-layout-settings:not([open]) > .pl-workspace-layout-options { display: none !important; }
+.pl-navigation-collapsed .pl-workspace-layout-settings > summary { font-size: 0; }
+.pl-navigation-collapsed .pl-workspace-layout-settings > summary::after { content: "⚙"; font-size: 18px; }
+
 /* v0.19 calendar presentation. Loaded after injected.css. Native geometry,
    meeting colors/borders, controls, hidden states and event handlers stay
    authoritative. Only the recognized grouped workspace receives this skin. */
@@ -2503,6 +2566,55 @@ section#layoutContentArea.pl-planner-introduction {
    masthead/navigation, native visibility, control geometry and course colors
    remain unchanged. Print deliberately keeps the ordinary light stylesheet. */
 @media screen {
+  /* Include the native layout ID so UCLA's ID-scoped important widget styles
+     cannot outrank the dark surface reset. Pseudo-elements may paint strips. */
+  html[data-pl-appearance="dark"] #layoutContentArea right-sidebar.pl-intro-sidebar-open :not(input,select,textarea,i,svg,path,use) {
+    background: var(--pl-dark-surface) !important;
+    color: var(--pl-dark-text) !important;
+    border-color: var(--pl-dark-line) !important;
+    text-shadow: none !important;
+  }
+  html[data-pl-appearance="dark"] #layoutContentArea right-sidebar.pl-intro-sidebar-open :not(i,svg,path,use)::before,
+  html[data-pl-appearance="dark"] #layoutContentArea right-sidebar.pl-intro-sidebar-open :not(i,svg,path,use)::after {
+    background-color: transparent !important;
+    background-image: none !important;
+    box-shadow: none !important;
+  }
+  /* Help widgets use native/custom surface tags beyond standard headings.
+     Reset every non-control surface inside this open panel, without depending
+     on a guessed tag/class name. Icons and form controls keep their own rules. */
+  html[data-pl-appearance="dark"] right-sidebar.pl-intro-sidebar-open :not(input,select,textarea,button,a,i,svg,path,use) {
+    background: var(--pl-dark-surface) !important;
+    color: var(--pl-dark-text) !important;
+    border-color: var(--pl-dark-line) !important;
+    text-shadow: none !important;
+  }
+  html[data-pl-appearance="dark"] .classPlanner_ClassOptimizerSection :is(button,input[type="button"],input[type="submit"],input[type="reset"]) {
+    background: var(--pl-dark-raised) !important;
+    color: var(--pl-dark-text) !important;
+    border-color: #60758c !important;
+    text-shadow: none !important;
+  }
+  html[data-pl-appearance="dark"] .classPlanner_ClassOptimizerSection button :is(span,i) { color: inherit !important; background: transparent !important; }
+  html[data-pl-appearance="dark"] .classPlanner_ClassOptimizerSection :is(button,input[type="button"],input[type="submit"]):hover:not(:disabled) { background: var(--pl-dark-hover) !important; }
+  html[data-pl-appearance="dark"] .classPlanner_ClassOptimizerSection :is(button,input[type="button"],input[type="submit"]):is(:disabled,[aria-disabled="true"]) { background: #253344 !important; color: #adbed0 !important; border-color: #41546a !important; opacity: 1; }
+  html[data-pl-appearance="dark"] .pl-workspace-layout-options { background: var(--pl-dark-raised); color: var(--pl-dark-text); border-color: var(--pl-dark-line); }
+  html[data-pl-appearance="dark"] .pl-intro-sidebar-open :is(iwe-widget,div,section,article,header,footer,table,thead,tbody,tfoot,tr,th,td) {
+    background: var(--pl-dark-surface) !important;
+    color: var(--pl-dark-text) !important;
+    border-color: var(--pl-dark-line) !important;
+  }
+  html[data-pl-appearance="dark"] .pl-intro-sidebar-open :is(h1,h2,h3,h4,p,li,label,span,strong,b) { color: var(--pl-dark-text) !important; }
+  /* Native widgets can paint their title on the heading itself or on a custom
+     element, rather than on a DIV/header wrapper. Include those title surfaces. */
+  html[data-pl-appearance="dark"] .pl-intro-sidebar-open :is(header,thead,th,h1,h2,h3,h4,h5,h6,iwe-widget-header,iwe-widget-title,[class*="header" i],[class*="title" i]) {
+    background: var(--pl-dark-raised) !important;
+    color: var(--pl-dark-text) !important;
+    border-color: var(--pl-dark-line) !important;
+    text-shadow: none !important;
+  }
+  html[data-pl-appearance="dark"] .pl-intro-sidebar-open a { color: var(--pl-dark-link) !important; background: transparent !important; }
+  html[data-pl-appearance="dark"] .pl-intro-sidebar-open :is(button,input[type="button"],input[type="submit"]) { background: var(--pl-dark-raised) !important; color: var(--pl-dark-text) !important; border-color: #60758c !important; text-shadow: none !important; }
   html[data-pl-appearance="dark"] {
     --pl-dark-canvas: #111820;
     --pl-dark-surface: #18222e;
@@ -2687,17 +2799,88 @@ section#layoutContentArea.pl-planner-introduction {
   html[data-pl-appearance="dark"] .pl-finals-host::backdrop { background: #050a12b3; }
   /* Calendar event fill/border/geometry stay native. Only the surrounding grid
      becomes dark, and every event keeps dark readable text on its light swatch. */
-  html[data-pl-appearance="dark"] .pl-workspace-calendar :is(#gridDiv,.hourbox) { background-color: var(--pl-dark-surface); color: var(--pl-dark-muted); border-color: var(--pl-dark-line); }
-  /* Native hour rows are behind the full-height day columns. Opaque columns
-     cover their horizontal rules; keep this overlay transparent without
-     changing the native row heights, vertical borders or meeting fills. */
-  html[data-pl-appearance="dark"] .pl-workspace-calendar #gridDiv .timebox { background-color: transparent; color: var(--pl-dark-muted); border-color: var(--pl-dark-line); }
+  html[data-pl-appearance="dark"] .pl-workspace-calendar :is(#gridDiv,.hourbox,.timebox) { background-color: var(--pl-dark-surface); color: var(--pl-dark-muted); border-color: var(--pl-dark-line); }
+  /* Draw inside the native time cells: visible rules without adding dimensions
+     or changing the position/size of meetings when Grid size changes. */
+  html[data-pl-appearance="dark"] .pl-workspace-calendar #gridDiv :is(.hourbox,.timebox) {
+    box-shadow: inset 0 -1px 0 #52677f, inset 1px 0 0 #3e5269;
+  }
+  /* Day columns span the whole day, over the native hourly table. An opaque
+     column hides that table's internal rules; keep this projection transparent. */
+  html[data-pl-appearance="dark"] .pl-workspace-calendar #gridDiv .timebox {
+    background-color: transparent !important;
+  }
+  html[data-pl-appearance="dark"] .pl-workspace-calendar #gridDiv table :is(td,th) {
+    border-color: #52677f !important;
+  }
   html[data-pl-appearance="dark"] .pl-workspace-calendar #gridDiv tr.primary.light.headerBar.classPlanner > td { background: var(--pl-dark-raised); color: var(--pl-dark-text); }
   html[data-pl-appearance="dark"] .pl-workspace-calendar .plannerMenuLinks,
   html[data-pl-appearance="dark"] .pl-workspace-calendar .plannerMenuLinks .pl-native-label { color: var(--pl-dark-muted) !important; }
   html[data-pl-appearance="dark"] .pl-workspace-calendar #gridDiv .planneritembox,
   html[data-pl-appearance="dark"] .pl-workspace-calendar #gridDiv .planneritembox :is(a,span,strong,b) { color: #17334b; }
   html[data-pl-appearance="dark"] .pl-workspace-calendar #gridDiv .planneritembox:focus-visible { outline-color: #17334b !important; }
+  html[data-pl-appearance="dark"] .pl-workspace-search :is(.message,.planClass),
+  html[data-pl-appearance="dark"] .pl-workspace-plan :is(.planClass,.enrl-plan-actions),
+  html[data-pl-appearance="dark"] .pl-workspace-plan tr.mobilemenupanel > td {
+    background-color: var(--pl-dark-raised) !important; color: var(--pl-dark-text) !important;
+    border-color: #52677f !important;
+  }
+  html[data-pl-appearance="dark"] :is(.pl-workspace-search .message,.pl-workspace-plan .enrl-plan-actions) :is(p,li,label,h2,h3,h4) {
+    color: var(--pl-dark-text) !important;
+  }
+  html[data-pl-appearance="dark"] :is(.pl-workspace-search .message,.pl-workspace-plan .enrl-plan-actions) a {
+    color: var(--pl-dark-link) !important; background-color: transparent !important;
+  }
+  /* Native search action forms have their own white inline surfaces. Theme
+     those surfaces and their text, not just the surrounding search panel. */
+  html[data-pl-appearance="dark"] .pl-workspace-search :is(.planClass,.touchpanelmenu,.message) :is(div,table,tbody,tr,td,fieldset,header) {
+    background-color: var(--pl-dark-raised) !important;
+    color: var(--pl-dark-text) !important; border-color: #52677f !important;
+  }
+  html[data-pl-appearance="dark"] .pl-workspace-search :is(.planClass,.touchpanelmenu,.message) :is(span,p,li,label,h2,h3,h4) {
+    color: var(--pl-dark-text) !important;
+  }
+}
+@media screen {
+  html[data-pl-appearance="dark"] .pl-workspace-host .pl-workspace-plan div.pl-course-menu-items { box-shadow: none; }
+  /* Search responses are not always descendants of message/planClass. Native
+     action panels can be sibling table cells with a repeated white image.
+     Clear images on structural search surfaces only; leave icons, inputs,
+     status spans and calendar swatches untouched. */
+  html[data-pl-appearance="dark"] .pl-workspace-search :is(div,table,thead,tbody,tfoot,tr,td,th,fieldset,header,footer) {
+    background-image: none !important;
+    background-color: var(--pl-dark-surface) !important;
+    color: var(--pl-dark-text) !important;
+    border-color: var(--pl-dark-line) !important;
+  }
+  html[data-pl-appearance="dark"] .pl-workspace-search :is(p,ul,ol,li,label,h2,h3,h4) {
+    color: var(--pl-dark-text) !important;
+    background-image: none !important;
+    background-color: transparent !important;
+  }
+  html[data-pl-appearance="dark"] .pl-workspace-search a {
+    background-image: none !important;
+    background-color: transparent !important;
+    color: var(--pl-dark-link) !important;
+  }
+  /* Native response controls may retain a white gradient independently of
+     their panel. Reset the complete background, preserving native state. */
+  html[data-pl-appearance="dark"] .pl-workspace-search :is(button,input[type="button"],input[type="submit"],input[type="reset"]) {
+    background: var(--pl-dark-raised) !important;
+    color: var(--pl-dark-text) !important;
+    border-color: #60758c !important;
+    text-shadow: none !important;
+  }
+  html[data-pl-appearance="dark"] .pl-workspace-search button :is(span,label) { color: inherit !important; }
+  html[data-pl-appearance="dark"] .pl-workspace-search :is(button,input[type="button"],input[type="submit"],input[type="reset"]):hover:not(:disabled):not([aria-disabled="true"]) {
+    background: var(--pl-dark-hover) !important;
+  }
+  html[data-pl-appearance="dark"] .pl-workspace-search :is(button,input[type="button"],input[type="submit"],input[type="reset"]):is(:disabled,[aria-disabled="true"]) {
+    background: #253344 !important;
+    color: #adbed0 !important;
+    border-color: #41546a !important;
+    opacity: 1;
+  }
 }
 
 /* Owned layout settings only. Native UCLA controls and menus are untouched. */
@@ -2786,7 +2969,7 @@ section#layoutContentArea.pl-planner-introduction {
   .pl-workspace-settings-dialog .pl-settings-footer { padding: 12px 18px; }
 }
 @media print { .pl-workspace-settings,dialog.pl-workspace-settings-dialog,dialog.pl-workspace-settings-dialog::backdrop { display: none !important; } }
-</style><script id="preview-build-meta" type="application/json">{"version":"0.19.4","cssSha256":"54864268bcbc58dd850e9b7531550033d5b9c8332ea8be178a6117b1611bc410","contentSha256":"eac14a23ca4bf7939f79c61f3469f0be7c4613368481acddaed7cdf996ee0fac","sourceRevision":"254f7d99281e83381f55d16af42478f1b7b071b9"}</script><style>
+</style><script id="preview-build-meta" type="application/json">{"version":"0.19.4","cssSha256":"8b8987d923a99c18d16ddcf9b6d5cc2f7c5b715ef78340b5244d6ef5bd05683c","contentSha256":"7f8ecc9a90e649b6bf17f30fd8cd0943f0dca3839d82e6e4e37c60ba5d88a8d4","sourceRevision":"aa60c130390f7765a66646b0a09c852e0c0e839e"}</script><style>
   #preview-notice { display:flex; flex-wrap:wrap; gap:12px; align-items:center; justify-content:center; box-sizing:border-box; padding:5px 12px; border-bottom:1px solid #dbe3ec; background:#f8fafc; color:#526174; font:11px/1.5 system-ui,sans-serif; }
   #preview-notice button { padding:0; border:0; background:none; color:#24528f; font:inherit; text-decoration:underline; cursor:pointer; }
   #preview-feedback { position:fixed; bottom:48px; left:50%; transform:translateX(-50%); z-index:2147483601; width:max-content; max-width:min(520px,calc(100vw - 32px)); padding:12px 16px; border:1px solid #cbd5e1; border-radius:9px; background:#fff; box-shadow:0 4px 20px #0002; color:#334155; font:13px/1.5 system-ui,sans-serif; }
@@ -3662,6 +3845,9 @@ section#layoutContentArea.pl-planner-introduction {
       this.positionHeader();
       this.positionInfo();
     }
+    isHeaderCompact() {
+      return this.compactHeader && !this.headerRevealed;
+    }
     stopHeaderMotion() {
       if (this.headerMotion) this.state?.doc.defaultView?.clearTimeout(this.headerMotion.timer);
       this.headerMotion = null;
@@ -3670,7 +3856,7 @@ section#layoutContentArea.pl-planner-introduction {
       const s = this.state, view = s?.doc.defaultView;
       return s && view ? Math.max(0, view.scrollY + s.title.getBoundingClientRect().top - 12) : 0;
     }
-    isHeaderCompact() {
+    isHeaderAtCompactPosition() {
       const s = this.state;
       return this.compactHeader || this.headerRevealed || !!(s && (s.doc.defaultView?.scrollY || 0) > 0 && s.title.getBoundingClientRect().top <= 13);
     }
@@ -3695,7 +3881,7 @@ section#layoutContentArea.pl-planner-introduction {
       s.onLayout();
     }
     revealHeader() {
-      if (!this.state?.masthead || !this.isHeaderCompact() || this.headerRevealed) return;
+      if (!this.state?.masthead || !this.isHeaderAtCompactPosition() || this.headerRevealed) return;
       this.headerRevealed = true;
       this.moveHeader(0);
     }
@@ -4012,7 +4198,7 @@ section#layoutContentArea.pl-planner-introduction {
       header.addEventListener("click", () => {
         const s = this.state, view = doc.defaultView;
         if (!view || s?.header !== header) return;
-        const compact = !this.isHeaderCompact();
+        const compact = !this.isHeaderAtCompactPosition();
         this.compactHeader = compact;
         this.headerRevealed = false;
         this.moveHeader(compact ? this.compactTop() : 0);
@@ -4049,7 +4235,7 @@ section#layoutContentArea.pl-planner-introduction {
     positionInfo() {
       const s = this.state;
       if (!s) return;
-      const compact = this.isHeaderCompact();
+      const compact = this.isHeaderAtCompactPosition();
       s.doc.documentElement.classList.toggle("pl-header-compact", compact);
       s.doc.documentElement.classList.toggle("pl-header-revealed", this.headerRevealed);
       if (s.edge) {
@@ -4133,12 +4319,18 @@ section#layoutContentArea.pl-planner-introduction {
     if (/^Waitlist(?:ed)?(?:\s+Class Full\s*\(\d{1,6}\))?$/i.test(text)) {
       return { label: "Waitlist", tone: "waitlist", detail: "" };
     }
-    const counted = /^(Open|Waitlist(?:ed)?)\s*:?\s+(\d{1,6})\s+of\s+(\d{1,6})\s+(Left|Taken)$/i.exec(text);
+    const counted = /^(Enrolled|Open|Waitlist(?:ed)?|Closed)\s*:?\s+(\d{1,6})\s+of\s+(\d{1,6})\s+(Left|Taken)$/i.exec(text);
     if (!counted) return null;
     const [, state, rawCount, rawCapacity, meaning] = counted;
     const count = Number(rawCount);
     const capacity = Number(rawCapacity);
     if (capacity < 1 || count > capacity) return null;
+    if (/^Enrolled$/i.test(state)) {
+      return { label: "Enrolled", tone: "enrolled", detail: /^Left$/i.test(meaning) ? `${count} ${count === 1 ? "seat" : "seats"} left` : `${count}/${capacity} places filled` };
+    }
+    if (/^Closed$/i.test(state) && count === 0 && /^Left$/i.test(meaning)) {
+      return { label: "Closed", tone: "closed", detail: "0 seats left" };
+    }
     if (/^Open$/i.test(state) && /^Left$/i.test(meaning)) {
       return { label: "Open", tone: "open", detail: `${count} ${count === 1 ? "seat" : "seats"} left` };
     }
@@ -4146,6 +4338,14 @@ section#layoutContentArea.pl-planner-introduction {
       return { label: "Waitlist", tone: "waitlist", detail: `${count}/${capacity} places filled` };
     }
     return null;
+  }
+
+  // src/storage/settings.ts
+  var DRAFT_TTL_MS = 24 * 60 * 60 * 1e3;
+  var LAYOUT_KEY = "plannerLift.layout.v1";
+  async function saveLayoutSettings(settings) {
+    if (!globalThis.chrome?.storage?.local) return;
+    await chrome.storage.local.set({ [LAYOUT_KEY]: { tidy: settings.tidy === true } });
   }
 
   // src/content/panel-layout.ts
@@ -5771,8 +5971,8 @@ section#layoutContentArea.pl-planner-introduction {
       button.className = "pl-workspace-actions-button";
       button.setAttribute(OWNED7, "true");
       button.dataset.plWorkspaceActions = "true";
-      button.textContent = "Class actions";
-      button.setAttribute("aria-label", `Class actions for ${course.label}`);
+      button.textContent = "Course tools";
+      button.setAttribute("aria-label", `Course tools for ${course.label}`);
       button.setAttribute("aria-expanded", "false");
       button.addEventListener("mousedown", (event) => {
         if (event.button === 0) event.preventDefault();
@@ -5881,6 +6081,12 @@ section#layoutContentArea.pl-planner-introduction {
         back.remove();
         this.returnButton = null;
         this.reconcile(doc, this.latestCourses);
+        void saveLayoutSettings({ tidy: true }).catch(() => {
+          this.restore();
+          this.useOriginal = true;
+          this.ensureReturnButton(doc);
+          if (this.returnButton) this.returnButton.textContent = "Preference could not be saved. Open planner workspace";
+        });
       });
     }
     mount(doc) {
@@ -6117,11 +6323,44 @@ section#layoutContentArea.pl-planner-introduction {
         choices[next].click();
         choices[next].focus({ preventScroll: true });
       });
+      const layoutSettings = owned(doc.createElement("details"), "pl-workspace-layout-settings");
+      const layoutSummary = doc.createElement("summary");
+      layoutSummary.textContent = "Layout settings";
+      layoutSummary.title = "Layout settings";
+      layoutSummary.setAttribute("aria-label", "Layout settings");
+      layoutSettings.append(layoutSummary);
+      navFooter.append(layoutSettings);
+      const layoutOptions = doc.createElement("div");
+      layoutOptions.className = "pl-workspace-layout-options";
+      if (typeof layoutOptions.showPopover === "function") layoutOptions.setAttribute("popover", "auto");
+      layoutSettings.append(layoutOptions);
+      layoutOptions.addEventListener("toggle", (event) => {
+        if (event.newState === "closed") layoutSettings.open = false;
+      });
+      layoutSettings.addEventListener("toggle", () => {
+        if (!layoutSettings.open) {
+          if (layoutOptions.matches(":popover-open")) layoutOptions.hidePopover();
+          return;
+        }
+        const rect = layoutSummary.getBoundingClientRect(), width = Math.min(180, doc.documentElement.clientWidth - 16);
+        layoutOptions.style.width = `${width}px`;
+        layoutOptions.style.left = `${Math.max(8, Math.min(rect.left, doc.documentElement.clientWidth - width - 8))}px`;
+        layoutOptions.style.top = `${Math.max(8, Math.min(rect.bottom + 4, (doc.defaultView?.innerHeight ?? 600) - 110))}px`;
+        if (layoutOptions.hasAttribute("popover")) layoutOptions.showPopover();
+      });
+      layoutSettings.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && layoutSettings.open) {
+          event.preventDefault();
+          event.stopPropagation();
+          layoutSettings.open = false;
+          layoutSummary.focus({ preventScroll: true });
+        }
+      });
       const defaultLayout = owned(doc.createElement("button"), "pl-workspace-default");
       defaultLayout.type = "button";
       defaultLayout.textContent = "Default layout";
       defaultLayout.title = "Reset panel positions, sizes and navigation; your classes stay unchanged.";
-      navFooter.append(defaultLayout);
+      layoutOptions.append(defaultLayout);
       defaultLayout.addEventListener("click", () => {
         this.state?.layout.reset();
         defaultLayout.focus({ preventScroll: true });
@@ -6129,11 +6368,14 @@ section#layoutContentArea.pl-planner-introduction {
       const original = owned(doc.createElement("button"), "pl-workspace-original");
       original.type = "button";
       original.textContent = "Original layout";
-      navFooter.append(original);
+      layoutOptions.append(original);
       original.addEventListener("click", () => {
         this.restore();
         this.useOriginal = true;
         this.ensureReturnButton(doc);
+        void saveLayoutSettings({ tidy: false }).catch(() => {
+          if (this.returnButton) this.returnButton.textContent = "Layout restored; preference could not be saved. Open planner workspace";
+        });
       });
       const tabs = owned(doc.createElement("div"), "pl-workspace-mobile-tabs");
       top.append(tabs);
@@ -6476,11 +6718,11 @@ section#layoutContentArea.pl-planner-introduction {
     positionWorkspace() {
       const s = this.state, view = s?.doc.defaultView;
       if (!s || !view || s.printing()) return;
-      const marker = s.position.getBoundingClientRect(), top = Math.max(12, Math.ceil(marker.top));
+      const marker = s.position.getBoundingClientRect(), top = this.introduction.isHeaderCompact() || marker.top <= 13 ? 0 : Math.ceil(marker.top);
       s.host.style.setProperty("--pl-workspace-top", `${top}px`);
-      s.host.classList.toggle("pl-workspace-flow", view.innerHeight - top < 400);
+      s.host.classList.toggle("pl-workspace-flow", top > 0 && view.innerHeight - top < 400);
       s.host.style.setProperty("--pl-workspace-left", `${marker.left}px`);
-      s.host.style.setProperty("--pl-workspace-width", `${s.doc.documentElement.clientWidth - 32}px`);
+      s.host.style.setProperty("--pl-workspace-width", `${s.doc.documentElement.clientWidth}px`);
       s.scrollRoom.style.height = `${Math.max(0, view.innerHeight - 28)}px`;
     }
     currentPlanMenu(s) {
@@ -6899,7 +7141,7 @@ section#layoutContentArea.pl-planner-introduction {
     }
     dockGeometry(override, groupState, focusId) {
       const s = this.state, measured = s.deck.getBoundingClientRect(), view = s.doc.defaultView;
-      const bottomReserve = parseFloat(view.getComputedStyle(s.host).getPropertyValue("--pl-workspace-bottom")) || 16;
+      const bottomReserve = parseFloat(view.getComputedStyle(s.host).getPropertyValue("--pl-workspace-bottom")) || 0;
       const visibleBottom = Math.min(measured.bottom, view.innerHeight - bottomReserve);
       const rect = new DOMRect(measured.left, measured.top, measured.width, Math.max(0, visibleBottom - measured.top));
       let state = groupState || this.presentationGroups();

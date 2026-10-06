@@ -8,8 +8,8 @@
 
 An unofficial Chrome extension that rearranges the existing MyUCLA Class Planner.
 
-[Download v0.19.1](https://github.com/comet-ctrl/better-myucla-planner/releases/tag/v0.19.1) ·
-[Source](https://github.com/comet-ctrl/better-myucla-planner/tree/v0.19.1) ·
+[Earlier v0.19.1 download](https://github.com/comet-ctrl/better-myucla-planner/releases/tag/v0.19.1) ·
+[Source](https://github.com/comet-ctrl/myucla-workspace/tree/workspace-v0.19.4) ·
 [Changelog](CHANGELOG.md) · [Privacy](PRIVACY.md)
 
 </div>
@@ -19,20 +19,28 @@ An unofficial Chrome extension that rearranges the existing MyUCLA Class Planner
 *Fictional courses shown in the v0.19.1 dark workspace. The extension works inside Class Planner; no separate planner website
 or account is required.*
 
-**Current release: v0.19.1, dark appearance prerelease.** The redesigned layout is
-opt-in, and the extension is not yet on the Chrome Web Store. This fork builds
-on [Astro-wen/better-myucla-planner](https://github.com/Astro-wen/better-myucla-planner).
+**Current development version: v0.19.4.** This is now maintained as the standalone
+[MyUCLA Workspace project](https://github.com/comet-ctrl/myucla-workspace).
+The extension keeps its Better MyUCLA name and existing browser preferences.
+The redesigned layout is opt-in; it is not yet on the Chrome Web Store.
+The last downloadable prerelease, v0.19.1, remains in the
+[historical repository](https://github.com/comet-ctrl/better-myucla-planner/releases).
+Build this branch for the current v0.19.4 code; that older ZIP does not include the latest work.
 It is not made by, endorsed by, or affiliated with UCLA.
 
-**Source branch: v0.19-workspace.** This version replaces
+**Source branch: `workspace-v0.19.4`.** This version replaces
 accidental narrow columns with tab groups and readable panel widths. It also
 tightens course/section spacing, adds navigation between open course details,
 and refines the original calendar without changing meeting geometry. See the
 [v0.19 scope and validation checklist](docs/V019_WORKSPACE.md) and the
 [interactive fictional design draft](harness/v019-design-draft.html). The draft
 illustrates the intended hierarchy; production adapts it to UCLA's original
-controls. It is not an installed extension screenshot. The v0.18.6 baseline is preserved on `flexible-panels` at
+controls. It is not an installed extension screenshot. The v0.18.6 baseline is preserved in the historical repository on `flexible-panels-v0.18.6` at
 `1337c94`. Earlier release archives remain available for rollback.
+
+The latest source includes visual layout presets in Settings, improved split targets,
+top-edge header reveal, restored dark calendar gridlines, and the contributor
+course-tool, viewport and help-widget improvements. See [migration details](docs/REPOSITORY_MIGRATION.md).
 
 ## Install or update
 
@@ -61,6 +69,9 @@ Panel placement, size, hidden state, active tabs and navigation choices
 are saved in this browser profile. **Default layout** restores the starting
 workspace and remembers that reset; **Original layout** returns to UCLA's native
 presentation. Neither action changes your plan or course selections.
+
+**Current source build:** follow [Build and test](#build-and-test), then load its `dist` folder.
+The following download instructions install the earlier v0.19.1 release.
 
 1. Download `better-myucla-v0.19.1.zip` from the [prerelease](https://github.com/comet-ctrl/better-myucla-planner/releases/tag/v0.19.1).
 2. Extract it into a folder you will keep. The ZIP contains a `dist` folder.
@@ -181,12 +192,12 @@ or bypass sign-in. See [PRIVACY.md](PRIVACY.md) for the complete boundaries.
 
 ## Verification and known limitations
 
-v0.19.1 passes typecheck, the production build and **477 unit tests**. Automated
+The combined v0.19.4 source passes typecheck, the production build and **565 unit tests**. Automated
 dark/light/system and popup checks cover contrast,
 preference changes, printing, Original layout restoration, native control identity,
 and unchanged calendar geometry/colors. These tests use fictional courses at
 2048, 1440, 1280 and 390px. Release evidence is recorded in [HANDOFF.md](HANDOFF.md).
-Live v0.19.1 verification on an authenticated Class Planner page is still pending.
+Live verification of the combined v0.19.4 migration build on an authenticated Class Planner page is still pending.
 
 For development v0.18.6, typecheck, the production build and **419 unit tests**
 passed. Production browser checks cover saved layouts across fresh documents,
@@ -273,11 +284,10 @@ cannot read or change a MyUCLA account.
 `public/demo.html` is a separate reordering fixture and does not represent the
 current workspace.
 
-The v0.19.1 source is tagged **`v0.19.1`** from **`v0.19-workspace`** in this fork.
-The GitHub Pages workflow publishes `site/` when its files change on `main`, so
-the hosted preview may lag this branch. Preview content is fictional; install
-the extension from the versioned release above to use the workspace inside
-MyUCLA Class Planner.
+Development continues on `workspace-v0.19.4` in the standalone repository.
+Historical release archives remain in the original fork. GitHub Pages deployment
+is manual and requires configuration in the new repository; the local preview
+is available without publishing a website.
 
 ## Project documentation
 
@@ -292,4 +302,7 @@ MyUCLA Class Planner.
 
 ## License
 
-MIT. See [LICENSE](LICENSE).
+This project is derived from [Astro-wen/better-myucla-planner](https://github.com/Astro-wen/better-myucla-planner),
+created by Aaron Wen, with subsequent work by comet-ctrl and contributors.
+The original Git history, MIT license and copyright notice are retained.
+Standalone repository status does not remove that provenance. See [LICENSE](LICENSE).

@@ -5,6 +5,15 @@ Before changing this project, read these files in order:
 1. `HANDOFF.md` — current status, architecture, verified behavior, and next steps.
 2. `docs/MYUCLA_CONTRACT.md` — exact fail-closed MyUCLA DOM/button contract.
 3. `PRIVACY.md` — allowed data and storage boundaries.
+4. `DEVELOPMENT_LOG.md` — user-requested task history, verification and outstanding follow-ups.
+
+After completing each requested update, append or update its entry in
+`DEVELOPMENT_LOG.md` before handoff. Record the request, concrete changes,
+affected files, checks actually run, user verification and remaining limits.
+Record follow-up corrections separately; do not erase failed attempts or claim
+fictional-browser checks verified the authenticated MyUCLA page. Use the user's
+local date; if a historical date is unknown, say so instead of inventing it.
+Keep real course names and account-specific page content out of this log.
 
 Non-negotiable rules:
 
@@ -24,7 +33,7 @@ npm test -- --run
 npm run build
 ```
 
-The project lives at https://github.com/Astro-wen/better-myucla-planner. Anyone may
+The project lives at https://github.com/comet-ctrl/myucla-workspace. Anyone may
 open a pull request; only the maintainer merges. See `CONTRIBUTING.md`.
 
 `dist/` is a build artifact and is not committed. Run `npm run build` after cloning.

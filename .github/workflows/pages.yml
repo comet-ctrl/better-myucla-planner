@@ -3,9 +3,7 @@ name: Install page
 # Publishes site/ to GitHub Pages. Enable it once under
 # Settings -> Pages -> Source -> GitHub Actions.
 on:
-  push:
-    branches: [main]
-    paths: ["site/**", ".github/workflows/pages.yml"]
+  # Opt in after configuring Pages in the standalone repository.
   workflow_dispatch:
 
 permissions:

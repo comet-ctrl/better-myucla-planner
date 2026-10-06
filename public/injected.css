@@ -1423,15 +1423,15 @@ html.pl-workspace-page body, html.pl-intro-page body { height: auto; min-height:
 html.pl-intro-page section#layoutContentArea.pl-planner-introduction { min-height: calc(100dvh - 12px); }
 .pl-intro-toolbar { justify-content: flex-end; }
 .classPlannerWrapper.pl-workspace-host {
-  position: fixed; top: var(--pl-workspace-top,12px); left: 16px; z-index: 100;
-  height: calc(100dvh - var(--pl-workspace-top,12px) - var(--pl-workspace-bottom,16px));
-  display: grid; grid-template-columns: minmax(0,1fr) auto; grid-template-rows: auto auto minmax(0,1fr); min-width: 0; width: var(--pl-workspace-width,calc(100vw - 32px)) !important;
+  position: fixed; top: var(--pl-workspace-top,0px); left: 0; z-index: 100;
+  height: calc(100dvh - var(--pl-workspace-top,0px) - var(--pl-workspace-bottom,0px));
+  display: grid; grid-template-columns: minmax(0,1fr) auto; grid-template-rows: auto auto minmax(0,1fr); min-width: 0; width: var(--pl-workspace-width,100%) !important;
   margin: 0 !important;
-  padding: 0; box-sizing: border-box; border: 1px solid #dce3eb;
-  border-radius: 8px; background: #fff; overflow: hidden;
+  padding: 0; box-sizing: border-box; border: 0;
+  border-radius: 0; background: #fff; overflow: hidden;
   color: #263344; font: 14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
 }
-html.pl-workspace-page.pl-has-actionbar .pl-workspace-host { --pl-workspace-bottom: 68px; }
+html.pl-workspace-page.pl-has-actionbar .pl-workspace-host { --pl-workspace-bottom: 56px; }
 .classPlannerWrapper.pl-workspace-host.pl-workspace-flow { position: relative; top: auto; left: auto; height: 640px; margin-left: calc(16px - var(--pl-workspace-left,16px)) !important; }
 .pl-workspace-position { height: 0; margin: 0; padding: 0; }
 .pl-workspace-scroll-room { margin: 0; padding: 0; pointer-events: none; }
@@ -2356,3 +2356,66 @@ section#layoutContentArea.pl-planner-introduction {
   button.pl-workspace-detail-jump:focus-visible { outline: 2px solid #3477b5; outline-offset: -2px; }
 }
 @media print { .pl-workspace-detail-index { display: none !important; } }
+
+/* Project existing controls beside the headline without changing native ancestry. */
+@media screen {
+  .pl-workspace-plan tbody.courseItem { position: relative; }
+  .pl-workspace-plan p.pl-headline { box-sizing: border-box; padding-left: 34px; padding-right: 48px; min-height: 32px; }
+  .pl-workspace-plan td.linkPanelRight:not(.pl-course-actions-open) > .pl-real-tools,
+  .pl-workspace-plan td.linkPanelRight.pl-course-actions-open > .pl-real-tools { display: contents !important; }
+  .pl-workspace-plan .pl-real-tools > .pl-rail { display: contents; }
+  .pl-workspace-plan .pl-grip { position: absolute; left: 8px; top: 10px; width: 30px; height: 32px; touch-action: none; }
+  .pl-workspace-plan td.linkPanelRight:not(.pl-course-actions-open) > .OrderingButtons { display: block !important; height: 0; margin: 0; padding: 0; }
+  .pl-workspace-plan td.linkPanelRight:not(.pl-course-actions-open) > .OrderingButtons > :not(input[type="color"]):not(:has(input[type="color"])) { display: none; }
+  .pl-workspace-plan .OrderingButtons :has(input[type="color"]) { display: contents; }
+  .pl-workspace-plan .OrderingButtons input[type="color"] { position: absolute; top: 12px; right: 12px; box-sizing: border-box; width: 36px; height: 28px; margin: 0; padding: 2px; cursor: pointer; }
+  .pl-workspace-plan .pl-course-menu { width: 100%; }
+  .pl-workspace-plan .pl-course-menu-items { display: flex; flex-wrap: wrap; gap: 6px; padding: 0; border: 0; background: transparent; }
+  .pl-workspace-plan .pl-course-menu-items button { flex: 1 1 130px; border: 1px solid #cbd8e5; border-radius: 5px; }
+  .pl-workspace-plan .pl-position-label { display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; margin: 6px 0; font-size: 13px; }
+  .pl-workspace-plan td.linkPanelRight:not(.pl-course-actions-open) .pl-position-label,
+  .pl-workspace-plan td.linkPanelRight:not(.pl-course-actions-open) .pl-course-menu,
+  .pl-workspace-plan td.linkPanelRight:not(.pl-course-actions-open) .pl-tag-editor { display: none !important; }
+}
+.pl-position-label { display: contents; }
+/* Flat secondary tools also remain usable in the original presentation. */
+div.pl-course-menu > .pl-course-menu-items { position: static; }
+
+/* Native feedback and section-action content remain in their original forms. */
+@media screen {
+  .pl-workspace-search .message,
+  .pl-workspace-search .planClass,
+  .pl-workspace-plan .planClass,
+  .pl-workspace-plan .enrl-plan-actions {
+    box-sizing: border-box; max-width: 100%; min-width: 0;
+    overflow-wrap: anywhere; font: 14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  }
+  .pl-workspace-search .message,
+  .pl-workspace-plan .enrl-plan-actions {
+    margin: 12px 0; padding: 14px; border: 1px solid #cbd8e5; border-radius: 6px;
+    background-color: #f7f9fc; color: #263344;
+  }
+  .pl-workspace-search .message header,
+  .pl-workspace-plan .enrl-plan-actions header { padding: 8px 12px; line-height: 1.5; }
+  .pl-workspace-search .message :is(p,ul),
+  .pl-workspace-plan .enrl-plan-actions :is(p,ul) { margin: 8px 0; }
+  .pl-workspace-search .message :is(button,input[type="button"],input[type="submit"]),
+  .pl-workspace-plan .enrl-plan-actions :is(button,input[type="button"],input[type="submit"]) {
+    max-width: 100%; min-height: 36px; white-space: normal; padding: 6px 10px;
+    border: 1px solid #b3c3d4; border-radius: 5px; background: #fff; color: #315776;
+  }
+  .pl-workspace-plan tr.mobilemenupanel > td { min-width: 0; }
+  .pl-workspace-plan .enrl-plan-actions .row-fluid { display: flex; flex-wrap: wrap; gap: 16px; margin: 0; }
+  .pl-workspace-plan .enrl-plan-actions .row-fluid::before,
+  .pl-workspace-plan .enrl-plan-actions .row-fluid::after { display: none; }
+  .pl-workspace-plan .enrl-plan-actions .row-fluid > [class*="span"] { float: none; flex: 1 1 200px; min-width: 0; width: auto; margin: 0; }
+  .pl-workspace-plan .enrl-plan-actions a { display: inline-block; margin: 4px 0; line-height: 1.5; }
+}
+.pl-workspace-layout-settings { position: relative; }
+.pl-workspace-layout-settings > summary { cursor: pointer; padding: 12px 10px; border-radius: 6px; font: inherit; font-weight: 600; }
+.pl-workspace-layout-options { position: fixed; z-index: 2147483600; padding: 6px; box-sizing: border-box; border: 1px solid #c5d1de; border-radius: 8px; background: #fff; box-shadow: 0 8px 24px #142c4933; }
+.pl-workspace-layout-options[popover] { margin: 0; right: auto; bottom: auto; }
+.pl-workspace-layout-options > button { display: block; width: 100%; }
+.pl-workspace-layout-settings:not([open]) > .pl-workspace-layout-options { display: none !important; }
+.pl-navigation-collapsed .pl-workspace-layout-settings > summary { font-size: 0; }
+.pl-navigation-collapsed .pl-workspace-layout-settings > summary::after { content: "⚙"; font-size: 18px; }

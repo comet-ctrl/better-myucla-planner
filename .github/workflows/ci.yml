@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [main, planner-improvements, planner-redesign]
+    branches: ['**']
   pull_request:
 
 jobs:

@@ -19,7 +19,7 @@ describe("scoped planner appearance", () => {
     document.body.innerHTML = new DOMParser().parseFromString(introductionFixtureHtml(), "text/html").body.innerHTML;
     document.documentElement.removeAttribute("data-pl-appearance"); preference = undefined; dark = false;
     storageListeners = new Set(); mediaListeners = new Map();
-    vi.stubGlobal("chrome", { storage: { local: { get: async () => ({ [APPEARANCE_KEY]: preference }) }, onChanged: {
+    vi.stubGlobal("chrome", { storage: { local: { get: async () => ({ [APPEARANCE_KEY]: preference }), set: vi.fn(async () => {}) }, onChanged: {
       addListener: (fn: never) => storageListeners.add(fn), removeListener: (fn: never) => storageListeners.delete(fn),
     } } });
     vi.stubGlobal("matchMedia", (query: string) => {

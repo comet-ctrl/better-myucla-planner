@@ -775,6 +775,9 @@ export class MyUclaPlannerController {
       positionSelect.dataset.plPosition = "true";
       positionSelect.setAttribute("aria-label", `Position of ${courseLabel} in the plan`);
       positionSelect.title = "Move this class to a position";
+      const positionLabel = document.createElement("label");
+      positionLabel.className = "pl-position-label";
+      positionLabel.append("Move to position ", positionSelect);
 
       const tagButton = this.createActionButton("tag", "Add or edit note");
       tagButton.className = "pl-menu-item";
@@ -787,19 +790,13 @@ export class MyUclaPlannerController {
       collapseButton.setAttribute("aria-label", `Hide details for ${courseLabel}`);
       collapseButton.append(makeIcon(ICONS.chevron));
 
-      const more = document.createElement("details");
+      const more = document.createElement("div");
       more.className = "pl-course-menu";
-      more.dataset.plCourseMenu = "true";
-      const moreToggle = document.createElement("summary");
-      moreToggle.className = "pl-course-more";
-      moreToggle.title = "More course tools";
-      moreToggle.setAttribute("aria-label", `More tools for ${courseLabel}`);
-      moreToggle.append(makeIcon(ICONS.more));
       const moreItems = document.createElement("div");
       moreItems.className = "pl-course-menu-items";
       moreItems.append(topButton, tagButton);
-      more.append(moreToggle, moreItems);
-      rail.append(dragHandle, positionSelect, more, collapseButton);
+      more.append(moreItems);
+      rail.append(dragHandle, positionLabel, more, collapseButton);
 
       const tagEditor = document.createElement("div");
       tagEditor.className = "pl-tag-editor";
@@ -819,9 +816,7 @@ export class MyUclaPlannerController {
 
     tools.dataset.courseId = courseId;
     const positionSelect = tools.querySelector<HTMLSelectElement>("[data-pl-position]");
-    // A bare number reads as a label rather than a control. The group heading
-    // says the verb once, the closed control still shows just "#4", and the
-    // stylesheet adds a caret so it looks like something you can open.
+    // Keep exact-position selection available beside its explicit action label.
     if (positionSelect && positionSelect.options.length !== total) {
       positionSelect.replaceChildren();
       const group = document.createElement("optgroup");
@@ -1677,7 +1672,7 @@ export class MyUclaPlannerController {
     if (!drag || event.pointerId !== drag.pointerId) return;
     event.preventDefault();
     drag.lastClientY = event.clientY;
-    this.updateDrag(event.clientY + (drag.scrollHost?.scrollTop ?? window.scrollY));
+    // The active animation frame renders the latest pointer, at most once per frame.
   };
 
   /**
@@ -1691,6 +1686,7 @@ export class MyUclaPlannerController {
       const drag = this.drag;
       if (!drag) return;
       drag.autoScrollFrame = window.requestAnimationFrame(step);
+      this.updateDrag(drag.lastClientY + (drag.scrollHost?.scrollTop ?? window.scrollY));
 
       const bounds = drag.scrollHost?.getBoundingClientRect();
       const top = bounds ? bounds.top + (drag.scrollHost?.querySelector(".classPlanner_SectionTitle")?.getBoundingClientRect().height || 0) : 0;
@@ -1749,6 +1745,7 @@ export class MyUclaPlannerController {
       }
     }
 
+    if (drag.toIndex === toIndex) return;
     drag.toIndex = toIndex;
     const shift = cards[fromIndex].height;
     cards.forEach((card, index) => {
@@ -1765,6 +1762,7 @@ export class MyUclaPlannerController {
   private onPointerUp = (event: PointerEvent): void => {
     const drag = this.drag;
     if (!drag || event.pointerId !== drag.pointerId) return;
+    this.updateDrag(event.clientY + (drag.scrollHost?.scrollTop ?? window.scrollY));
     this.stopAutoScroll(drag);
     const { courseId, fromIndex, toIndex } = drag;
     drag.handle.releasePointerCapture?.(event.pointerId);

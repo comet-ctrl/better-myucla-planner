@@ -42,7 +42,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Astro-wen/better-myucla-planner.git"
+    "url": "git+https://github.com/comet-ctrl/myucla-workspace.git"
   },
   "license": "MIT"
 }

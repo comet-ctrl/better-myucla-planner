@@ -74,7 +74,7 @@ describe("workspace tab strip drop geometry", () => {
     const pane=document.querySelector<HTMLElement>('.classPlanner_ClassOptimizerSection')!;
     const field=pane.querySelector('input')!,parent=field.parentElement;
     const bottom=()=>parseFloat(pane.style.getPropertyValue('--pl-dock-top'))+parseFloat(pane.style.getPropertyValue('--pl-dock-height'));
-    expect(bottom()).toBe(584);expect(parseFloat(pane.style.getPropertyValue('--pl-dock-height'))).toBe(136);
+    expect(bottom()).toBe(600);expect(parseFloat(pane.style.getPropertyValue('--pl-dock-height'))).toBe(152);
     document.querySelector<HTMLElement>('.pl-workspace-host')!.style.setProperty('--pl-workspace-bottom','68px');
     window.dispatchEvent(new Event('resize'));expect(bottom()).toBe(532);
     bounds.mockReturnValue(rect({left:16,top:160,width:358,height:500}));window.dispatchEvent(new Event('resize'));

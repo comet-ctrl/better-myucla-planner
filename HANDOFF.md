@@ -1,9 +1,26 @@
 # Better MyUCLA — Agent handoff
 
-Last updated: 2026-10-04
+Last updated: 2026-10-05
 
-Current development version: `0.19.4`, branch `v0.19-workspace`.
+Current development version: `0.19.4`, branch `workspace-v0.19.4`.
 Installed files: `0.19.4` (Chrome reload requested). Published: `v0.19.1` prerelease.
+
+## Standalone repository migration
+
+Canonical repository: https://github.com/comet-ctrl/myucla-workspace.
+The latest remote contributor history (`b90faff`, PR #2) is merged with the
+local v0.19.4 work; both ancestries and the original license are retained.
+The historical fork and its release downloads remain available. Branches now
+use purpose-first names with version suffixes; see [migration details](docs/REPOSITORY_MIGRATION.md).
+The installed Chrome extension has not been changed during this migration.
+The rebuilt combined source requires a separate install/reload to use locally.
+
+Verification: typecheck, all 565 unit tests and production/preview builds pass.
+Dark-mode checks pass at four widths; viewport fill passes at six sizes, and
+course tools pass at three widths with ten repeated local drag operations.
+All ten header-reveal cases and five calendar pixel/geometry cases also pass.
+Browser fixtures use fictional data; the combined build is not yet verified
+on an authenticated MyUCLA page.
 
 ## v0.19.4 header, notice and calendar polish
 

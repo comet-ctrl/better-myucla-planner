@@ -117,7 +117,7 @@ try {
 
       // Prove this fixture detects the original failure, not merely the presence
       // of a border underneath a painted overlay.
-      const oldOverlay = await page.addStyleTag({ content: 'html[data-pl-appearance="dark"] .pl-workspace-calendar #gridDiv .timebox { background-color:var(--pl-dark-surface) }' });
+      const oldOverlay = await page.addStyleTag({ content: 'html[data-pl-appearance="dark"] .pl-workspace-calendar #gridDiv .timebox { background-color:var(--pl-dark-surface) !important }' });
       assert.equal((await linePixels(page)).visible, false, 'the old opaque overlay reproduces missing hour rules');
       await oldOverlay.evaluate(node => node.remove());
       assert.equal((await linePixels(page)).visible, true, 'transparent overlay restores painted hour rules');
@@ -150,6 +150,7 @@ try {
       assert.equal(await page.locator('#gridDiv .hourbox').first().evaluate(node => getComputedStyle(node).backgroundColor), 'rgb(255, 255, 255)', 'printing restores the light native grid');
       assert.equal(await page.locator('#gridDiv .timebox').first().evaluate(node => getComputedStyle(node).backgroundColor), 'rgba(0, 0, 0, 0)');
       await page.emulateMedia({ media: 'screen' }); await frame(page);
+      await page.locator('.pl-workspace-layout-settings > summary').click();
       await page.locator('.pl-workspace-original').click(); await page.waitForFunction(() => !document.querySelector('.pl-workspace-deck')); await frame(page);
       assert.notEqual(await page.locator('html').getAttribute('data-pl-appearance'), 'dark');
       assert.equal(await page.locator('#gridDiv .hourbox').first().evaluate(node => getComputedStyle(node).backgroundColor), 'rgb(255, 255, 255)', 'Original layout restores native hour background');

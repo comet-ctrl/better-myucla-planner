@@ -7,7 +7,7 @@ import { JSDOM } from 'jsdom';
 import { introductionFixtureHtml } from './workspace-fixture.mjs';
 
 const root = resolve(import.meta.dirname, '..');
-const output = resolve(root, '../../outputs/course-detail-actions');
+const output = resolve(root, 'harness/shots/course-detail-actions');
 const build = resolve(root, process.env.BETTER_MYUCLA_DETAIL_ACTION_BUILD || 'dist');
 const css = await readFile(resolve(build, 'injected.css'), 'utf8');
 const js = await readFile(resolve(build, 'content.js'), 'utf8');
@@ -53,7 +53,7 @@ try {
       : (requests.push(route.request().url()), route.abort()));
     await page.goto(url);
     await page.evaluate(redraw => {
-      const stored = { 'plannerLift.layout.v1': { tidy: true }, 'plannerLift.header.v1': { compact: true } }, listeners = [];
+      const stored = { 'plannerLift.layout.v1': { tidy: true }, 'plannerLift.header.v1': { compact: true }, 'plannerLift.appearance.v1': 'dark' }, listeners = [];
       window.chrome = { storage: { local: { get: async key => ({ [key]: stored[key] }), set: async values => Object.assign(stored, values), remove: async key => delete stored[key] }, onChanged: { addListener: fn => listeners.push(fn), removeListener: () => {} } } };
       window.fixtureTidy = tidy => listeners.forEach(fn => fn({ 'plannerLift.layout.v1': { newValue: { tidy } } }, 'local'));
       const wrapper = document.querySelector('.classPlannerWrapper');
